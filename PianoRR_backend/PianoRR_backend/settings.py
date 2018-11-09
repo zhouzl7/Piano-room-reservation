@@ -12,22 +12,42 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import sys
+import json
+import logging
+import urllib.parse
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 
+# Configurations load from file
+CONFIGS = json.loads(open(os.path.join(BASE_DIR, 'configs.json')).read())
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '2^h^#^$8@3#-ckoh05t-*1)k%p%51$k^(42by&4wf8z9j0eddj'
+SECRET_KEY = CONFIGS['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = CONFIGS['DEBUG']
 
-ALLOWED_HOSTS = []
+# SECURITY WARNING: don't run with IGNORE_WECHAT_SIGNATURE turned on in production!
+IGNORE_WECHAT_SIGNATURE = CONFIGS['IGNORE_WECHAT_SIGNATURE']
+
+# SECURITY WARNING: keep the WeChat token, appid and secret used in production secret!
+WECHAT_TOKEN = CONFIGS['WECHAT_TOKEN']
+WECHAT_APPID = CONFIGS['WECHAT_APPID']
+WECHAT_SECRET = CONFIGS['WECHAT_SECRET']
+# # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = '2^h^#^$8@3#-ckoh05t-*1)k%p%51$k^(42by&4wf8z9j0eddj'
+#
+# # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = True
+
+ALLOWED_HOSTS = [
+    '*',
+]
 
 
 # Application definition
@@ -78,10 +98,21 @@ WSGI_APPLICATION = 'PianoRR_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': CONFIGS['DB_NAME'],
+        'USER': CONFIGS['DB_USER'],
+        'PASSWORD': CONFIGS['DB_PASS'],
+        'HOST': CONFIGS['DB_HOST'],
+        'PORT': CONFIGS['DB_PORT'],
     }
 }
 
@@ -111,7 +142,8 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'zh-Hans'
 #LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+#TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 

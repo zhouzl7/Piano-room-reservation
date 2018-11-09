@@ -19,7 +19,7 @@ from extra_apps import xadmin
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
-    path(r'admin/', xadmin.site.urls),
+    path('admin/', xadmin.site.urls),
 ]
 #username:admin
 #pwd:admin123
