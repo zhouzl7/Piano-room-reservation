@@ -1,0 +1,5 @@
+<!--firstpage.wxml-->
+<view class = "content">
+  <button class = "message" bindtap='change'style = "background-image:url(../../images/1.jpg);">公告</button>
+  <button>琴房使用注意事项</button>
+</view>
