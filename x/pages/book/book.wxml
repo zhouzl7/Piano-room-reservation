@@ -1,0 +1,18 @@
+<!--pages/book/book.wxml-->
+<view class='container'>
+  <view class="Days">
+    <button class="DayBtn" wx:for="{{Days}}" wx:key="id" style="background-color:{{item.color}}" data-id="{{index}}"bindtap = "chooseDay">{{item.id}}</button>
+    <!--TODO: wxss:row-->
+  </view>
+  <view class="Rooms">
+    <button class="RoomBtn" wx:for="{{Days[chosenDay].room}}" bindtap="chooseRoom" style="background-color:{{item.color}}" data-id="{{index}}">{{item.name}}</button>
+  </view>
+  <view class="Times">
+    <button class="Time" wx:for="{{time}}" style="background-color:{{item.color}}" disabled="{{Days[chosenDay].room[chosenRoom].disabled[index]}}" data-id="{{index}}" bindtap = "chooseTime">{{item.timestr}}</button>
+  </view>
+  <view style='display:flex;flex-direction:row'>
+  <switch checked="{{single}}" bindchange="singleChange"/>
+  <text>多人/单人</text>
+  </view>
+  <text>总金额: {{money}}</text>
+</view>

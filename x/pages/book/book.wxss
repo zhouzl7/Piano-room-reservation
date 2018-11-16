@@ -1,0 +1,37 @@
+/* pages/book/book.wxss */
+.Days {
+  width:600rpx;
+  flex-direction: row;
+  display: flex;
+  padding: 40rpx 0;
+}
+
+.Rooms {
+  width:600rpx;
+  flex-direction: row;
+  flex-wrap: wrap;
+  display: flex;
+  padding: 40rpx 0;
+}
+
+.DayBtn{
+  width:100%;
+  justify-content: center;
+}
+
+.RoomBtn{
+  width: 50%;
+  justify-content: center;
+}
+
+.Times {
+  width: 600rpx;
+  flex-direction: row;
+  flex-wrap: wrap;
+  display: flex;
+  padding: 40rpx 0;
+}
+
+.Time{
+  width: 300rpx;
+}

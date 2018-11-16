@@ -1,8 +1,28 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/book/book",
+    "pages/mine/mine"
   ],
+  "tabBar":{
+    "list": [
+      {
+        "text": "index",
+        "pagePath": "pages/index/index"
+      },
+      {
+        "text": "预约",
+        "pagePath": "pages/book/book"
+      },
+      {
+        "text": "我的",
+        "pagePath": "pages/mine/mine"
+      }
+    ],
+    "color": "black",
+    "selectedColor": "#00f"
+  },
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#fff",
