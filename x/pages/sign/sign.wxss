@@ -1,0 +1,26 @@
+/* pages/sign/sign.wxss */
+.title{
+  text-align: center;
+  height:45px;
+  border-bottom:1px solid cornflowerblue;
+  font-size: 28px; 
+  font-weight: bold;}
+
+  .section__title{
+    margin-left: 5%;
+    font-weight: bold;
+
+  }
+ .input{
+    padding-left: 10px;
+    height: 30px;
+    font-size: 15px;
+}
+
+.inputView{
+    border-bottom:  1px solid cornflowerblue;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

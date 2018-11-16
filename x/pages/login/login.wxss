@@ -1,0 +1,53 @@
+/**index.wxss**/
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+}
+
+.userinfo-nickname {
+  color: #aaa;
+}
+
+.usermotto {
+  margin-top: 200px;
+}
+.title{
+  text-align: center;
+  height:45px;
+  border-bottom:1px solid cornflowerblue;
+  font-size: 28px; 
+  font-weight: bold;}
+
+  .section__title{
+    
+    margin-left: 5%;
+    font-weight: bold;
+    
+  }
+ .input{
+    padding-left: 10px;
+    height: 40px;
+    font-size:15px;
+}
+
+.inputView{
+    border-bottom:  1px solid cornflowerblue;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 5px;
+}
+
+.nameImage, .keyImage {
+  width: 15px;
+  height: 15px;
+  margin-right:5px;
+}
+
