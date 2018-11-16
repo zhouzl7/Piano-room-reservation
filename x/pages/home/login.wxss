@@ -1,7 +1,0 @@
-/* pages/Home/login.wxss */
-.title{
-  text-align: center;
-  height:45px;
-  border-bottom:1px solid cornflowerblue;
-  font-size: 28px; 
-  font-weight: bold;}
