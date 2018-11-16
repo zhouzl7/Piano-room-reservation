@@ -1,0 +1,13 @@
+<view class="title">校外登录</view>
+<view class="section__title" style="margin-top:15%;"><image class="nameImage" src="../images/name.png"></image>身份证号</view>
+<view class="inputView">
+<input class="input" type="number" placeholder="请输入身份证号" placeholder-style="color: grey" bindinput="listenerIdInput" />
+</view>
+<view class="section__title"style="margin-top:5%"><image class="nameImage" src="../images/key.png"></image>密码</view>
+<view class="inputView">
+<input class="input" password="true" placeholder="请输入密码" placeholder-style="color: grey" bindinput="listenerPasswordInput"/>
+</view>
+
+
+<button style="margin-left: 10%; margin-right: 10%; margin-top: 10%;"type="primary"  bindtap="listenerLogin">登录</button>
+
