@@ -34,7 +34,6 @@ App({
     })
   },
   globalData: {
-    userInfo: null,
-    userName: "2016013263"
+    userInfo: null
   }
 })
