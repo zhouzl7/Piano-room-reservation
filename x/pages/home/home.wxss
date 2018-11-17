@@ -1,9 +1,57 @@
-.content{
-  padding-top: 20px;
-}
 .message{
   margin-top: 10px;
-  color: black;
-  background-color: lightgreen;
-  font-size: 30rpx;
+  height: 100px;
+  width:90%;
+}
+.message image{
+  margin-left: -30rpx;
+  height: 100px;
+  width: 120%;
+}
+.notice{
+  margin-top: 10px;
+  height:100px;
+  width: 90%;
+  font-size: 60rpx;
+  text-align: left;
+}
+.notice image{
+  margin-left: -30rpx;
+  height: 100px;
+  width: 120%;
+}
+.room1{
+  margin-top: 10px;
+  height:100px;
+  width: 90%;
+  font-size: 60rpx;
+  text-align: left;
+}
+.room2{
+  margin-top: 10px;
+  height:100px;
+  width: 90%;
+  font-size: 60rpx;
+  text-align: left;
+}
+.room3{
+  margin-top: 10px;
+  height:100px;
+  width: 90%;
+  font-size: 60rpx;
+  text-align: left;
+}
+.room4{
+  margin-top: 10px;
+  height:100px;
+  width: 90%;
+  font-size: 60rpx;
+  text-align: left;
+}
+.room5{
+  margin-top: 10px;
+  height:100px;
+  width: 90%;
+  font-size: 60rpx;
+  text-align: left;
 }

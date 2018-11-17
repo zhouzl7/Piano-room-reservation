@@ -1,21 +1,15 @@
 //mine.js
+//获取应用实例
 const app = getApp()
 
 Page({
   data: {
-    myBook: [],
+    motto: 'Hello World',
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
-  //事件处理函数
-  bindViewTap: function () {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
-  },
   onLoad: function () {
-    app.globalData.userName = "2016013261 CQ"
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -49,6 +43,21 @@ Page({
     this.setData({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
+    })
+  },
+  connectAdmin:function(event) {
+    wx.navigateTo({
+      url: '../admin/admin',
+    })
+  },
+  checkmyReservation:function(event){
+    wx.navigateTo({
+      url: '../myReservation/myReservation',
+    })
+  },
+  toBind:function(event){
+    wx.navigateTo({
+      url:'../chooseLog/chooseLog',
     })
   }
 })

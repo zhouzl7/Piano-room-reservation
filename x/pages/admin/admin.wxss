@@ -1,0 +1,8 @@
+.admin {
+  width:90%;
+  height:30px;
+  background-color: #fff;
+  font-size: 15px;
+  line-height: 30px;
+  text-align: center
+}

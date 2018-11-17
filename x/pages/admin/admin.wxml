@@ -1,0 +1,4 @@
+<view class = "adminMessage">
+  
+  <button class = "admin">管理员信息</button>
+</view>

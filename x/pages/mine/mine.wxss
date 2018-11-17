@@ -1,8 +1,8 @@
-/* pages/mine/mine.wxss */
+
 .userinfo {
+  margin-top: -50px;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .userinfo-avatar {
@@ -13,9 +13,38 @@
 }
 
 .userinfo-nickname {
-  color: #aaa;
+  color: #000;
 }
 
-.usermotto {
-  margin-top: 200px;
+.myReservation {
+  margin-top: 20px;
+  height: 80px;
+  width: 80%;
+  color: #000;
+  text-align: center;
+  line-height: 80px;
+  background-color: #fff;
+  justify-content: center;
+}
+
+.bind {
+  margin-top: 10px;
+  height: 80px;
+  width: 80%;
+  color: #000;
+  text-align: center;
+  line-height: 80px;
+  background-color: #fff;
+  justify-content: center;
+}
+
+.admin {
+  margin-top: 10px;
+  height: 80px;
+  width: 80%;
+  color: #000;
+  text-align: center;
+  line-height: 80px;
+  background-color: #fff;
+  justify-content: center;
 }

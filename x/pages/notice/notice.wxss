@@ -1,0 +1,18 @@
+.pic {
+  display: flex;
+  justify-content: center;
+}
+
+.pic image{
+  height: 100px;
+  width: 90%;
+}
+
+.word{
+  justify-content: center;
+}
+.title{
+  text-align: center;
+  width:80%;
+  font-weight: bold;
+}

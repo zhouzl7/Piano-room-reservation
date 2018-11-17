@@ -2,17 +2,28 @@
 //首页
 
 Page({
-  change:function(event){
-    wx.redirectTo({
-      url: '../index/index',
-      success: function (res) {
-        // success
-        console.log(成功);
-      },
-      fail: function () {
-        // fail
-        console.log('sksdfksjfksjf');
-      },
-    })
-  }
+    data: {
+        color: "#fff",
+    },
+    change: function(event) {
+        wx.navigateTo({
+            url: '../mine/mine',
+        })
+    },
+    toNotice: function(event) {
+        wx.navigateTo({
+            url: '../notice/notice',
+        })
+    },
+    changecolor: function(event) {
+        if (this.data.color == "yellow") {
+            this.setData({
+                color: "#fff"
+            })
+        } else {
+            this.setData({
+                color: "yellow"
+            })
+        }
+    }
 })

@@ -1,5 +1,10 @@
 <!--firstpage.wxml-->
 <view class = "content">
-  <button class = "message" bindtap='change'style = "background-image:url(../../images/1.jpg);">公告</button>
-  <button>琴房使用注意事项</button>
+  <button class = "message" bindtap='change' form-type='submit'><image src="../../images/message.jpg"></image></button>
+  <button class = "notice" bindtap='toNotice'><image src="../../images/notice.jpg" mode = " top left"></image></button>
+  <button class = "room1" bindtap='changecolor' style="background-color:{{color}}">琴房1</button>
+  <button class = "room2">琴房2</button>
+  <button class = "room3">琴房3</button>
+  <button class = "room4">琴房4</button>
+  <button class = "room5">琴房5</button>
 </view>
