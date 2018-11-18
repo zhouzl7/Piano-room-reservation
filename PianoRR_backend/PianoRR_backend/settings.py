@@ -54,6 +54,9 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'PRmanage',
+    'USERmanage',
+    'BOOKmanage',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -62,8 +65,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'xadmin',
     'crispy_forms',
-    'PRmanage',
-    'USERmanage',
 ]
 
 MIDDLEWARE = [
