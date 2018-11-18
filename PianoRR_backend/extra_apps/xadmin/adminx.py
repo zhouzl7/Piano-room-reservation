@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 import xadmin
 from .models import UserSettings, Log
+from xadmin import views
 from xadmin.layout import *
 
 from django.utils.translation import ugettext_lazy as _, ugettext
@@ -30,3 +31,21 @@ class LogAdmin(object):
     model_icon = 'fa fa-cog'
 
 xadmin.site.register(Log, LogAdmin)
+
+# 创建xadmin的最基本管理器配置，并与view绑定
+class BaseSetting(object):
+    # 开启主题功能
+    enable_themes = True
+    use_bootswatch = True
+
+# 将基本配置管理与view绑定
+xadmin.site.register(views.BaseAdminView,BaseSetting)
+
+class GlobalSetting(object):
+    # 设置base_site.html的Title
+    site_title = '《伯牙有约》后台管理界面'
+    # 设置base_site.html的Footer
+    site_footer  = '伯牙有约'
+    # 收起菜单
+    menu_style = 'accordion'
+xadmin.site.register(views.CommAdminView, GlobalSetting)

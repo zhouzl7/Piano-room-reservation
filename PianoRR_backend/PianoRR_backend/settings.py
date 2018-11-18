@@ -19,6 +19,7 @@ import urllib.parse
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 # Configurations load from file
 CONFIGS = json.loads(open(os.path.join(BASE_DIR, 'configs.json')).read())
@@ -61,6 +62,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'xadmin',
     'crispy_forms',
+    'PRmanage',
+    'USERmanage',
 ]
 
 MIDDLEWARE = [
