@@ -1,7 +1,7 @@
 <!--pages/book/book.wxml-->
 <view class='container'>
   <view class="Days">
-    <button class="DayBtn" wx:for="{{Days}}" wx:key="id" style="background-color:{{item.color}}" data-id="{{index}}"bindtap = "chooseDay">{{item.id}}</button>
+    <button class="DayBtn" wx:for="{{Days}}" wx:key="name" style="background-color:{{item.color}}" data-id="{{index}}"bindtap = "chooseDay">{{item.name}}</button>
     <!--TODO: wxss:row-->
   </view>
   <view class = "roomAndTime">
@@ -17,5 +17,5 @@
   <text>多人/单人</text>
   </view>
   <text class = "money">总金额: {{money}}</text>
-  <button class = "makesure" type = "primary">确认预约</button>
+  <button class = "makesure" type = "primary" bindtap="Book">确认预约</button>
 </view>

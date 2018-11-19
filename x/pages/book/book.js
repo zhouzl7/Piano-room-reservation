@@ -1,4 +1,6 @@
 // pages/book/book.js
+const app = getApp()
+
 Page({
 
     /**
@@ -37,19 +39,20 @@ Page({
             }
         ],
         Days: [{
-                id: "今天",
-                room: [{
+                name: "今天",
+                room: [
+                    {
                         name: "琴房1",
-                        disabled: [true, true, false, false, false, false],
-                        chosen: [false, false, false, false, false, false],
+                        disabled: [false, false, false, false, false, false],
+                        chosen: [false, true, false, false, false, false],
                         money: 15,
                         multiMoney: 30,
-                        color: "#fff"
+                        color: "#0090CE"
                     },
                     {
                         name: "琴房2",
                         disabled: [false, false, false, false, false, false],
-                        chosen: [false, false, false, false, false, false],
+                        chosen: [false, true, false, false, false, false],
                         money: 15,
                         multiMoney: 30,
                         color: "#fff"
@@ -58,14 +61,15 @@ Page({
                 color: "#fff"
             },
             {
-                id: "明天",
-                room: [{
+                name: "明天",
+                room: [
+                    {
                         name: "test",
                         disabled: [false, false, false, false, false, false],
                         chosen: [false, false, false, false, false, false],
                         money: 15,
                         multiMoney: 30,
-                        color: "#fff"
+                        color: "Yellow"
                     },
                     {
                         name: "wtf",
@@ -79,8 +83,9 @@ Page({
                 color: "#fff"
             },
             {
-                id: "后天",
-                room: [{
+                name: "后天",
+                room: [
+                    {
                         name: "wtf",
                         disabled: [false, false, false, false, false, false],
                         chosen: [false, false, false, false, false, false],
@@ -119,7 +124,53 @@ Page({
     /**
      * 生命周期函数--监听页面加载
      */
-    onLoad: function() {},
+    onLoad: function() {
+      let self = this
+      wx.showLoading({
+        title: 'loading...',
+      })
+      wx.request({
+        url: app.globalData.url + '/api/availableTime',
+        data: {
+          openId: app.globalData.openId
+        },
+        method: "GET",
+        success: res => {
+          console.log('success')
+          load(self,res.data.Days)
+          wx.showToast({
+            title: 'BookLoaded!'
+          })
+        },
+        fail: function () {
+          setTimeout(function () {
+            let Days = self.data.Days
+            Days.forEach(function (item, index) {
+              item.color = "#fff"
+              item.room.forEach(function (item, index) {
+                item.chosen = item.disabled.slice()
+                item.chosen.fill(false)
+                item.color = "#fff"
+              })
+            })
+            Days[0].color = "#0090CE"
+            Days[0].room[0].color = "#0090CE"
+            self.data.time.forEach(function (item) {
+              item.color = "#fff"
+            })
+            self.setData({
+              Days: Days,
+              money: 0,
+              multiMoney: 0,
+              single: true,
+              chosenDay: 0,
+              chosenRoom: 0,
+              time: self.data.time
+            })
+          }, 0)
+        }
+      })
+    },
 
     /**
      * 生命周期函数--监听页面初次渲染完成
@@ -132,7 +183,7 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow: function() {
-        //TODO: 刷新当前可用时间.
+      /*
         const chosenDay = this.data.chosenDay
         const chosenRoom = this.data.chosenRoom
         const length = this.data.Days[chosenDay].room[chosenRoom].disabled.length
@@ -153,6 +204,7 @@ Page({
             time: this.data.time,
             Days: this.data.Days
         })
+        */
     },
 
     /**
@@ -248,6 +300,9 @@ Page({
 
     chooseTime: function(event) {
         let index = event.currentTarget.dataset.id
+        wx.showToast({
+          title: this.data.time[index].timestr
+        })
         let chosenDay = this.data.chosenDay
         let chosenRoom = this.data.chosenRoom
         if (this.data.Days[chosenDay].room[chosenRoom].chosen[index] === false) {
@@ -263,7 +318,6 @@ Page({
             this.data.multiMoney -= this.data.Days[chosenDay].room[chosenRoom].multiMoney
         }
         this.data.money = this.data.single ? this.data.singleMoney : this.data.multiMoney
-            //this.data.money = this.data.singleMoney
         this.setData({
             time: this.data.time,
             Days: this.data.Days,
@@ -274,7 +328,6 @@ Page({
     },
 
     singleChange: function(event) {
-        console.log(event)
         if (event.detail.value) {
             this.setData({
                 money: this.data.singleMoney,
@@ -287,5 +340,98 @@ Page({
             })
         }
         console.log(this.data.single)
+    },
+
+    Book: function() {
+      let self = this
+      wx.showLoading({
+        title: '预约中',
+      })
+      let booklist = []
+      let bookTime = {
+        day: 0,
+        room: 0,
+        time: 0
+      }
+      this.data.Days.forEach(function(item,index){
+        bookTime.day = index
+        item.room.forEach(function(item,index){
+          bookTime.room = index
+          item.chosen.forEach(function(item,index){
+            if(item){
+              bookTime.time = index
+              booklist.push({
+                day: bookTime.day,
+                room: bookTime.room,
+                time: index
+              })
+            }
+          })
+        })
+      })
+      wx.request({
+        url: app.globalData.url+'/api/book',
+        method: 'POST',
+        data:{
+          bookTime: booklist
+        },
+        success: res => {
+          if(res.statusCode === 200){
+            console.log(res)
+            bookChange(self,res.data.times)
+            wx.showToast({
+              title: '预约成功!',
+            })
+          }else if(res.statusCode === 403){
+            bookChange(self, res.data.times)
+            wx.showToast({
+              title: '已有预约被占用!'
+            })
+          }
+        },
+        fail: function(){
+          wx.showToast({
+            title: '预约失败!',
+            icon: 'none'
+          })
+        }
+      })
     }
 })
+
+function load(self,data){
+  let Days = data
+  console.log(Days)
+  Days.forEach(function (item, index) {
+    item.color = "#fff"
+    item.room.forEach(function (item, index) {
+      item.chosen = item.disabled.slice()
+      item.chosen.fill(false)
+      item.color = "#fff"
+    })
+  })
+  Days[0].color = "#0090CE"
+  Days[0].room[0].color = "#0090CE"
+  self.data.time.forEach(function (item) {
+    item.color = "#fff"
+  })
+  self.setData({
+    Days: Days,
+    money: 0,
+    multiMoney: 0,
+    single: true,
+    chosenDay: 0,
+    chosenRoom: 0,
+    time: self.data.time
+  })
+}
+
+function bookChange(self,data){
+  //data:[{day,room,disabled}]
+  console.log(data)
+  data.forEach(item => {
+    let param = {}
+    param['Days['+item.day+'].room['+item.room+'].disabled'] = item.disabled
+    self.setData(param)
+  })
+}

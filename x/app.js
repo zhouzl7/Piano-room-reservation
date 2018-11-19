@@ -7,9 +7,32 @@ App({
     wx.setStorageSync('logs', logs)
 
     // 登录
+    var self = this
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        console.log(res.code)
+        if(res.code){
+          wx.request({
+            url: self.globalData.url + "/api/login",
+            data: {
+              code: res.code
+            },
+            method: 'GET',
+            success: res => {
+              console.log('loginSucceed');
+              self.globalData.openId = res.data.openId
+              console.log(self.globalData)
+            },
+            fail: function () {
+              console.log('res.code.fail')
+              wx.navigateTo({
+                url: './pages/login/login',
+              })
+            }
+          })
+
+        }
       }
     })
     // 获取用户信息
@@ -34,6 +57,8 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    url: "https://c6b37e2b.ngrok.io",
+    openId: null
   }
 })
