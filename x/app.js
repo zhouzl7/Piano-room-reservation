@@ -58,7 +58,7 @@ App({
   },
   globalData: {
     userInfo: null,
-    url: "https://c6b37e2b.ngrok.io",
+    url: "http://localhost:8888",
     openId: null
   }
 })

@@ -3,19 +3,10 @@ console.log('test')
 const Koa = require('koa');
 const request = require('request');
 const koaBody = require('koa-body');
-const http = require('http');
-const https = require('https');
-const fs = require('fs');
-const enforceHttps =  require('koa-sslify');
-const crypto = require('crypto');
-const sql = require('mysql');
-
-const connection = sql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'XNCSDFU2',
-    database: 'ubuntu'
-});
+//const http = require('http');
+//const https = require('https');
+//const fs = require('fs');
+//const enforceHttps =  require('koa-sslify');
 
 let Days = [{
     name: "今天",
@@ -76,6 +67,53 @@ let Days = [{
 }
 ]
 
+let reserve = [{
+    room: "琴房1",
+    useTime: "2018-11-17 13:00-14:00",
+    user: "single",
+    resTime: "xxxx-xx-xx xx:xx-xx:xx"
+},
+{
+    room: "琴房2",
+    useTime: "2018-11-18 13:00-14:00",
+    user: "multy",
+    resTime: "xxxx-xx-xx xx:xx-xx:xx"
+}
+]
+
+let time = [
+    {
+        id: 0,
+        timestr: "8:00-9:00",
+        color: "#fff"
+    },
+    {
+        id: 1,
+        timestr: "9:00-10:00",
+        color: "#fff"
+    },
+    {
+        id: 2,
+        timestr: "10:00-11:00",
+        color: "#fff"
+    },
+    {
+        id: 3,
+        timestr: "13:00-14:00",
+        color: "#fff"
+    },
+    {
+        id: 4,
+        timestr: "14:00-15:00",
+        color: "#fff"
+    },
+    {
+        id: 5,
+        timestr: "15:00-16:00",
+        color: "#fff"
+    }
+]
+
 let openId = '';
 
 
@@ -84,82 +122,6 @@ app.use(koaBody({multipart: true}));
 //app.use(enforceHttps());
 
 app.listen(8888);
-let users = new Object();
-
-app.use(async (ctx,next) =>{
-	//ctx.status = 200;
-	await next();
-});
-
-//
-app.use(async (ctx,next) => {
-        if(ctx.request.path === "/api/compute"){
-            let result = 0;
-            let param = ctx.request.query;
-            console.log(param);
-            switch(ctx.request.query.type){
-                case 'ADD':
-                result = parseInt(param.firstParam) + parseInt(param.secondParam);
-                break;
-                case 'SUB':
-                result = param.firstParam - param.secondParam;
-                break;
-                case 'MUL':
-                result = param.firstParam * param.secondParam;
-                break;
-                case 'DIV':
-                result = Math.round(param.firstParam / param.secondParam);
-                break;
-                default:break;
-            }
-            ctx.response.status = 200;
-            ctx.response.type = 'application/json';
-            ctx.response.body = {
-                ans: result
-            };
-        }
-        else{
-            await next();
-        }
-});
-
-app.use(async (ctx,next) => {
-    if(ctx.request.path === '/api/addMoney'){
-        let secret = ctx.request.query.secret;
-        let sql = `SELECT * FROM users WHERE secret=?`;
-        let score = parseFloat(ctx.request.query.score);
-        connection.query(sql,secret,(err,results,fields) =>{
-            if(err){
-                console.log(err);
-            }
-            if(score <= results[0].biggest_ballon){
-                score = results[0].biggest_ballon;
-            }
-        });
-        sql = `UPDATE users SET biggest_ballon = ?, money = ? WHERE secret = ?`;
-        connection.query(sql,[score,ctx.request.query.money,secret],
-            (err,results,fields) =>{
-                if(err){
-                    console.log(err);
-                }
-        });
-        ctx.response.status = 200;
-    }else{
-        await next();
-    }
-});
-
-app.use(async (ctx,next) => {
-    if(ctx.request.path === '/api/buy'){
-        let secret = ctx.request.query.secret;
-        let body = await buyUp(secret);
-	console.log(body);
-        ctx.response.body = body;
-        ctx.response.status = 200;
-    }else{
-        await next();
-    }
-});
 
 app.use(async (ctx,next) =>{
     if(ctx.request.path === '/api/login'){
@@ -196,7 +158,24 @@ app.use(async (ctx,next) =>{
             };
         }
     }else{
-        await next();
+        await next()
+    }
+})
+
+app.use(async (ctx,next) => {
+    if(ctx.request.path === '/api/reservation'){
+        if(ctx.request.query.openId === openId){
+            ctx.response.body = {
+                reservation: reserve
+            }
+            ctx.response.code = 200
+        }else{
+            ctx.response.body = {
+                reservation: reserve
+            }
+        }
+    }else{
+        await next()
     }
 })
 
@@ -204,19 +183,31 @@ app.use(async (ctx,next) => {
     if(ctx.request.path === '/api/book'){
         //check if those have been booked.
         data = ctx.request.body.bookTime
-        canBook = true
+        let canBook = true
         console.log(data)
         if(data){
+            let newReserve = []
             data.forEach( item =>{
                 console.log(item)
                 if(Days[item.day].room[item.room].disabled[item.time] === false){
                     Days[item.day].room[item.room].disabled[item.time] = true
+                    let param = {
+                        room: Days[item.day].room[item.room].name,
+                        useTime: Days[item.day].name + ' ' + time[item.time].timestr,
+                        user: "single",
+                        resTime: "????"
+                    }
+                    if(!ctx.request.body.single){
+                        param.user = "multi"
+                    }
+                    newReserve.push(param)
                 }else{
                     canBook = false
                 }
             })
             if(canBook){
                 ctx.response.statusCode = 200
+                reserve = reserve.concat(newReserve)
             }else{
                 ctx.response.statusCode = 403
             }
@@ -250,6 +241,8 @@ app.use(async (ctx,next) => {
                 times: result
             }
         }
+    }else{
+        await next()
     }
 })
 
@@ -280,76 +273,3 @@ function reqUserInfo(code){
     });
 }
 
-function getUserInfoFromDb(data){
-    return new Promise((resolve,reject) => {
-        let user_secret = crypto.createHmac('sha256',data.session_key).update(data.openid).digest('base64');
-        let sql = `SELECT * FROM users WHERE openId=?`;
-        let body = {
-            secret: user_secret
-        };
-        connection.query(sql, data.openid,(err,results,fields) =>{
-            if(err){
-                console.log('login');
-                console.error(err.message);
-                reject(err);
-            }
-            //判断是否存在用户
-            if(results.length === 0){
-                sql = `INSERT INTO users SET ?`;
-                let newuser = {
-                    openId: data.openid,
-                    session_key: data.session_key,
-                    secret: user_secret,
-                    biggest_ballon: 0,
-                    money: 0
-                };
-                connection.query(sql,newuser,(err,results,fields) =>{
-                    if(err){
-                        console.log('new user');
-                        console.error(err.message);
-                    }
-                });
-                body.biggest_balloon = 0;
-                body.money = 0;
-            }else{
-                sql = `UPDATE users SET session_key = ?, secret = ? WHERE openId = ?`;
-                connection.query(sql,[data.session_key,user_secret,data.openid],
-                    (err,results,fields)=>{
-                        if(err){
-                            console.log(err.message);
-                        }
-                });
-                body.biggest_balloon = results[0].biggest_ballon;
-                body.money = results[0].money;
-            }
-            resolve(body);
-        });
-    });
-}
-
-function buyUp(secret){
-    return new Promise((resolve,reject) => {
-        let sql = `SELECT * FROM users WHERE secret=?`;
-        let body = {
-            purchase: 'failed'
-        };
-        connection.query(sql,secret,(err,results,fields) =>{
-            if(err){
-                console.log('buy');
-                console.log(err);
-                reject(err);
-            }
-            if(results[0].money >= 50){
-		body.purchase = 'succeed';
-                let money = results[0].money - 50;
-                sql = `UPDATE users SET money = ? WHERE secret = ?`;
-                connection.query(sql,[money,secret],(err,results,fields) =>{
-                    if(err){
-                        console.log(err);
-                    }
-                });
-            }
-            resolve(body);
-        });
-    });
-}

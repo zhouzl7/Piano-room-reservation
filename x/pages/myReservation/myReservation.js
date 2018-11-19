@@ -1,4 +1,5 @@
 // pages/myReservation/myReservation.js
+const app = getApp()
 Page({
 
     /**
@@ -40,7 +41,23 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow: function() {
-
+      //刷新预约情况
+      let self = this
+      wx.request({
+        url: app.globalData.url + '/api/reservation',
+        method: "GET",
+        data: {
+          openId: app.globalData.openId
+        },
+        success: res => {
+          console.log(res.data)
+          loadReservation(self,res.data.reservation)
+          console.log('Reservation loaded')
+        },
+        fail: function(){
+          console.log('can\'t get reservation')
+        }
+      })
     },
 
     /**
@@ -93,3 +110,10 @@ Page({
     }
 
 })
+
+function loadReservation(self,data){
+  console.log(data)
+  self.setData({
+    reserve: data
+  })
+}

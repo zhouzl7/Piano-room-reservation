@@ -373,7 +373,8 @@ Page({
         url: app.globalData.url+'/api/book',
         method: 'POST',
         data:{
-          bookTime: booklist
+          bookTime: booklist,
+          single: self.data.single
         },
         success: res => {
           if(res.statusCode === 200){
@@ -383,6 +384,7 @@ Page({
               title: '预约成功!',
             })
           }else if(res.statusCode === 403){
+            console.log(res)
             bookChange(self, res.data.times)
             wx.showToast({
               title: '已有预约被占用!'
@@ -393,6 +395,18 @@ Page({
           wx.showToast({
             title: '预约失败!',
             icon: 'none'
+          })
+        },
+        complete: function(){
+          self.data.time.forEach(item =>{
+            item.color = "#fff"
+          })
+          self.setData({
+            time: self.data.time,
+            money: 0,
+            singleMoney: 0,
+            multiMoney: 0,
+            single: true
           })
         }
       })
@@ -418,6 +432,7 @@ function load(self,data){
   self.setData({
     Days: Days,
     money: 0,
+    singleMoney: 0,
     multiMoney: 0,
     single: true,
     chosenDay: 0,
@@ -431,7 +446,9 @@ function bookChange(self,data){
   console.log(data)
   data.forEach(item => {
     let param = {}
-    param['Days['+item.day+'].room['+item.room+'].disabled'] = item.disabled
+    param['Days[' + item.day + '].room[' + item.room + '].disabled'] = item.disabled
+    param['Days[' + item.day + '].room[' + item.room +'].chosen'] = item.disabled.slice()
+    param['Days[' + item.day + '].room[' + item.room + '].chosen'].fill(false)
     self.setData(param)
   })
 }
