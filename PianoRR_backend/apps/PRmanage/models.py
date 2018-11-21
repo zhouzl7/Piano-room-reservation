@@ -40,22 +40,29 @@ class TimeTable(models.Model):
     # 后天
     AFTER_TOMORROW = 2
 
+    # 停止使用
+    TIME_DISABLED = -1
+    # 已被预约
+    TIME_BOOKED = 0
+    # 可被预约
+    TIME_ABLED = 1
+
     piano_room = models.ForeignKey(PianoRoom, on_delete=models.CASCADE, default=None, verbose_name='琴房')
     date = models.IntegerField(u'日期', choices=((0, '今天'), (1, '明天'), (2, '后天')), default=0)
-    Time1 = models.BooleanField(u'08-09', choices=((True, '开放'), (False, '关闭')), default=True)
-    Time2 = models.BooleanField(u'09-10', choices=((True, '开放'), (False, '关闭')), default=True)
-    Time3 = models.BooleanField(u'10-11', choices=((True, '开放'), (False, '关闭')), default=True)
-    Time4 = models.BooleanField(u'11-12', choices=((True, '开放'), (False, '关闭')), default=True)
-    Time5 = models.BooleanField(u'12-13', choices=((True, '开放'), (False, '关闭')), default=True)
-    Time6 = models.BooleanField(u'13-14', choices=((True, '开放'), (False, '关闭')), default=True)
-    Time7 = models.BooleanField(u'14-15', choices=((True, '开放'), (False, '关闭')), default=True)
-    Time8 = models.BooleanField(u'15-16', choices=((True, '开放'), (False, '关闭')), default=True)
-    Time9 = models.BooleanField(u'16-17', choices=((True, '开放'), (False, '关闭')), default=True)
-    Time10 = models.BooleanField(u'17-18', choices=((True, '开放'), (False, '关闭')), default=True)
-    Time11 = models.BooleanField(u'18-19', choices=((True, '开放'), (False, '关闭')), default=True)
-    Time12 = models.BooleanField(u'19-20', choices=((True, '开放'), (False, '关闭')), default=True)
-    Time13 = models.BooleanField(u'20-21', choices=((True, '开放'), (False, '关闭')), default=True)
-    Time14 = models.BooleanField(u'21-22', choices=((True, '开放'), (False, '关闭')), default=True)
+    Time1 = models.IntegerField(u'08-09', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
+    Time2 = models.IntegerField(u'09-10', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
+    Time3 = models.IntegerField(u'10-11', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
+    Time4 = models.IntegerField(u'11-12', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
+    Time5 = models.IntegerField(u'12-13', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
+    Time6 = models.IntegerField(u'13-14', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
+    Time7 = models.IntegerField(u'14-15', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
+    Time8 = models.IntegerField(u'15-16', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
+    Time9 = models.IntegerField(u'16-17', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
+    Time10 = models.IntegerField(u'17-18', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
+    Time11 = models.IntegerField(u'18-19', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
+    Time12 = models.IntegerField(u'19-20', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
+    Time13 = models.IntegerField(u'20-21', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
+    Time14 = models.IntegerField(u'21-22', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
 
     class Meta:
         verbose_name = '时间表'
