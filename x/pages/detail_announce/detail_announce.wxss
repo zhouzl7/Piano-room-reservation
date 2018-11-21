@@ -42,7 +42,13 @@
 }
 
 .main{
-  margin: 10px;
+  margin: 20rpx;
   text-align: left;
   line-height: 60rpx;
+}
+
+.OK{
+  margin-top: 20rpx;
+  margin-bottom: 20rpx;
+  width: 60%
 }
