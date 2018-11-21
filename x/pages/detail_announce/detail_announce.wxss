@@ -41,5 +41,7 @@
 }
 
 .main{
-  background-color: #fff;
+  text-align: left;
+  line-height: 60rpx;
+  margin-bottom: 10px;
 }
