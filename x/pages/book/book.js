@@ -168,6 +168,10 @@ Page({
               time: self.data.time
             })
           }, 0)
+          wx.showToast({
+            title: 'loginFailed!',
+            icon: 'none'
+          })
         }
       })
     },
@@ -374,7 +378,8 @@ Page({
         method: 'POST',
         data:{
           bookTime: booklist,
-          single: self.data.single
+          single: self.data.single,
+          openId: app.globalData.openId
         },
         success: res => {
           if(res.statusCode === 200){
@@ -401,7 +406,13 @@ Page({
           self.data.time.forEach(item =>{
             item.color = "#fff"
           })
+          self.data.Days.forEach(item => {
+            item.room.forEach(item => {
+              item.chosen.fill(false)
+            })
+          })
           self.setData({
+            Days: self.data.Days,
             time: self.data.time,
             money: 0,
             singleMoney: 0,

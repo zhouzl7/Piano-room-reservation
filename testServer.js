@@ -1,85 +1,79 @@
-console.log('test')
+//'use strict'
 
-const Koa = require('koa');
-const request = require('request');
-const koaBody = require('koa-body');
-//const http = require('http');
-//const https = require('https');
-//const fs = require('fs');
-//const enforceHttps =  require('koa-sslify');
+const Koa = require('koa')
+const request = require('request')
+const koaBody = require('koa-body')
+const http = require('http')
+const https = require('https')
+const fs = require('fs')
+const enforceHttps =  require('koa-sslify')
+/*
+const options = {
+    key: fs.readFileSync('./domain.key'),
+    cert: fs.readFileSync('./chained.pem')
+}*/
 
-let Days = [{
-    name: "今天",
-    room: [
-        {
-            name: "琴房1",
-            disabled: [true, true, false, false, false, false],
-            money: 15,
-            multiMoney: 30,
-        },
-        {
-            name: "琴房2",
-            disabled: [false, false, false, false, false, false],
-            money: 15,
-            multiMoney: 30,
-        }
-    ],
-},
-{
-    name: "明天",
-    room: [
-        {
-            name: "test",
-            disabled: [false, false, false, false, false, false],
-            money: 15,
-            multiMoney: 30,
-        },
-        {
-            name: "wtf",
-            disabled: [false, false, false, false, false, false],
-            money: 15,
-            multiMoney: 30,
-        }
-    ],
-},
-{
-    name: "后天",
-    room: [
-        {
-            name: "wtf",
-            disabled: [false, false, false, false, false, false],
-            money: 15,
-            multiMoney: 30,
-        },
-        {
-            name: "test",
-            disabled: [false, false, false, false, false, false],
-            money: 15,
-            multiMoney: 30,
-        },
-        {
-            name: "test",
-            disabled: [false, false, false, false, false, false],
-            money: 15,
-            multiMoney: 30,
-        }
-    ],
-}
+let Days = [
+    {
+        name: "11-22",
+        room: [
+            {
+                name: "琴房1",
+                disabled: [true, true, false, false, false, false],
+                money: 15,
+                multiMoney: 30,
+            },
+            {
+                name: "琴房2",
+                disabled: [false, false, false, false, false, false],
+                money: 15,
+                multiMoney: 30,
+            }
+        ],
+    },
+    {
+        name: "明天",
+        room: [
+            {
+                name: "test",
+                disabled: [false, false, false, false, false, false],
+                money: 15,
+                multiMoney: 30,
+            },
+            {
+                name: "wtf",
+                disabled: [false, false, false, false, false, false],
+                money: 15,
+                multiMoney: 30,
+            }
+        ],
+    },
+    {
+        name: "后天",
+        room: [
+            {
+                name: "wtf",
+                disabled: [false, false, false, false, false, false],
+                money: 15,
+                multiMoney: 30,
+            },
+            {
+                name: "test",
+                disabled: [false, false, false, false, false, false],
+                money: 15,
+                multiMoney: 30,
+            },
+            {
+                name: "test",
+                disabled: [false, false, false, false, false, false],
+                money: 15,
+                multiMoney: 30,
+            }
+        ],
+    }
 ]
 
-let reserve = [{
-    room: "琴房1",
-    useTime: "2018-11-17 13:00-14:00",
-    user: "single",
-    resTime: "xxxx-xx-xx xx:xx-xx:xx"
-},
-{
-    room: "琴房2",
-    useTime: "2018-11-18 13:00-14:00",
-    user: "multy",
-    resTime: "xxxx-xx-xx xx:xx-xx:xx"
-}
-]
+let reserves = {}
 
 let time = [
     {
@@ -114,48 +108,51 @@ let time = [
     }
 ]
 
-let openId = '';
+let openId = ''
 
 
-const app = new Koa();
-app.use(koaBody({multipart: true}));
-//app.use(enforceHttps());
+const app = new Koa()
+app.use(koaBody({multipart: true}))
+app.use(enforceHttps())
 
-app.listen(8888);
+app.listen(8888)
 
 app.use(async (ctx,next) =>{
     if(ctx.request.path === '/api/login'){
         //console.log(ctx.request.query.code)
-        let data = await reqUserInfo(ctx.request.query.code);
-        let body = {};
-        //console.log(data);
+        let data = await reqUserInfo(ctx.request.query.code)
+        let body = {}
+        //console.log(data)
         if(data.openid){
-        body.openId = data.openid;
-        openId = data.openid;
+            body.openId = data.openid
+            if(reserves[data.openid] === undefined){
+                reserves[data.openid] = []
+            }
         }
         else{
-            body.openId = 'wtf';
+            body.openId = 'wtf'
         }
         //console.log(body)
-        //let body = await getUserInfoFromDb(data);
-        ctx.response.status = 200;
-        ctx.response.body = body;
+        //let body = await getUserInfoFromDb(data)
+        ctx.response.status = 200
+        ctx.response.body = body
     }else{
-        await next();
+        await next()
     }
-});
+})
 
 app.use(async (ctx,next) =>{
     if(ctx.request.path === '/api/availableTime'){
-        if(ctx.request.query.openId === openId){
+        if(reserves[ctx.request.query.openId] !== undefined){
             //console.log(Days)
             ctx.response.body = {
                 Days: Days
-            };
+            }
         }else{
+            console.log(ctx.request.query)
             ctx.response.body = {
-                Days: []
-            };
+                Days: Days
+            }
         }
     }else{
         await next()
@@ -164,14 +161,16 @@ app.use(async (ctx,next) =>{
 
 app.use(async (ctx,next) => {
     if(ctx.request.path === '/api/reservation'){
-        if(ctx.request.query.openId === openId){
+        let openId = ctx.request.query.openId
+        if(openId){
+            let reserve = reserves[openId]
             ctx.response.body = {
                 reservation: reserve
             }
             ctx.response.code = 200
         }else{
             ctx.response.body = {
-                reservation: reserve
+                reservation: []
             }
         }
     }else{
@@ -182,7 +181,8 @@ app.use(async (ctx,next) => {
 app.use(async (ctx,next) => {
     if(ctx.request.path === '/api/book'){
         //check if those have been booked.
-        data = ctx.request.body.bookTime
+        let data = ctx.request.body.bookTime
+        let openId = ctx.request.body.openId
         let canBook = true
         console.log(data)
         if(data){
@@ -190,7 +190,6 @@ app.use(async (ctx,next) => {
             data.forEach( item =>{
                 console.log(item)
                 if(Days[item.day].room[item.room].disabled[item.time] === false){
-                    Days[item.day].room[item.room].disabled[item.time] = true
                     let param = {
                         room: Days[item.day].room[item.room].name,
                         useTime: Days[item.day].name + ' ' + time[item.time].timestr,
@@ -206,8 +205,17 @@ app.use(async (ctx,next) => {
                 }
             })
             if(canBook){
+                data.forEach(item => {
+                    Days[item.day].room[item.room].disabled[item.time] = true
+                })
                 ctx.response.statusCode = 200
-                reserve = reserve.concat(newReserve)
+                if(reserves[openId] === undefined){
+                    reserves[openId] = []
+                }
+                reserves[openId] = reserves[openId].concat(newReserve)
+                console.log(openId)
+                console.log(newReserve)
+                console.log(reserves[openId])
             }else{
                 ctx.response.statusCode = 403
             }
@@ -246,8 +254,8 @@ app.use(async (ctx,next) => {
     }
 })
 
-//http.createServer(app.callback()).listen(80);
-//https.createServer(options, app.callback()).listen(443);
+//http.createServer(app.callback()).listen(80)
+//https.createServer(options, app.callback()).listen(443)
 
 function reqUserInfo(code){
     return new Promise(function (resolve,reject){
@@ -263,13 +271,13 @@ function reqUserInfo(code){
         },function(err,res,data){
             if(res.statusCode === 200){
                 openId = data.openId
-                resolve(data);
+                resolve(data)
             }else{
                 resolve({
                     openId: 'wtf'
-                });
+                })
             }
-        });
-    });
+        })
+    })
 }
 
