@@ -7,7 +7,7 @@ Page({
     },
     change: function(event) {
         wx.navigateTo({
-            url: '../mine/mine',
+            url: '../announceall/announceall',
         })
     },
     toNotice: function(event) {

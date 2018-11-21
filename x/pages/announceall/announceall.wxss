@@ -1,0 +1,58 @@
+.head{
+  margin-top: 10px;
+  width:90%;
+  height:30px;
+  background-color: #fff;
+  font-size: 15px;
+  line-height: 30px;
+  text-align: center
+}
+
+.announce{
+  width:90%;
+  background-color: #fff;
+  margin-top: 10px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  display: flex;
+  height:200rpx;
+}
+
+.word{
+  width:90%;
+}
+.title{
+  width:100%;
+  background-color: #fff;
+  text-align: left;
+  font-size: 40rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.title::after{
+  border: none;
+}
+
+.time{
+  background-color: #fff;
+  text-align: left;
+  font-size: 30rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: none;
+}
+
+.time::after{
+  border: none;
+}
+
+.icon{
+  width:10%;
+  text-align: center;
+  display:flex; 
+  justify-content:center;
+  align-items:center;
+}
