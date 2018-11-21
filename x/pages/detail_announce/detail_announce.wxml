@@ -1,5 +1,5 @@
 <view>
-  <button class = "all">
+  <view class = "all">
       <button class = "title">琴房使用说明</button>
       <button class = "time">2018-11-21 21:40</button>
       <button class = "author">管理员</button>
@@ -10,5 +10,6 @@
       校内学生琴卡，15元∕小时，学生琴卡应打3孔∕小时；
       教职工卡，20元∕小时，教职工琴卡应打2孔∕小时；
       社会卡，30元∕小时，社会琴卡应打2孔∕小时；</button></view>
-  </button>
+      <button bindtap = 'Iknow' type = 'primary'>我知道了</button>
+  </view>
 </view>

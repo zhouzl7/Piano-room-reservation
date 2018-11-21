@@ -61,5 +61,9 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+
+  Iknow: function(){
+    wx.navigateBack({})
   }
 })
