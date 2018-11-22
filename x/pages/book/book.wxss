@@ -11,6 +11,7 @@ page{
 }
 .DayBtn{
   width:100%;
+  justify-content: center;
 }
 
 .roomAndTime{
