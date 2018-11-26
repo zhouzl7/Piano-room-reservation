@@ -4,7 +4,7 @@ page{
 }
 .Days {
   margin-top: -100px;
-  width: 90%;
+  width: 100%;
   flex-direction: row;
   display: flex;
   padding: 40rpx 0;
@@ -12,7 +12,22 @@ page{
 .DayBtn{
   width:100%;
   justify-content: center;
+  border-radius: 0;
+  border-width: 1rpx;
+  background-color: #fff;
 }
+.DayBtn::after{
+  border: none;
+}
+
+.Day1{
+  height: 10rpx;
+  border-color: #fff;
+}
+.Day1::after{
+  border: none;
+}
+
 
 .roomAndTime{
   flex-direction: row;

@@ -1,7 +1,7 @@
 <view class = "announceall">
   <button class = "head">公告</button>
   <view class = "detail_announce">
-    <button class = "announce" wx:for="{{announce}}" bindtap='more_detail'>
+    <button class = "announce" wx:for="{{announce}}" bindtap='more_detail' data-index="{{index}}">
       <view class = "word">
         <button class = "title">{{item.title}}</button>
         <button class = "time">{{item.time}}</button>

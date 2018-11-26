@@ -1,9 +1,9 @@
 <!--pages/book/book.wxml-->
 <view class='container'>
   <view class="Days">
-    <button class="DayBtn" wx:for="{{Days}}" wx:key="name" style="background-color:{{item.color}}" data-id="{{index}}"bindtap = "chooseDay">{{item.name}}</button>
-    <!--TODO: wxss:row-->
+    <button class="DayBtn" wx:for="{{Days}}" wx:key="name" data-id="{{index}}" bindtap = "chooseDay">{{item.name}}<button class="Day1"style="background-color:{{item.color}};  border-radius:0"></button></button>
   </view>
+
   <view class = "roomAndTime">
     <scroll-view scroll-y="true" class="Rooms">
       <button class="RoomBtn" wx:for="{{Days[chosenDay].room}}" bindtap="chooseRoom" style="background-color:{{item.color}}" data-id="{{index}}">{{item.name}}</button>
