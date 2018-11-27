@@ -8,11 +8,15 @@ Page({
     announce:[
       {
         title:"琴房一使用说明",
-        time:"2018-11-21 21:40"
+        time:"2018-11-21 21:40",
+        author:"管理员",
+        content:"lalala"
       },
       {
         title:"关于国庆放假琴房关闭说明",
-        time:"2018-11-21 21:41"
+        time:"2018-11-21 21:41",
+        author:"author",
+        content: "2-08，为键盘队专用琴房，键盘队自行，蒙楼负责登记管理；2-05，为键盘队与合唱队合用琴房，两队自行排队使用，蒙楼负责登记管理；2-01，为星海钢琴，为本校学生持学生琴卡使用，10元∕小时，应打2孔；2-02，2-03，2-04，2-06，2-07，向所有人开放，校内学生琴卡，15元∕小时，学生琴卡应打3孔∕小时；教职工卡，20元∕小时，教职工琴卡应打2孔∕小时；社会卡，30元∕小时，社会琴卡应打2孔∕小时；"
       }
     ]
   },
@@ -74,8 +78,9 @@ Page({
   },
 
   more_detail:function(event){
+    var index = parseInt(event.currentTarget.dataset.index)
     wx.navigateTo({
-      url: '../detail_announce/detail_announce',
+      url: '../detail_announce/detail_announce?title=' + this.data.announce[index].title + '&time=' + this.data.announce[index].time + '&author=' + this.data.announce[index].author+'&content=' + this.data.announce[index].content,
     })
   }
 })

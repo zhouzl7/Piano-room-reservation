@@ -5,14 +5,23 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    title:null,
+    time:null,
+    author:null,
+    content:null
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var self=this
+    self.setData({
+      title:options.title,
+      time:options.time,
+      author:options.author,
+      content:options.content
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

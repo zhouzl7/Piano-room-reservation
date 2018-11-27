@@ -1,7 +1,7 @@
 <view class = "pic">
   <image src = "../../images/notice.png"></image>
 </view>
-<view class = "word">
+<button class = "word">
   <text class = "title">钢琴房使用注意事项：</text>
   <text>
   2-08，为键盘队专用琴房，键盘队自行，蒙楼负责登记管理；
@@ -22,4 +22,4 @@
   社会卡，15元∕小时，社会琴卡应打1孔∕小时；
   收费标准仅限一人使用琴房，如2人及以上进入琴房练习，一律按照社会标准收费。
  </text>
-</view>
+</button>
