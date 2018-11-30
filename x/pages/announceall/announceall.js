@@ -1,5 +1,7 @@
 // pages/announceall/announceall.js
+const app = getApp()
 Page({
+
 
   /**
    * 页面的初始数据
@@ -39,7 +41,22 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+    let self = this
+    wx.request({
+      url: app.globalData.url + '/api/announcement',
+      method: "GET",
+      data: {
+        openId: app.globalData.openId
+      },
+      success: res => {
+        console.log(res.data)
+        loadReservation(self, res.data.announce)
+        console.log('Reservation loaded')
+      },
+      fail: function () {
+        console.log('can\'t get reservation')
+      }
+    })
   },
 
   /**
@@ -83,4 +100,12 @@ Page({
       url: '../detail_announce/detail_announce?title=' + this.data.announce[index].title + '&time=' + this.data.announce[index].time + '&author=' + this.data.announce[index].author+'&content=' + this.data.announce[index].content,
     })
   }
+  
 })
+
+function loadReservation(self, data) {
+  console.log(data)
+  self.setData({
+    announce: data
+  })
+}

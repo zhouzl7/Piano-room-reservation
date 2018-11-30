@@ -3,7 +3,6 @@ page{
   background-color: #EDEDED;
 }
 .Days {
-  margin-top: -100px;
   width: 100%;
   flex-direction: row;
   display: flex;

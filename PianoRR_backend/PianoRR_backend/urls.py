@@ -16,10 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from extra_apps import xadmin
+from django.conf.urls import url,include
+from apps import USERmanage
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
     path('admin/', xadmin.site.urls),
+    path('api/', include('PRmanage.urls')),
 ]
 #username:admin
 #pwd:admin123
