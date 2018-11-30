@@ -7,8 +7,8 @@ from PRmanage.models import Announcement,PianoRoom,TimeTable
 from BOOKmanage.models import BookRecord
 from USERmanage.models import User,UserGroup
 from django.core import serializers
+from PianoRR_backend.settings import WECHAT_APPID, WECHAT_SECRET
 import requests
-from PianoRR_backend.settings import WECHAT_SECRET, WECHAT_APPID
 
 def announcement(request):
     announceall = []
@@ -45,74 +45,233 @@ def availableTime(request):
     PianoRoomLists = PianoRoom.objects.all()
     dateToday =[]
     dateTomorrow = []
-    dateAfter_Tomorow = []
+    dateAfter_Tomorrow = []
+    date0 = ''
+    date1 = ''
+    date2 = ''
     for room in PianoRoomLists:
-        dateTodayi = TimeTable.objects.filter(piano_room=room,date=0).first()
-        if(dateTodayi.Time1 == 1):
-            time1 = 'false'
-        else:
-            time1 = 'true'
-        if(dateTodayi.Time2 == 1):
-            time2 = 'false'
-        else:
-            time2 = 'true'
-        if(dateTodayi.Time3 == 1):
-            time3 = 'false'
-        else:
-            time3 = 'true'
-        if(dateTodayi.Time4 == 1):
-            time4 = 'false'
-        else:
-            time4 = 'true'
-        if(dateTodayi.Time5 == 1):
-            time5 = 'false'
-        else:
-            time5 = 'true'
-        if(dateTodayi.Time6 == 1):
-            time6 = 'false'
-        else:
-            time6 = 'true'
-        if(dateTodayi.Time7 == 1):
-            time7 = 'false'
-        else:
-            time7 = 'true'
-        if(dateTodayi.Time8 == 1):
-            time8 = 'false'
-        else:
-            time8 = 'true'
-        if(dateTodayi.Time9 == 1):
-            time9 = 'false'
-        else:
-            time9 = 'true'
-        if(dateTodayi.Time10 == 1):
-            time10 = 'false'
-        else:
-            time10 = 'true'
-        if(dateTodayi.Time11 == 1):
-            time11 = 'false'
-        else:
-            time11 = 'true'
-        if(dateTodayi.Time12 == 1):
-            time12 = 'false'
-        else:
-            time12 = 'true'
-        if(dateTodayi.Time13 == 1):
-            time13 = 'false'
-        else:
-            time13 = 'true'
-        if(dateTodayi.Time14 == 1):
-            time14 = 'false'
-        else:
-            time14 = 'true'
-
         if(room.piano_type == 0):
             money = user.group.smallPR_price
         elif(room.piano_type == 1):
             money = user.group.bigPR_price
         else:
             money = user.group.xinghaiPR_price
-        dateToday.append({
-            'name':room.room_id,
-            'disabled':[time1,time2,time3,time4,time5,time6,time7,time8,time9,time10,time11,time12,time13,time14],
-            'money':money
-        })
+        dateTodayi = TimeTable.objects.filter(piano_room=room,TT_type=0).first()
+        if(dateTodayi):
+            date0 = dateTodayi.date
+            if(dateTodayi.Time1 == 1):
+                time1 = False
+            else:
+                time1 = True
+            if(dateTodayi.Time2 == 1):
+                time2 = False
+            else:
+                time2 = True
+            if(dateTodayi.Time3 == 1):
+                time3 = False
+            else:
+                time3 = True
+            if(dateTodayi.Time4 == 1):
+                time4 = False
+            else:
+                time4 = True
+            if(dateTodayi.Time5 == 1):
+                time5 = False
+            else:
+                time5 = True
+            if(dateTodayi.Time6 == 1):
+                time6 = False
+            else:
+                time6 = True
+            if(dateTodayi.Time7 == 1):
+                time7 = False
+            else:
+                time7 = True
+            if(dateTodayi.Time8 == 1):
+                time8 = False
+            else:
+                time8 = True
+            if(dateTodayi.Time9 == 1):
+                time9 = False
+            else:
+                time9 = True
+            if(dateTodayi.Time10 == 1):
+                time10 = False
+            else:
+                time10 = True
+            if(dateTodayi.Time11 == 1):
+                time11 = False
+            else:
+                time11 = True
+            if(dateTodayi.Time12 == 1):
+                time12 = False
+            else:
+                time12 = True
+            if(dateTodayi.Time13 == 1):
+                time13 = False
+            else:
+                time13 = True
+            if(dateTodayi.Time14 == 1):
+                time14 = False
+            else:
+                time14 = True
+
+            dateToday.append({
+                'name':room.room_id,
+                'disabled':[time1,time2,time3,time4,time5,time6,time7,time8,time9,time10,time11,time12,time13,time14],
+                'money':money,
+                'multiMoney': 2*money
+            })
+
+        dateTomorrowi = TimeTable.objects.filter(piano_room=room,TT_type=1).first()
+        if(dateTomorrowi):
+            date1 = dateTomorrowi.date
+            if(dateTomorrowi.Time1 == 1):
+                time1 = False
+            else:
+                time1 = True
+            if(dateTomorrowi.Time2 == 1):
+                time2 = False
+            else:
+                time2 = True
+            if(dateTomorrowi.Time3 == 1):
+                time3 = False
+            else:
+                time3 = True
+            if(dateTomorrowi.Time4 == 1):
+                time4 = False
+            else:
+                time4 = True
+            if(dateTomorrowi.Time5 == 1):
+                time5 = False
+            else:
+                time5 = True
+            if(dateTomorrowi.Time6 == 1):
+                time6 = False
+            else:
+                time6 = True
+            if(dateTomorrowi.Time7 == 1):
+                time7 = False
+            else:
+                time7 = True
+            if(dateTomorrowi.Time8 == 1):
+                time8 = False
+            else:
+                time8 = True
+            if(dateTomorrowi.Time9 == 1):
+                time9 = False
+            else:
+                time9 = True
+            if(dateTomorrowi.Time10 == 1):
+                time10 = False
+            else:
+                time10 = True
+            if(dateTomorrowi.Time11 == 1):
+                time11 = False
+            else:
+                time11 = True
+            if(dateTomorrowi.Time12 == 1):
+                time12 = False
+            else:
+                time12 = True
+            if(dateTomorrowi.Time13 == 1):
+                time13 = False
+            else:
+                time13 = True
+            if(dateTomorrowi.Time14 == 1):
+                time14 = False
+            else:
+                time14 = True
+
+            dateTomorrow.append({
+                'name':room.room_id,
+                'disabled':[time1,time2,time3,time4,time5,time6,time7,time8,time9,time10,time11,time12,time13,time14],
+                'money':money,
+                'multiMoney': 2*money
+            })
+
+        dateAfter_Tomorrowi = TimeTable.objects.filter(piano_room=room,TT_type=2).first()
+        if(dateAfter_Tomorrowi):
+            date2 = dateAfter_Tomorrowi.date
+            if(dateAfter_Tomorrowi.Time1 == 1):
+                time1 = False
+            else:
+                time1 = True
+            if(dateAfter_Tomorrowi.Time2 == 1):
+                time2 = False
+            else:
+                time2 = True
+            if(dateAfter_Tomorrowi.Time3 == 1):
+                time3 = False
+            else:
+                time3 = True
+            if(dateAfter_Tomorrowi.Time4 == 1):
+                time4 = False
+            else:
+                time4 = True
+            if(dateAfter_Tomorrowi.Time5 == 1):
+                time5 = False
+            else:
+                time5 = True
+            if(dateAfter_Tomorrowi.Time6 == 1):
+                time6 = False
+            else:
+                time6 = True
+            if(dateAfter_Tomorrowi.Time7 == 1):
+                time7 = False
+            else:
+                time7 = True
+            if(dateAfter_Tomorrowi.Time8 == 1):
+                time8 = False
+            else:
+                time8 = True
+            if(dateAfter_Tomorrowi.Time9 == 1):
+                time9 = False
+            else:
+                time9 = True
+            if(dateAfter_Tomorrowi.Time10 == 1):
+                time10 = False
+            else:
+                time10 = True
+            if(dateAfter_Tomorrowi.Time11 == 1):
+                time11 = False
+            else:
+                time11 = True
+            if(dateAfter_Tomorrowi.Time12 == 1):
+                time12 = False
+            else:
+                time12 = True
+            if(dateAfter_Tomorrowi.Time13 == 1):
+                time13 = False
+            else:
+                time13 = True
+            if(dateAfter_Tomorrowi.Time14 == 1):
+                time14 = False
+            else:
+                time14 = True
+
+            dateAfter_Tomorrow.append({
+                'name':room.room_id,
+                'disabled':[time1,time2,time3,time4,time5,time6,time7,time8,time9,time10,time11,time12,time13,time14],
+                'money':money,
+                'multiMoney': 2*money
+            })
+
+    Days = []
+    Days.append({
+        'name':date0,
+        'room':dateToday
+    })
+    Days.append({
+        'name':date1,
+        'room':dateTomorrow
+    })
+    Days.append({
+        'name':date2,
+        'room':dateAfter_Tomorrow
+    })
+
+    result = {
+        'Days':Days
+    }
+    return JsonResponse(result)
