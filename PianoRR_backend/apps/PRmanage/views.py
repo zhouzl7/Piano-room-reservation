@@ -9,6 +9,7 @@ from USERmanage.models import User,UserGroup
 from django.core import serializers
 from PianoRR_backend.settings import WECHAT_APPID, WECHAT_SECRET
 import requests
+from PianoRR_backend.settings import WECHAT_SECRET, WECHAT_APPID
 
 def announcement(request):
     announceall = []
