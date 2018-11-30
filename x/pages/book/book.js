@@ -23,20 +23,60 @@ Page({
                 color: "#fff"
             },
             {
-                id: 3,
-                timestr: "13:00-14:00",
-                color: "#fff"
+              id: 3,
+              timestr: "11:00-12:00",
+              color: "#fff"
             },
             {
                 id: 4,
-                timestr: "14:00-15:00",
+                timestr: "12:00-13:00",
                 color: "#fff"
             },
             {
                 id: 5,
-                timestr: "15:00-16:00",
+                timestr: "13:00-14:00",
                 color: "#fff"
-            }
+            },
+            {
+                id: 6,
+                timestr: "14:00-15:00",
+                color: "#fff"
+            },
+            {
+              id: 7,
+              timestr: "15:00-16:00",
+              color: "#fff"
+            },
+            {
+              id: 8,
+              timestr: "16:00-17:00",
+              color: "#fff"
+            },
+            {
+              id: 9,
+              timestr: "17:00-18:00",
+              color: "#fff"
+            },
+            {
+              id: 10,
+              timestr: "18:00-19:00",
+              color: "#fff"
+            },
+            {
+              id: 11,
+              timestr: "19:00-20:00",
+              color: "#fff"
+            },
+            {
+              id: 12,
+              timestr: "20:00-21:00",
+              color: "#fff"
+            },
+            {
+              id: 13,
+              timestr: "21:00-22:00",
+              color: "#fff"
+            },
         ],
         Days: [{
                 name: "今天",
