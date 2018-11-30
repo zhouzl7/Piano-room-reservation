@@ -24,6 +24,9 @@ class TimeTableAdmin(object):
     list_filter = ['piano_room', 'TT_type', 'date', 'Time1', 'Time2', 'Time3', 'Time4', 'Time5', 'Time6', 'Time7',
                    'Time8', 'Time9', 'Time10', 'Time11', 'Time12', 'Time13', 'Time14']
 
+    # def has_add_permission(self):
+    #     return False
+
 xadmin.site.register(TimeTable, TimeTableAdmin)
 
 class AnnouncementAdmin(object):

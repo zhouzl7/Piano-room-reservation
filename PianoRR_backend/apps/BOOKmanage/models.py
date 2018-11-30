@@ -19,8 +19,12 @@ class BookRecord(models.Model):
     is_pay = models.BooleanField(u'缴费情况', choices=((
                                             True, '已缴费'), (False, '待缴费')))
     user_quantity = models.IntegerField(u'人数')
-    start_time = models.DateTimeField(u'开始时间')
-    end_time = models.DateTimeField(u'结束时间')
+    BR_date = models.DateField(u'日期')
+    use_time = models.IntegerField(u'时间段', choices=((1, u'8-9'), (2, u'9-10'), (3, u'10-11'), (4, u'11-12'),
+                                                    (5, u'12-13'), (6, u'13-14'), (7, u'14-15'), (8, u'15-16'),
+                                                    (9, u'16-17'), (10, u'17-18'), (11, u'18-19'), (12, u'19-20'),
+                                                    (13, u'20-21'), (14, u'21-22'))
+                                   )
     status = models.IntegerField(u'状态', choices=((
                                     STATUS_CANCELLED, '已取消'), (STATUS_VALID, '未赴约'), (STATUS_USED, '已赴约')))
     piano_room = models.ForeignKey(PianoRoom, on_delete=models.CASCADE, verbose_name='琴房')
