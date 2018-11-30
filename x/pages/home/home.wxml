@@ -1,10 +1,25 @@
-<!--firstpage.wxml-->
-<view class = "content">
-  <button class = "message" bindtap='change' form-type='submit'><image src="../../images/message.jpg"></image></button>
-  <button class = "notice" bindtap='toNotice'><image src="../../images/notice.jpg" mode = " top left"></image></button>
-  <button class = "room1" bindtap='changecolor' style="background-color:{{color}}">琴房1</button>
-  <button class = "room2">琴房2</button>
-  <button class = "room3">琴房3</button>
-  <button class = "room4">琴房4</button>
-  <button class = "room5">琴房5</button>
+<!--pages/hometest/home test.wxml-->
+<view class='content'>
+<view class="head">
+<image style="height: 50px;" mode="left" src="../../images/logo.png"></image> </view>
+<view class="table">
+  <view class="tr bg-w">
+    <button class="th" bindtap='change'>公告</button>
+    <button class="th" bindtap='toNotice'>注意事项</button>
+  </view>
 </view>
+<view class = "choose">
+<view class="td">选择钢琴房</view>
+</view>
+<button class = "room"><view style="margin-left:3%">
+琴房1</view></button>
+<button class = "room"><view style="margin-left:3%">
+琴房2</view></button>
+<button class = "room"><view style="margin-left:3%">
+琴房3</view></button>
+<button class = "room"><view style="margin-left:3%">
+琴房4</view></button>
+<button class = "room"><view style="margin-left:3%">
+琴房5</view></button>
+</view>
+

@@ -48,7 +48,8 @@ class TimeTable(models.Model):
     TIME_ABLED = 1
 
     piano_room = models.ForeignKey(PianoRoom, on_delete=models.CASCADE, default=None, verbose_name='琴房')
-    date = models.IntegerField(u'日期', choices=((0, '今天'), (1, '明天'), (2, '后天')), default=0)
+    TT_type = models.IntegerField(u'类型', choices=((0, '今天'), (1, '明天'), (2, '后天')), default=0)
+    date = models.DateField(u'日期')
     Time1 = models.IntegerField(u'08-09', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
     Time2 = models.IntegerField(u'09-10', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
     Time3 = models.IntegerField(u'10-11', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)

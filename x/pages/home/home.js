@@ -1,29 +1,30 @@
-//firstpage.js
-//首页
-
+// pages/hometest/home test.js
 Page({
-    data: {
-        color: "#fff",
-    },
-    change: function(event) {
-        wx.navigateTo({
-            url: '../announceall/announceall',
-        })
-    },
-    toNotice: function(event) {
-        wx.navigateTo({
-            url: '../notice/notice',
-        })
-    },
-    changecolor: function(event) {
-        if (this.data.color == "yellow") {
-            this.setData({
-                color: "#fff"
-            })
-        } else {
-            this.setData({
-                color: "yellow"
-            })
-        }
+  data: {
+    color: "darkgrey",
+  },
+  change: function (event) {
+    wx.navigateTo({
+      url: '../announceall/announceall',
+    })
+  },
+  toNotice: function (event) {
+    this.setData({
+      color: "cornflowerblue"
+    })
+    wx.navigateTo({
+      url: '../notice/notice',
+    })
+  },
+  changecolor: function (event) {
+    if (this.data.color == "cornflowerblue") {
+      this.setData({
+        color: "darkgrey"
+      })
+    } else {
+      this.setData({
+        color: "cornflowerblue"
+      })
     }
+  }
 })

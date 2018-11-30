@@ -15,14 +15,17 @@ xadmin.site.register(PianoRoom, PianoRoomAdmin)
 
 class TimeTableAdmin(object):
     # 显示的列
-    list_display = ['piano_room', 'date', 'Time1', 'Time2', 'Time3', 'Time4', 'Time5', 'Time6', 'Time7', 'Time8',
-                    'Time9', 'Time10', 'Time11', 'Time12', 'Time13', 'Time14']
+    list_display = ['piano_room', 'TT_type', 'date', 'Time1', 'Time2', 'Time3', 'Time4', 'Time5', 'Time6', 'Time7',
+                    'Time8', 'Time9', 'Time10', 'Time11', 'Time12', 'Time13', 'Time14']
     # 搜索的字段，不要添加时间搜索
-    search_fields = ['piano_room', 'date', 'Time1', 'Time2', 'Time3', 'Time4', 'Time5', 'Time6', 'Time7', 'Time8',
-                     'Time9', 'Time10', 'Time11', 'Time12', 'Time13', 'Time14']
+    search_fields = ['piano_room', 'TT_type', 'Time1', 'Time2', 'Time3', 'Time4', 'Time5', 'Time6', 'Time7',
+                     'Time8', 'Time9', 'Time10', 'Time11', 'Time12', 'Time13', 'Time14']
     # 过滤
-    list_filter = ['piano_room', 'date', 'Time1', 'Time2', 'Time3', 'Time4', 'Time5', 'Time6', 'Time7', 'Time8',
-                   'Time9', 'Time10', 'Time11', 'Time12', 'Time13', 'Time14']
+    list_filter = ['piano_room', 'TT_type', 'date', 'Time1', 'Time2', 'Time3', 'Time4', 'Time5', 'Time6', 'Time7',
+                   'Time8', 'Time9', 'Time10', 'Time11', 'Time12', 'Time13', 'Time14']
+
+    # def has_add_permission(self):
+    #     return False
 
 xadmin.site.register(TimeTable, TimeTableAdmin)
 
