@@ -9,4 +9,4 @@
  
  	python3.6
 	
- 	django2.0.2
+ 	django2.1.3
