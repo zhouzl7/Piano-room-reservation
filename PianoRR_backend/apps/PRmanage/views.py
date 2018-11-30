@@ -8,6 +8,7 @@ from BOOKmanage.models import BookRecord
 from USERmanage.models import User,UserGroup
 from django.core import serializers
 import requests
+from PianoRR_backend.settings import WECHAT_SECRET, WECHAT_APPID
 
 def announcement(request):
     announceall = []
@@ -27,8 +28,8 @@ def announcement(request):
 
 def onlogin(request):
     data = {
-        'appid': 'wx77fa9e3e4014ff7a',
-        'secret': '79e90ba6f0b6cab8b273cafd79fe1ba2',
+        'appid': WECHAT_APPID,
+        'secret': WECHAT_SECRET,
         'grant_type': 'authorization_code',
     }
     data['js_code'] = request.GET['code']
