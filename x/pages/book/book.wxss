@@ -3,12 +3,14 @@ page{
   background-color: #EDEDED;
 }
 .Days {
+  margin-top:-31.5%;
   width: 100%;
   flex-direction: row;
   display: flex;
   padding: 40rpx 0;
 }
 .DayBtn{
+
   width:100%;
   justify-content: center;
   border-radius: 0;

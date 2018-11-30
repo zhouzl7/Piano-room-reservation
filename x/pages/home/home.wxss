@@ -1,57 +1,45 @@
-.message{
+/* pages/hometest/home test.wxss */
+.table {
+  border: 0px solid darkgray;
+}
+.head{
   margin-top: 10px;
-  height: 100px;
-  width:90%;
+  background-color: white;
+  height: 50px;
 }
-.message image{
-  margin-left: -30rpx;
-  height: 100px;
-  width: 120%;
+.choose{
+  margin-bottom: 5%;
+  background-color: cornflowerblue;
+  height: 10%;
 }
-.notice{
-  margin-top: 10px;
-  height:100px;
-  width: 90%;
-  font-size: 60rpx;
-  text-align: left;
+.tr {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 2rem;
+  align-items: center;
 }
-.notice image{
-  margin-left: -30rpx;
-  height: 100px;
-  width: 120%;
+.td {
+    color: #fff;
+    margin-left: 5%;
+    margin-top: 10px;
 }
-.room1{
-  margin-top: 10px;
-  height:100px;
-  width: 90%;
-  font-size: 60rpx;
-  text-align: left;
+.bg-w{
+  background: white;
 }
-.room2{
-  margin-top: 10px;
-  height:100px;
-  width: 90%;
-  font-size: 60rpx;
-  text-align: left;
+.bg-g{
+  background: #E6F3F9;
 }
-.room3{
-  margin-top: 10px;
-  height:100px;
-  width: 90%;
-  font-size: 60rpx;
-  text-align: left;
+.th {
+  width: 50%;
+  justify-content: center;
+  color:cornflowerblue;
+  display: flex;
+  height: 2rem;
+  align-items: center;
+  border-radius: 0;
 }
-.room4{
-  margin-top: 10px;
-  height:100px;
-  width: 90%;
-  font-size: 60rpx;
-  text-align: left;
-}
-.room5{
-  margin-top: 10px;
-  height:100px;
-  width: 90%;
-  font-size: 60rpx;
+.room{
+  background-color: white;
   text-align: left;
 }
