@@ -1,12 +1,11 @@
 <view>
   <view class = "res">
-    <button class = "btn" bindtap="toUnuse" style = "background-color:{{colorUnuse}}">未使用预约</button>
-    <button class = "btn" bindtap="toHistory" style = "background-color:{{colorHistory}}">历史预约</button>
+  <button class = "myres">我的预约</button>
   </view>
   <view >
     <button class = "reservation" wx:for="{{reserve}}"><text>{{item.room}}
     {{item.useTime}}
-    {{item.user}}
-    {{item.resTime}}</text></button>
+    {{item.people}}
+    {{item.user}}</text></button>
     </view>
 </view>
