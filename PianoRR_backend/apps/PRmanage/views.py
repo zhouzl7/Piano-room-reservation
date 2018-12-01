@@ -27,6 +27,8 @@ def announcement(request):
     return JsonResponse(result)
 
 def onlogin(request):
+    print("appid: "+WECHAT_APPID)
+    print("\n secret: "+WECHAT_SECRET)
     data = {
         'appid': WECHAT_APPID,
         'secret': WECHAT_SECRET,
@@ -273,5 +275,23 @@ def availableTime(request):
 
     result = {
         'Days':Days
+    }
+    return JsonResponse(result)
+
+def reservation(request):
+    openId = request.GET['openId']
+    user = User.objects.filter(open_id = openId).first()
+    bookLists = BookRecord.objects.filter(user = user)
+    bookall = []
+    for book in bookLists:
+        bookall.append({
+            'room':book.piano_room.room_id,
+            'useTime':str(book.BR_date) + ' ' + str(book.use_time+7) +'-' + str(book.use_time+8),
+            'people':book.user_quantity,
+            'user':user.name
+        })
+    bookall.reverse()
+    result = {
+        'reserve': bookall
     }
     return JsonResponse(result)
