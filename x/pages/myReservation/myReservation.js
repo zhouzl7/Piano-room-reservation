@@ -8,7 +8,19 @@ Page({
     data: {
         colorUnuse: "#0090CE",
         colorHistory: "#fff",
-        reserve: []
+        reserve: [{
+                room: "琴房1",
+                useTime: "2018-11-17 13:00-14:00",
+                user: "single",
+                resTime: "xxxx-xx-xx xx:xx-xx:xx"
+            },
+            {
+                room: "琴房2",
+                useTime: "2018-11-18 13:00-14:00",
+                user: "multy",
+                resTime: "xxxx-xx-xx xx:xx-xx:xx"
+            }
+        ]
     },
 
     /**
@@ -39,7 +51,7 @@ Page({
         },
         success: res => {
           console.log(res.data)
-          loadReservation(self,res.data.reserve)
+          loadReservation(self,res.data.reservation)
           console.log('Reservation loaded')
         },
         fail: function(){
@@ -82,6 +94,20 @@ Page({
     onShareAppMessage: function() {
 
     },
+
+    toUnuse: function(event) {
+        this.setData({
+            colorUnuse: "#0090CE",
+            colorHistory: "#fff"
+        })
+    },
+
+    toHistory: function(event) {
+        this.setData({
+            colorUnuse: "#fff",
+            colorHistory: "#0090CE"
+        })
+    }
 
 })
 
