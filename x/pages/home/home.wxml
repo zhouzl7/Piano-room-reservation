@@ -9,7 +9,7 @@
   </view>
 </view>
 <view class = "choose">
-<view class="td">选择钢琴房</view>
+<view class="td">琴房介绍</view>
 </view>
 <button class = "room"><view style="margin-left:3%">
 琴房1</view></button>

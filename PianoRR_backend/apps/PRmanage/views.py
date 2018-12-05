@@ -3,12 +3,16 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.http import HttpResponse,JsonResponse
+from django.db import transaction
+from django.db.models import Q
 from PRmanage.models import Announcement,PianoRoom,TimeTable
 from BOOKmanage.models import BookRecord
-from USERmanage.models import User,UserGroup
+from USERmanage.models import User,UserGroup,BlackList
 from django.core import serializers
 from PianoRR_backend.settings import WECHAT_APPID, WECHAT_SECRET
+import json
 import requests
+import datetime
 
 def announcement(request):
     announceall = []
@@ -27,8 +31,6 @@ def announcement(request):
     return JsonResponse(result)
 
 def onlogin(request):
-    print("appid: "+WECHAT_APPID)
-    print("\n secret: "+WECHAT_SECRET)
     data = {
         'appid': WECHAT_APPID,
         'secret': WECHAT_SECRET,
@@ -295,3 +297,83 @@ def reservation(request):
         'reserve': bookall
     }
     return JsonResponse(result)
+
+def book(request):
+    #check if the times are available
+    body = json.loads(request.body)
+    print(body['openId'])
+    try:
+        user = User.objects.get(open_id=body['openId'])
+    except:
+        return JsonResponse({'errMsg':'您尚未绑定!'})
+    if(BlackList.objects.filter(open_id=body['openId']).exists()):
+        return JsonResponse({'errMsg': '您已被加入黑名单,请联系管理员'})
+    available = False
+    query = Q()
+    bookTime = body['bookTime']
+    for i in bookTime:
+        timeQuery = Q(piano_room=i['room']) & Q(TT_type=i['day'])
+        for j in i['time']:
+            timeQuery.children.append((j,TimeTable.TIME_ABLED))
+        query = query | timeQuery
+    print(query)
+    result = TimeTable.objects.select_for_update().filter(query)
+    with transaction.atomic():
+        print(result)
+        if len(result) == len(bookTime):
+            available = True
+            for i in result:
+                for j in bookTime:
+                    print(j)
+                    if (j['day'] == i.TT_type) and (j['room'] == i.piano_room.room_id):
+                        for time in j['time']:
+                            print(time)
+                            setattr(i,time,TimeTable.TIME_BOOKED)
+                        break
+                i.save()
+        else:
+            available = False
+    
+    money = 0
+    resData = {
+        'times': []
+    }
+    for timetable in TimeTable.objects.all():
+        time = []
+        for i in range(1,15):
+            if(getattr(timetable,'Time'+str(i)) == 1):
+                time.append(False)
+            else:
+                time.append(True)
+        resData['times'].append({
+            'day' : timetable.TT_type,
+            'room' : timetable.piano_room.room_id,
+            'disabled' : time
+        })
+    if available == True:
+        if body['single']:
+            prices = user.group
+        else:
+            prices = UserGroup.objects.get(group_name='普通用户')
+        for i in bookTime:
+            room = PianoRoom.objects.get(room_id=i['room'])
+            if room.piano_type == PianoRoom.TYPE_SMALL:
+                price = prices.smallPR_price
+            elif room.piano_type == PianoRoom.TYPE_BIG:
+                price = prices.bigPR_price
+            elif room.piano_type == PianoRoom.TYPE_XINGHAI:
+                price = prices.xinghaiPR_price
+            money += len(i['time']) * price
+            #createBookRecord:
+            for j in i['time']:
+                record = BookRecord.objects.create(user=user,fee=price,
+                        is_pay=True,user_quantity=body['single'],
+                        BR_date=datetime.date.today()+datetime.timedelta(days=i['day']),
+                        use_time=int(j[4:]),status=BookRecord.STATUS_VALID,piano_room=room)
+                #TODO: is_pay should be false by default, but there's no pay model
+                record.save()
+    else:
+        resData['errMsg'] = '所选时间已被占用或无法使用!'
+    #refresh the availableTime
+    return JsonResponse(resData)
+    

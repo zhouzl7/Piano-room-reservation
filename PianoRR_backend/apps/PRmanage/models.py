@@ -7,7 +7,7 @@ import datetime
 # Create your models here.
 
 class PianoRoom(models.Model):
-    room_id = models.CharField(u'编号', max_length=10, unique=True, db_index=True)
+    room_id = models.CharField(u'编号', max_length=10, unique=True)
     # 小琴房
     TYPE_SMALL = 0
     # 大琴房
@@ -47,7 +47,7 @@ class TimeTable(models.Model):
     # 可被预约
     TIME_ABLED = 1
 
-    piano_room = models.ForeignKey(PianoRoom, on_delete=models.CASCADE, default=None, verbose_name='琴房')
+    piano_room = models.ForeignKey(PianoRoom, to_field='room_id',on_delete=models.CASCADE, default=None, verbose_name='琴房')
     TT_type = models.IntegerField(u'类型', choices=((0, '今天'), (1, '明天'), (2, '后天')), default=0)
     date = models.DateField(u'日期')
     Time1 = models.IntegerField(u'08-09', choices=((-1, '停止使用'), (0, '已被预约'), (1, '可被预约')), default=1)
