@@ -7,77 +7,7 @@ Page({
      * 页面的初始数据
      */
     data: {
-        time: [{
-                id: 0,
-                timestr: "8:00-9:00",
-                color: "#fff"
-            },
-            {
-                id: 1,
-                timestr: "9:00-10:00",
-                color: "#fff"
-            },
-            {
-                id: 2,
-                timestr: "10:00-11:00",
-                color: "#fff"
-            },
-            {
-              id: 3,
-              timestr: "11:00-12:00",
-              color: "#fff"
-            },
-            {
-                id: 4,
-                timestr: "12:00-13:00",
-                color: "#fff"
-            },
-            {
-                id: 5,
-                timestr: "13:00-14:00",
-                color: "#fff"
-            },
-            {
-                id: 6,
-                timestr: "14:00-15:00",
-                color: "#fff"
-            },
-            {
-              id: 7,
-              timestr: "15:00-16:00",
-              color: "#fff"
-            },
-            {
-              id: 8,
-              timestr: "16:00-17:00",
-              color: "#fff"
-            },
-            {
-              id: 9,
-              timestr: "17:00-18:00",
-              color: "#fff"
-            },
-            {
-              id: 10,
-              timestr: "18:00-19:00",
-              color: "#fff"
-            },
-            {
-              id: 11,
-              timestr: "19:00-20:00",
-              color: "#fff"
-            },
-            {
-              id: 12,
-              timestr: "20:00-21:00",
-              color: "#fff"
-            },
-            {
-              id: 13,
-              timestr: "21:00-22:00",
-              color: "#fff"
-            },
-        ],
+        time: [],
         Days: [{
                 name: "今天",
                 room: [
@@ -165,6 +95,17 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function() {
+      let time = []
+      for(let i = 0;i < 15;i++){
+        time.push({
+          id: i,
+          timestr: (i+8) + ':00-' + (i+9) + ':00',
+          color: '#fff'
+        })
+      }
+      this.setData({
+        time: time
+      })
       let self = this
       wx.showLoading({
         title: 'loading...',
@@ -323,9 +264,6 @@ Page({
 
     chooseTime: function(event) {
         let index = event.currentTarget.dataset.id
-        wx.showToast({
-          title: this.data.time[index].timestr
-        })
         let chosenDay = this.data.chosenDay
         let chosenRoom = this.data.chosenRoom
         if (this.data.Days[chosenDay].room[chosenRoom].chosen[index] === false) {
