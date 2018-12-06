@@ -77,9 +77,21 @@ def onlogin(request):
     }
     data['js_code'] = request.GET['code']
     r = requests.get('https://api.weixin.qq.com/sns/jscode2session', params=data)
-    result = {
-        'openId' : r.json()['openid'] 
-    }
+    if r.json()['openid']:
+        result = {
+            'openId' : r.json()['openid'] 
+        }
+        try:
+            user = User.objects.get(open_id=result['openId'])
+        except:
+            #create New User by default:
+            user = User.objects.create(open_id=result['openId'])
+            user.group = UserGroup.objects.get(group_name='普通用户')
+            user.save()
+    else:
+        result = {
+            'errMsg' : '登录失败口..口|||'
+        }
     return JsonResponse(result)
 
 def availableTime(request):
@@ -230,4 +242,5 @@ def book(request):
     else:
         resData['errMsg'] = '所选时间已被占用或无法使用!'
     #refresh the availableTime
+    print(resData.)
     return JsonResponse(resData)
