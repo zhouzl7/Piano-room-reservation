@@ -43,3 +43,29 @@
   background-color: white;
   text-align: left;
 }
+
+.allroom{
+  width:90%;
+  background-color: #fff;
+  margin-top: 10px;
+}
+
+.room_type{
+  width:100%;
+  background-color: #fff;
+  text-align: center;
+  font-size: 40rpx;
+}
+.room_type::after{
+  border: none;
+}
+
+.room{
+  width:100%;
+  background-color: #fff;
+  text-align: center;
+  font-size: 40rpx;
+}
+.room::after{
+  border: none;
+}

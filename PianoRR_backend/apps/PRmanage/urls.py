@@ -6,5 +6,6 @@ urlpatterns = [
     url(r'^login', views.onlogin),
     url(r'^availableTime',views.availableTime),
     url(r'^reservation', views.reservation),
-    url(r'^book', views.book)
+    url(r'^book', views.book),
+    url(r'^room', views.room),
 ]

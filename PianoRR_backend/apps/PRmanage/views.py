@@ -30,6 +30,45 @@ def announcement(request):
     }
     return JsonResponse(result)
 
+def room(request):
+    allroom = []
+    all_xinghai = ""
+    room_xinghai = PianoRoom.objects.filter(piano_type=PianoRoom.TYPE_XINGHAI)
+    if(room_xinghai):
+        for room in room_xinghai:
+            all_xinghai = all_xinghai + "\n" + room.room_id
+        allroom.append({
+            "room_type":"星海琴房",
+            "room":all_xinghai
+        })
+
+    all_big = ""
+    room_big = PianoRoom.objects.filter(piano_type=PianoRoom.TYPE_BIG)
+    if(room_big):
+        for room in room_big:
+            all_big = all_big + "\n" + room.room_id
+        allroom.append({
+            "room_type":"大琴房",
+            "room":all_big
+        })
+
+    all_small = ""
+    room_small = PianoRoom.objects.filter(piano_type=PianoRoom.TYPE_SMALL)
+    if(room_small):
+        for room in room_small:
+            all_small = all_small + "\n" + room.room_id
+        allroom.append({
+            "room_type":"小琴房",
+            "room":all_small
+        })
+    
+    result = {
+        'allroom':allroom
+    }
+    return JsonResponse(result)
+
+
+
 def onlogin(request):
     data = {
         'appid': WECHAT_APPID,
@@ -114,6 +153,7 @@ def reservation(request):
     return JsonResponse(result)
 
 def book(request):
+
     #check if the times are available
     body = json.loads(request.body)
     print(body['openId'])

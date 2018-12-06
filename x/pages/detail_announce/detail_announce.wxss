@@ -10,12 +10,11 @@
 }
 
 .title{
-  height: 100rpx;
   margin-top: 20rpx;
   font-size: 50rpx;
   font-weight: bold;
-  line-height:  100rpx;
   background-color: #fff;
+  line-height: 70rpx;
 }
 .title::after{
   border: none;
