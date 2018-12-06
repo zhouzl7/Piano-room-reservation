@@ -18,7 +18,7 @@ class BookRecord(models.Model):
     fee = models.IntegerField(u'费用 /元')
     is_pay = models.BooleanField(u'缴费情况', choices=((
                                             True, '已缴费'), (False, '待缴费')))
-    user_quantity = models.IntegerField(u'人数')
+    user_quantity = models.BooleanField(u'单人/多人', choices=((True, '单人'), (False, '多人')))
     BR_date = models.DateField(u'日期')
     use_time = models.IntegerField(u'时间段', choices=((1, u'8-9'), (2, u'9-10'), (3, u'10-11'), (4, u'11-12'),
                                                     (5, u'12-13'), (6, u'13-14'), (7, u'14-15'), (8, u'15-16'),
