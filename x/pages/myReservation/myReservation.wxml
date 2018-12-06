@@ -2,10 +2,11 @@
   <view class = "res">
     <button class = "myres">我的预约</button>
   </view>
-  <view >
-    <button class = "reservation" wx:for="{{reserve}}"><text>{{item.room}}
-    {{item.useTime}}
-    {{item.people}}
-    {{item.user}}</text></button>
+<view >
+    <button class = "reservation" wx:for="{{reserve}}"><view class="head">{{item.room}}</view>
+   <view class="content">
+   <view class="circle"></view>{{item.useTime}}</view>
+   <view class="content"><view class="circle"></view>{{item.user}}</view>
+   <view class="content"style="margin-bottom:60rpx"><view class="circle"></view>{{item.resTime}}</view></button>
     </view>
 </view>
