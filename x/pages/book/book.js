@@ -7,83 +7,13 @@ Page({
      * 页面的初始数据
      */
     data: {
-        time: [{
-                id: 0,
-                timestr: "8:00-9:00",
-                color: "#fff"
-            },
-            {
-                id: 1,
-                timestr: "9:00-10:00",
-                color: "#fff"
-            },
-            {
-                id: 2,
-                timestr: "10:00-11:00",
-                color: "#fff"
-            },
-            {
-              id: 3,
-              timestr: "11:00-12:00",
-              color: "#fff"
-            },
-            {
-                id: 4,
-                timestr: "12:00-13:00",
-                color: "#fff"
-            },
-            {
-                id: 5,
-                timestr: "13:00-14:00",
-                color: "#fff"
-            },
-            {
-                id: 6,
-                timestr: "14:00-15:00",
-                color: "#fff"
-            },
-            {
-              id: 7,
-              timestr: "15:00-16:00",
-              color: "#fff"
-            },
-            {
-              id: 8,
-              timestr: "16:00-17:00",
-              color: "#fff"
-            },
-            {
-              id: 9,
-              timestr: "17:00-18:00",
-              color: "#fff"
-            },
-            {
-              id: 10,
-              timestr: "18:00-19:00",
-              color: "#fff"
-            },
-            {
-              id: 11,
-              timestr: "19:00-20:00",
-              color: "#fff"
-            },
-            {
-              id: 12,
-              timestr: "20:00-21:00",
-              color: "#fff"
-            },
-            {
-              id: 13,
-              timestr: "21:00-22:00",
-              color: "#fff"
-            },
-        ],
+        time: [],
         Days: [{
                 name: "今天",
                 room: [
                     {
                         name: "琴房1",
-                        disabled: [false, false, false, false, false, false],
+                        disabled: [true, false, false, false, false, false],
                         chosen: [false, true, false, false, false, false],
                         money: 15,
                         multiMoney: 30,
@@ -165,6 +95,17 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function() {
+      let time = []
+      for(let i = 0;i < 15;i++){
+        time.push({
+          id: i,
+          timestr: (i+8) + ':00-' + (i+9) + ':00',
+          color: '#fff'
+        })
+      }
+      this.setData({
+        time: time
+      })
       let self = this
       wx.showLoading({
         title: 'loading...',
@@ -176,7 +117,7 @@ Page({
         },
         method: "GET",
         success: res => {
-          console.log('success')
+          console.log(res)
           load(self,res.data.Days)
           wx.showToast({
             title: 'BookLoaded!'
@@ -227,28 +168,7 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow: function() {
-      /*
-        const chosenDay = this.data.chosenDay
-        const chosenRoom = this.data.chosenRoom
-        const length = this.data.Days[chosenDay].room[chosenRoom].disabled.length
-        this.data.Days[chosenDay].color = "#0090CE"
-        this.data.Days[chosenDay].room[chosenRoom].color = "#0090CE"
-        for (let i = 0; i < length; i++) {
-            if (this.data.Days[chosenDay].room[chosenRoom].disabled[i]) {
-                this.data.time[i].color = "#fff"
-            } else {
-                if (this.data.Days[chosenDay].room[chosenRoom].chosen[i]) {
-                    this.data.time[i].color = "Yellow"
-                } else {
-                    this.data.time[i].color = "#fff"
-                }
-            }
-        }
-        this.setData({
-            time: this.data.time,
-            Days: this.data.Days
-        })
-        */
+
     },
 
     /**
@@ -344,9 +264,6 @@ Page({
 
     chooseTime: function(event) {
         let index = event.currentTarget.dataset.id
-        wx.showToast({
-          title: this.data.time[index].timestr
-        })
         let chosenDay = this.data.chosenDay
         let chosenRoom = this.data.chosenRoom
         if (this.data.Days[chosenDay].room[chosenRoom].chosen[index] === false) {
@@ -393,24 +310,24 @@ Page({
       })
       let booklist = []
       let bookTime = {
-        day: 0,
-        room: 0,
-        time: 0
       }
       this.data.Days.forEach(function(item,index){
         bookTime.day = index
         item.room.forEach(function(item,index){
-          bookTime.room = index
+          bookTime.room = item.name
+          bookTime.time = []
           item.chosen.forEach(function(item,index){
             if(item){
-              bookTime.time = index
-              booklist.push({
-                day: bookTime.day,
-                room: bookTime.room,
-                time: index
-              })
+              bookTime.time.push('Time'+(index+1))
             }
           })
+          if(bookTime.time.length > 0){
+            booklist.push({
+              day: bookTime.day,
+              room: bookTime.room,
+              time: bookTime.time
+            })
+          }
         })
       })
       wx.request({
@@ -422,23 +339,25 @@ Page({
           openId: app.globalData.openId
         },
         success: res => {
-          if(res.statusCode === 200){
-            console.log(res)
+          console.log(res)
+          if(res.data.times){
             bookChange(self,res.data.times)
+          }
+          if(res.data.errMsg){
             wx.showToast({
-              title: '预约成功!',
+              title: res.data.errMsg,
+              icon: 'none'
             })
-          }else if(res.statusCode === 403){
-            console.log(res)
-            bookChange(self, res.data.times)
+          }
+          else{
             wx.showToast({
-              title: '已有预约被占用!'
+              title:'预约成功!'
             })
           }
         },
         fail: function(){
           wx.showToast({
-            title: '预约失败!',
+            title: '请求超时!',
             icon: 'none'
           })
         },
@@ -496,10 +415,18 @@ function bookChange(self,data){
   //data:[{day,room,disabled}]
   console.log(data)
   data.forEach(item => {
+    let roomName = item.room
+    let roomIndex = 0
+    self.data.Days[item.day].room.forEach((item,index)=>{
+      if(item.name === roomName){
+        roomIndex = index
+        return
+      }
+    })
     let param = {}
-    param['Days[' + item.day + '].room[' + item.room + '].disabled'] = item.disabled
-    param['Days[' + item.day + '].room[' + item.room +'].chosen'] = item.disabled.slice()
-    param['Days[' + item.day + '].room[' + item.room + '].chosen'].fill(false)
+    param['Days[' + item.day + '].room[' + roomIndex + '].disabled'] = item.disabled
+    param['Days[' + item.day + '].room[' + roomIndex +'].chosen'] = item.disabled.slice()
+    param['Days[' + item.day + '].room[' + roomIndex + '].chosen'].fill(false)
     self.setData(param)
   })
 }
