@@ -11,4 +11,7 @@ class BookRecordAdmin(object):
     # 过滤
     list_filter = ['user', 'piano_room', 'BR_date', 'use_time', 'fee', 'is_pay', 'user_quantity', 'status']
 
+    # 是否显示书签
+    show_bookmarks = False
+
 xadmin.site.register(BookRecord, BookRecordAdmin)

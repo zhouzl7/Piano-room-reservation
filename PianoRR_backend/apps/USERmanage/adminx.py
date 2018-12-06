@@ -1,4 +1,5 @@
 import xadmin
+from xadmin.layout import Fieldset
 
 from .models import UserGroup, ArtTroupeMember, User, BlackList
 
@@ -11,6 +12,12 @@ class UserGroupAdmin(object):
     # 过滤
     list_filter = ['group_name', 'xinghaiPR_price', 'smallPR_price', 'bigPR_price']
 
+    # 直接编辑
+    list_editable = ['xinghaiPR_price', 'smallPR_price', 'bigPR_price']
+
+    # 是否显示书签
+    show_bookmarks = False
+
 xadmin.site.register(UserGroup, UserGroupAdmin)
 
 class ArtTroupeMemberAdmin(object):
@@ -20,6 +27,9 @@ class ArtTroupeMemberAdmin(object):
     search_fields = ['name', 'student_id']
     # 过滤
     list_filter = ['name', 'student_id']
+
+    # 是否显示书签
+    show_bookmarks = False
 
 xadmin.site.register(ArtTroupeMember, ArtTroupeMemberAdmin)
 
@@ -31,6 +41,9 @@ class UserAdmin(object):
     # 过滤
     list_filter = ['name', 'person_id', 'open_id', 'group']
 
+    # 是否显示书签
+    show_bookmarks = False
+
 xadmin.site.register(User, UserAdmin)
 
 class BlackListAdmin(object):
@@ -40,5 +53,8 @@ class BlackListAdmin(object):
     search_fields = ['name', 'person_id', 'open_id', 'group']
     # 过滤
     list_filter = ['name', 'person_id', 'open_id', 'group']
+
+    # 是否显示书签
+    show_bookmarks = False
 
 xadmin.site.register(BlackList, BlackListAdmin)
