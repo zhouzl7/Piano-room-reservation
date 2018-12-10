@@ -1,5 +1,4 @@
 import xadmin
-from xadmin.layout import Fieldset
 
 from .models import PianoRoom, Announcement, TimeTable
 
@@ -12,8 +11,20 @@ class PianoRoomAdmin(object):
     # 过滤
     list_filter = ['room_id', 'piano_type', 'user_group', 'status']
 
+    # 不可进入更新界面
+    # list_display_links = ['id']
+
     # 直接编辑
     list_editable = ['status']
+
+    #readonly_fields = ['room_id']
+
+    def get_readonly_fields(self):
+        path = self.request.get_full_path()
+        if "update" in path:
+            return ['room_id', ]  # Return a list or tuple of readonly fields' names
+        else:  # This is an addition
+            return []
 
     # 是否显示书签
     show_bookmarks = False
@@ -40,6 +51,16 @@ class TimeTableAdmin(object):
 
     # def has_add_permission(self):
     #     return False
+
+    # 不可进入更新界面
+   # list_display_links = ['id']
+
+    def get_readonly_fields(self):
+        path = self.request.get_full_path()
+        if "update" in path:
+            return ['piano_room', 'TT_type', 'date']  # Return a list or tuple of readonly fields' names
+        else:  # This is an addition
+            return []
 
 xadmin.site.register(TimeTable, TimeTableAdmin)
 

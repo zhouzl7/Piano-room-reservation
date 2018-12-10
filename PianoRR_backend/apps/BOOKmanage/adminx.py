@@ -14,4 +14,20 @@ class BookRecordAdmin(object):
     # 是否显示书签
     show_bookmarks = False
 
+    # 直接编辑
+    list_editable = ['is_pay', 'status']
+
+    # 不可进入更新界面
+   # list_display_links = ['id']
+
+    def get_readonly_fields(self):
+        path = self.request.get_full_path()
+        if "update" in path:
+            return ['user', 'piano_room', 'BR_date', 'use_time', 'fee', 'user_quantity']  # Return a list or tuple of readonly fields' names
+        else:  # This is an addition
+            return []
+
+    def has_add_permission(self):
+        return False
+
 xadmin.site.register(BookRecord, BookRecordAdmin)

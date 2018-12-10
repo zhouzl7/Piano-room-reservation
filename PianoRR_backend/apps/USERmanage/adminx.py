@@ -18,6 +18,16 @@ class UserGroupAdmin(object):
     # 是否显示书签
     show_bookmarks = False
 
+    # 不可进入更新界面
+   # list_display_links = ['id']
+
+    def get_readonly_fields(self):
+        path = self.request.get_full_path()
+        if "update" in path:
+            return ['group_name']  # Return a list or tuple of readonly fields' names
+        else:  # This is an addition
+            return []
+
 xadmin.site.register(UserGroup, UserGroupAdmin)
 
 class ArtTroupeMemberAdmin(object):
@@ -44,6 +54,19 @@ class UserAdmin(object):
     # 是否显示书签
     show_bookmarks = False
 
+    # 不可进入更新界面
+   # list_display_links = ['id']
+
+    # def has_add_permission(self):
+    #     return False
+
+    def get_readonly_fields(self):
+        path = self.request.get_full_path()
+        if "update" in path:
+            return ['name', 'person_id', 'open_id', 'group']  # Return a list or tuple of readonly fields' names
+        else:  # This is an addition
+            return []
+
 xadmin.site.register(User, UserAdmin)
 
 class BlackListAdmin(object):
@@ -56,5 +79,15 @@ class BlackListAdmin(object):
 
     # 是否显示书签
     show_bookmarks = False
+
+    # 不可进入更新界面
+   # list_display_links = ['id']
+
+    def get_readonly_fields(self):
+        path = self.request.get_full_path()
+        if "update" in path:
+            return ['name', 'person_id', 'open_id', 'group']  # Return a list or tuple of readonly fields' names
+        else:  # This is an addition
+            return []
 
 xadmin.site.register(BlackList, BlackListAdmin)
