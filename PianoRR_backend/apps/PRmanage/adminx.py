@@ -11,13 +11,14 @@ class PianoRoomAdmin(object):
     # 过滤
     list_filter = ['room_id', 'piano_type', 'user_group', 'status']
 
+    # 多对多字段
+    filter_horizontal = ['user_group']
+
     # 不可进入更新界面
     # list_display_links = ['id']
 
     # 直接编辑
     list_editable = ['status']
-
-    #readonly_fields = ['room_id']
 
     def get_readonly_fields(self):
         path = self.request.get_full_path()

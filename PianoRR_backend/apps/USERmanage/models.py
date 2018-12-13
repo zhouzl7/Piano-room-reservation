@@ -19,7 +19,8 @@ class UserGroup(models.Model):
 
 class User(models.Model):
     open_id = models.CharField(u'open_id', max_length=64, unique=True, db_index=True)
-    person_id = models.CharField(u'学号/教职工号/身份证', max_length=32, unique=False, db_index=True)
+    person_id = models.CharField(u'学号/教职工号/手机号', max_length=32, unique=True, db_index=True)
+    password = models.CharField(u'密码', max_length=32, blank=True)
     name = models.CharField(u'姓名', max_length=12)
     group = models.ForeignKey(UserGroup, on_delete=models.CASCADE, verbose_name='用户组')
 
@@ -44,7 +45,7 @@ class User(models.Model):
         return self.name
 
 class ArtTroupeMember(models.Model):
-    student_id = models.CharField(u'学生证号', max_length=32, unique=False, db_index=True)
+    student_id = models.CharField(u'学生证号', max_length=32, unique=True, db_index=True)
     name = models.CharField(u'姓名', max_length=12)
 
     @classmethod
@@ -69,7 +70,7 @@ class ArtTroupeMember(models.Model):
 
 class BlackList(models.Model):
     open_id = models.CharField(u'open_id', max_length=64, unique=True, db_index=True)
-    person_id = models.CharField(u'学号/教职工号/身份证', max_length=32, unique=False, db_index=True)
+    person_id = models.CharField(u'学号/教职工号/身份证', max_length=32, unique=True, db_index=True)
     name = models.CharField(u'姓名', max_length=12)
     group = models.ForeignKey(UserGroup, on_delete=models.CASCADE, verbose_name='用户组')
 
