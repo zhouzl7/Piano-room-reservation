@@ -67,8 +67,6 @@ def room(request):
     }
     return JsonResponse(result)
 
-
-
 def onlogin(request):
     data = {
         'appid': WECHAT_APPID,
@@ -149,9 +147,9 @@ def reservation(request):
     bookall = []
     for book in bookLists:
         if(book.user_quantity):
-            people = '多人'
-        else:
             people = '单人'
+        else:
+            people = '多人'
         bookall.append({
             'room':book.piano_room.room_id,
             'useTime':str(book.BR_date) + ' ' + str(book.use_time+7) +':00-' + str(book.use_time+8)+':00',
@@ -165,7 +163,6 @@ def reservation(request):
     return JsonResponse(result)
 
 def book(request):
-
     #check if the times are available
     body = json.loads(request.body)
     print(body['openId'])

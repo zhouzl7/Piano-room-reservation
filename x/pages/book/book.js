@@ -96,7 +96,7 @@ Page({
      */
     onLoad: function() {
       let time = []
-      for(let i = 0;i < 15;i++){
+      for(let i = 0;i < 14;i++){
         time.push({
           id: i,
           timestr: (i+8) + ':00-' + (i+9) + ':00',
