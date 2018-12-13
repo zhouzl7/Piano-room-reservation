@@ -239,5 +239,4 @@ def book(request):
     else:
         resData['errMsg'] = '所选时间已被占用或无法使用!'
     #refresh the availableTime
-    print(resData)
     return JsonResponse(resData)
