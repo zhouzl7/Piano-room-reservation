@@ -30,48 +30,49 @@ try:
 
         if int(hour_now)>=8 and int(hour_now)<=21:
             for all_time_table in all_time_tables:
-                if int(hour_now) == 8:
-                    if all_time_table == 1:
-                        all_time_table.Time1 = -1
-                if int(hour_now) == 9:
-                    if all_time_table == 1:
-                        all_time_table.Time2 = -1
-                if int(hour_now) == 10:
-                    if all_time_table == 1:
-                        all_time_table.Time3 = -1
-                if int(hour_now) == 11:
-                    if all_time_table == 1:
-                        all_time_table.Time4 = -1
-                if int(hour_now) == 12:
-                    if all_time_table == 1:
-                        all_time_table.Time5 = -1
-                if int(hour_now) == 13:
-                    if all_time_table == 1:
-                        all_time_table.Time6 = -1
-                if int(hour_now) == 14:
-                    if all_time_table == 1:
-                        all_time_table.Time7 = -1
-                if int(hour_now) == 15:
-                    if all_time_table == 1:
-                        all_time_table.Time8 = -1
-                if int(hour_now) == 16:
-                    if all_time_table == 1:
-                        all_time_table.Time9 = -1
-                if int(hour_now) == 17:
-                    if all_time_table == 1:
-                        all_time_table.Time10 = -1
-                if int(hour_now) == 18:
-                    if all_time_table == 1:
-                        all_time_table.Time11 = -1
-                if int(hour_now) == 19:
-                    if all_time_table == 1:
-                        all_time_table.Time12 = -1
-                if int(hour_now) == 20:
-                    if all_time_table == 1:
-                        all_time_table.Time13 = -1
-                if int(hour_now) == 21:
-                    if all_time_table == 1:
-                        all_time_table.Time14 = -1
+                if all_time_table.TT_type == 0:
+                    if int(hour_now) == 7:
+                        if all_time_table == 1:
+                            all_time_table.Time1 = -1
+                    if int(hour_now) == 8:
+                        if all_time_table == 1:
+                            all_time_table.Time2 = -1
+                    if int(hour_now) == 9:
+                        if all_time_table == 1:
+                            all_time_table.Time3 = -1
+                    if int(hour_now) == 10:
+                        if all_time_table == 1:
+                            all_time_table.Time4 = -1
+                    if int(hour_now) == 11:
+                        if all_time_table == 1:
+                            all_time_table.Time5 = -1
+                    if int(hour_now) == 12:
+                        if all_time_table == 1:
+                            all_time_table.Time6 = -1
+                    if int(hour_now) == 13:
+                        if all_time_table == 1:
+                            all_time_table.Time7 = -1
+                    if int(hour_now) == 14:
+                        if all_time_table == 1:
+                            all_time_table.Time8 = -1
+                    if int(hour_now) == 15:
+                        if all_time_table == 1:
+                            all_time_table.Time9 = -1
+                    if int(hour_now) == 16:
+                        if all_time_table == 1:
+                            all_time_table.Time10 = -1
+                    if int(hour_now) == 17:
+                        if all_time_table == 1:
+                            all_time_table.Time11 = -1
+                    if int(hour_now) == 18:
+                        if all_time_table == 1:
+                            all_time_table.Time12 = -1
+                    if int(hour_now) == 19:
+                        if all_time_table == 1:
+                            all_time_table.Time13 = -1
+                    if int(hour_now) == 20:
+                        if all_time_table == 1:
+                            all_time_table.Time14 = -1
                 all_time_table.save()
 
         is_first = 0
@@ -140,7 +141,7 @@ try:
                                                Time10=1, Time11=1, Time12=1,
                                                Time13=1, Time14=1)
                     time_table_new.save()
-
+        print("已刷新")
     # 监控任务
     register_events(scheduler)
     # 调度器开始
