@@ -1,24 +1,18 @@
 # _*_ coding: utf-8 _*_
-from django.shortcuts import render
-
 # Create your views here.
-from django.http import HttpResponse,JsonResponse
+from django.http import JsonResponse
 from django.db import transaction
 from django.db.models import Q
-from PRmanage.models import Announcement,PianoRoom,TimeTable
+from PRmanage.models import Announcement, PianoRoom, TimeTable
 from BOOKmanage.models import BookRecord
-from USERmanage.models import User,UserGroup,BlackList
-from django.core import serializers
+from USERmanage.models import User, UserGroup, BlackList
 from PianoRR_backend.settings import WECHAT_APPID, WECHAT_SECRET
 import json
 import requests
-import datetime
 
 import time
 from apscheduler.schedulers.background import BackgroundScheduler
 from django_apscheduler.jobstores import DjangoJobStore, register_events, register_job
-from PRmanage.models import PianoRoom
-from PRmanage.models import TimeTable
 import datetime
 
 try:
@@ -30,14 +24,14 @@ try:
 
     # 'cron'方式循环，周一到周五，每天9:30:10执行,id为工作ID作为标记
     # ('scheduler',"interval", seconds=1)  #用interval方式循环，每一秒执行一次
-    @register_job(scheduler, 'cron', minute='16',second='59', id='task_time')
+    @register_job(scheduler, 'cron', minute='59', second='59', id='task_time')
     def test_job():
         t_now = time.localtime()
         all_time_tables = TimeTable.objects.all()
 
         hour_now = t_now.tm_hour
 
-        if int(hour_now)>=8 and int(hour_now)<=21:
+        if int(hour_now) >= 7 and int(hour_now) <= 20:
             for all_time_table in all_time_tables:
                 if all_time_table.TT_type == 0:
                     print('2-01')
@@ -85,7 +79,7 @@ try:
                             all_time_table.Time14 = -1
                 all_time_table.save()
 
-        if int(hour_now) == 22:
+        if int(hour_now) == 23:
             time_tables = TimeTable.objects.filter(TT_type='0')
 
             for time_table in time_tables:
@@ -95,12 +89,14 @@ try:
 
             for time_table in time_tables:
                 time_table.TT_type = '0'
+                time_table.date = datetime.date.today() + datetime.timedelta(days=1)
                 time_table.save()
 
             time_tables = TimeTable.objects.filter(TT_type='2')
 
             for time_table in time_tables:
                 time_table.TT_type = '1'
+                time_table.date = datetime.date.today() + datetime.timedelta(days=2)
                 time_table.save()
 
             time_tables = TimeTable.objects.filter(TT_type='0')
@@ -110,10 +106,10 @@ try:
                 date_old = today + datetime.timedelta(days=3)
                 piano_room_old = time_table.piano_room
                 time_table_new = TimeTable(piano_room=piano_room_old, TT_type='2', date=date_old, Time1=1,
-                                               Time2=1, Time3=1, Time4=1, Time5=1, Time6=1,
-                                               Time7=1, Time8=1, Time9=1,
-                                               Time10=1, Time11=1, Time12=1,
-                                               Time13=1,Time14=1)
+                                           Time2=1, Time3=1, Time4=1, Time5=1, Time6=1,
+                                           Time7=1, Time8=1, Time9=1,
+                                           Time10=1, Time11=1, Time12=1,
+                                           Time13=1, Time14=1)
                 time_table_new.save()
 
             piano_rooms = PianoRoom.objects.all()
@@ -125,22 +121,22 @@ try:
                     tomorrow_new = today + datetime.timedelta(days=2)
                     after_tomorrow_new = today + datetime.timedelta(days=3)
                     time_table_new = TimeTable(piano_room=pianoroom, TT_type='0', date=today_new, Time1=1,
-                                                   Time2=1, Time3=1, Time4=1, Time5=1, Time6=1,
-                                                   Time7=1, Time8=1, Time9=1,
-                                                   Time10=1, Time11=1, Time12=1,
-                                                   Time13=1, Time14=1)
+                                               Time2=1, Time3=1, Time4=1, Time5=1, Time6=1,
+                                               Time7=1, Time8=1, Time9=1,
+                                               Time10=1, Time11=1, Time12=1,
+                                               Time13=1, Time14=1)
                     time_table_new.save()
                     time_table_new = TimeTable(piano_room=pianoroom, TT_type='1', date=tomorrow_new, Time1=1,
-                                                   Time2=1, Time3=1, Time4=1, Time5=1, Time6=1,
-                                                   Time7=1, Time8=1, Time9=1,
-                                                   Time10=1, Time11=1, Time12=1,
-                                                   Time13=1, Time14=1)
+                                               Time2=1, Time3=1, Time4=1, Time5=1, Time6=1,
+                                               Time7=1, Time8=1, Time9=1,
+                                               Time10=1, Time11=1, Time12=1,
+                                               Time13=1, Time14=1)
                     time_table_new.save()
                     time_table_new = TimeTable(piano_room=pianoroom, TT_type='2', date=after_tomorrow_new, Time1=1,
-                                                   Time2=1, Time3=1, Time4=1, Time5=1, Time6=1,
-                                                   Time7=1, Time8=1, Time9=1,
-                                                   Time10=1, Time11=1, Time12=1,
-                                                   Time13=1, Time14=1)
+                                               Time2=1, Time3=1, Time4=1, Time5=1, Time6=1,
+                                               Time7=1, Time8=1, Time9=1,
+                                               Time10=1, Time11=1, Time12=1,
+                                               Time13=1, Time14=1)
                     time_table_new.save()
         print("已刷新")
     # 监控任务
