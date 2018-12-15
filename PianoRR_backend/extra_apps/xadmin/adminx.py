@@ -21,7 +21,7 @@ try:
 
     # 'cron'方式循环，周一到周五，每天9:30:10执行,id为工作ID作为标记
     # ('scheduler',"interval", seconds=1)  #用interval方式循环，每一秒执行一次
-    @register_job(scheduler, 'cron', minute='59',second='59', id='task_time')
+    @register_job(scheduler, 'cron', minute='59', second='59', id='task_time')
     def test_job():
         t_now = time.localtime()
         all_time_tables = TimeTable.objects.all()
@@ -31,6 +31,7 @@ try:
         if int(hour_now)>=8 and int(hour_now)<=21:
             for all_time_table in all_time_tables:
                 if all_time_table.TT_type == 0:
+                    print('2-01')
                     if int(hour_now) == 7:
                         if all_time_table == 1:
                             all_time_table.Time1 = -1
@@ -50,8 +51,10 @@ try:
                         if all_time_table == 1:
                             all_time_table.Time6 = -1
                     if int(hour_now) == 13:
+                        print('2-01-1')
                         if all_time_table == 1:
                             all_time_table.Time7 = -1
+                            print("已关闭")
                     if int(hour_now) == 14:
                         if all_time_table == 1:
                             all_time_table.Time8 = -1

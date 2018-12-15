@@ -7,7 +7,7 @@ class BookRecordAdmin(object):
     # 显示的列
     list_display = ['user', 'piano_room', 'BR_date', 'use_time', 'fee', 'is_pay', 'user_quantity', 'status']
     # 搜索的字段，不要添加时间搜索
-    search_fields = ['user', 'piano_room', 'use_time', 'fee', 'is_pay', 'user_quantity', 'status']
+    search_fields = ['user__name', 'piano_room__room_id', 'use_time', 'fee', 'is_pay', 'user_quantity', 'status']
     # 过滤
     list_filter = ['user', 'piano_room', 'BR_date', 'use_time', 'fee', 'is_pay', 'user_quantity', 'status']
 
