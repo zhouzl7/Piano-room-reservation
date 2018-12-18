@@ -1,19 +1,19 @@
 <!--pages/郊外注册/sign.wxml-->
 <view class="title">校外注册</view>
-<view class="section__title" style="margin-top:10%;">身份证号</view>
+<view class="section__title" style="margin-top:10%;">手机号   <text class="inputErr" style='display:{{displayIdErr}}'>*手机号不能为空</text></view>
 <view class="inputView">
-<input class="input" type="number" placeholder="请输入身份证号" placeholder-style="color: grey" bindinput="listenerIdInput" />
+<input class="input" type="number" placeholder="请输入手机号" placeholder-style="color: grey" bindinput="listenerIdInput" />
 </view>
-<view class="section__title" >姓名</view>
+<view class="section__title" >姓名    <text class="inputErr" style='display:{{displayNameErr}}'>*姓名不能为空</text></view>
 <view class="inputView">
 <input class="input" type="number" placeholder="请输入姓名" placeholder-style="color: grey" bindinput="listenerNameInput" />
 </view>
-<view class="section__title" >密码</view>
+<view class="section__title" >密码    <text class="inputErr" style='display:{{displayPwErr}}'>*密码过短</text></view>
 <view class="inputView">
-<input class="input" type="number" placeholder="请输入密码" placeholder-style="color: grey" bindinput="listenerPasswordInput" />
+<input class="input" type="number" password="true" placeholder="请输入密码" placeholder-style="color: grey" bindinput="listenerPasswordInput" />
 </view>
-<view class="section__title" >确认密码</view>
+<view class="section__title" >确认密码    <text class="inputErr" style='display:{{displayPwConfirmErr}}'>*两次输入不一致</text></view>
 <view class="inputView">
-<input class="input"  type="number" placeholder="请输入密码" placeholder-style="color: grey" bindinput="listenerPassword2Input" />
+<input class="input" type="number" password="true" placeholder="请输入密码" placeholder-style="color: grey" bindinput="listenerPassword2Input" />
 </view>
 <button style="margin-left: 10%; margin-right: 10%; margin-top: 10%;" type="primary" bindtap="listenerLogin">确认</button>
