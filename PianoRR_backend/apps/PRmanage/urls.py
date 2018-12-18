@@ -8,7 +8,4 @@ urlpatterns = [
     url(r'^reservation', views.reservation),
     url(r'^book', views.book),
     url(r'^room', views.room),
-    url(r'^salt', views.salt),
-    url(r'^pwlogin', views.pwLogin),
-    url(r'^register', views.register)
 ]

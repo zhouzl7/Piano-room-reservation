@@ -8,7 +8,81 @@ Page({
      */
     data: {
         time: [],
-        Days: [],
+        Days: [{
+                name: "今天",
+                room: [
+                    {
+                        name: "琴房1",
+                        disabled: [true, false, false, false, false, false],
+                        chosen: [false, true, false, false, false, false],
+                        money: 15,
+                        multiMoney: 30,
+                        color: "#0090CE"
+                    },
+                    {
+                        name: "琴房2",
+                        disabled: [false, false, false, false, false, false],
+                        chosen: [false, true, false, false, false, false],
+                        money: 15,
+                        multiMoney: 30,
+                        color: "#fff"
+                    }
+                ],
+                color: "#fff"
+            },
+            {
+                name: "明天",
+                room: [
+                    {
+                        name: "test",
+                        disabled: [false, false, false, false, false, false],
+                        chosen: [false, false, false, false, false, false],
+                        money: 15,
+                        multiMoney: 30,
+                        color: "Yellow"
+                    },
+                    {
+                        name: "wtf",
+                        disabled: [false, false, false, false, false, false],
+                        chosen: [false, false, false, false, false, false],
+                        money: 15,
+                        multiMoney: 30,
+                        color: "#fff"
+                    }
+                ],
+                color: "#fff"
+            },
+            {
+                name: "后天",
+                room: [
+                    {
+                        name: "wtf",
+                        disabled: [false, false, false, false, false, false],
+                        chosen: [false, false, false, false, false, false],
+                        money: 15,
+                        multiMoney: 30,
+                        color: "#fff"
+                    },
+                    {
+                        name: "test",
+                        disabled: [false, false, false, false, false, false],
+                        chosen: [false, false, false, false, false, false],
+                        money: 15,
+                        multiMoney: 30,
+                        color: "#fff"
+                    },
+                    {
+                        name: "test",
+                        disabled: [false, false, false, false, false, false],
+                        chosen: [false, false, false, false, false, false],
+                        money: 15,
+                        multiMoney: 30,
+                        color: "#fff"
+                    }
+                ],
+                color: "#fff"
+            }
+        ],
         chosenDay: 0,
         chosenRoom: 0,
         single: true,
@@ -18,9 +92,9 @@ Page({
     },
 
     /**
-     * 生命周期函数--监听页面显示
+     * 生命周期函数--监听页面加载
      */
-    onShow: function() {
+    onLoad: function() {
       let time = []
       for(let i = 0;i < 14;i++){
         time.push({
@@ -91,9 +165,9 @@ Page({
     },
 
     /**
-     * 生命周期函数--监听页面加载
+     * 生命周期函数--监听页面显示
      */
-    onLoad: function() {
+    onShow: function() {
 
     },
 

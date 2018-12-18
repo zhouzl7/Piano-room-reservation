@@ -1,7 +1,4 @@
 // pages/hometest/home test.js
-//const crypt = require('../../utils/miniprogram_npm/pbkdf2/index.js')
-
-
 const app = getApp()
 Page({
   data: {
@@ -54,7 +51,7 @@ Page({
     })
   },
   changecolor: function (event) {
-    if (this.data.color === "cornflowerblue") {
+    if (this.data.color == "cornflowerblue") {
       this.setData({
         color: "darkgrey"
       })
