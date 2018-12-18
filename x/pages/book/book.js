@@ -7,93 +7,7 @@ Page({
    */
   data: {
     time: [],
-    Days: [{
-      name: "今天",
-      room: [
-        {
-          name: "琴房1",
-          disabled: [true, false, false, false, false, false],
-          chosen: [false, true, false, false, false, false],
-          money: 15,
-          multiMoney: 30,
-          color: "fff"
-        },
-        {
-          name: "琴房2",
-          disabled: [false, false, false, false, false, false],
-          chosen: [false, true, false, false, false, false],
-          money: 15,
-          multiMoney: 30,
-          color: "#fff"
-        },
-
-
-
-        {
-          name: "琴房2",
-          disabled: [false, false, false, false, false, false],
-          chosen: [false, true, false, false, false, false],
-          money: 15,
-          multiMoney: 30,
-          color: "#fff"
-        },
-
-      ],
-      color: "#fff"
-    },
-    {
-      name: "明天",
-      room: [
-        {
-          name: "test",
-          disabled: [false, false, false, false, false, false],
-          chosen: [false, false, false, false, false, false],
-          money: 15,
-          multiMoney: 30,
-          color: "#fff"
-        },
-        {
-          name: "wtf",
-          disabled: [false, false, false, false, false, false],
-          chosen: [false, false, false, false, false, false],
-          money: 15,
-          multiMoney: 30,
-          color: "#fff"
-        }
-      ],
-      color: "#fff"
-    },
-    {
-      name: "后天",
-      room: [
-        {
-          name: "wtf",
-          disabled: [false, false, false, false, false, false],
-          chosen: [false, false, false, false, false, false],
-          money: 15,
-          multiMoney: 30,
-          color: "#fff"
-        },
-        {
-          name: "test",
-          disabled: [false, false, false, false, false, false],
-          chosen: [false, false, false, false, false, false],
-          money: 15,
-          multiMoney: 30,
-          color: "#fff"
-        },
-        {
-          name: "test",
-          disabled: [false, false, false, false, false, false],
-          chosen: [false, false, false, false, false, false],
-          money: 15,
-          multiMoney: 30,
-          color: "#fff"
-        }
-      ],
-      color: "#fff"
-    }
-    ],
+    Days: [],
     fontcolor: "black",
     chosenDay: 0,
     chosenRoom: 0,
@@ -119,6 +33,19 @@ Page({
     this.setData({
       time: time
     })
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
     let self = this
     wx.showLoading({
       title: 'loading...',
@@ -173,20 +100,6 @@ Page({
         })
       }
     })
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
   },
 
   /**
