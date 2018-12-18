@@ -1,21 +1,25 @@
 <!--pages/book/book.wxml-->
-<view class='container'>
-  <view class="Days">
-    <button class="DayBtn" wx:for="{{Days}}" wx:key="name" data-id="{{index}}" bindtap = "chooseDay">{{item.name}}<button class="Day1"style="background-color:{{item.color}};  border-radius:0"></button></button>
+<view class="head">
+  <image style="height: 50px;" mode="center" src="../../images/logo.png"></image>
   </view>
 
+     <view class="Days">
+    <button class="DayBtn" wx:for="{{Days}}" wx:key="name" data-id="{{index}}" bindtap = "chooseDay"style="background-color:{{item.color}}; color:{{item.fontcolor}};">{{item.name}}</button>
+  </view>
   <view class = "roomAndTime">
     <scroll-view scroll-y="true" class="Rooms">
-      <button class="RoomBtn" wx:for="{{Days[chosenDay].room}}" bindtap="chooseRoom" style="background-color:{{item.color}}" data-id="{{index}}">{{item.name}}</button>
+      <view class="RoomBtn" wx:for="{{Days[chosenDay].room}}" bindtap="chooseRoom" style="background-color:{{item.color}}" data-id="{{index}}">{{item.name}}</view>
+      
     </scroll-view>
-    <scroll-view scroll-y="true" class="Times">
-      <button class="Time" wx:for="{{time}}" style="background-color:{{item.color}}" disabled="{{Days[chosenDay].room[chosenRoom].disabled[index]}}" data-id="{{index}}" bindtap = "chooseTime">{{item.timestr}}</button>
+    <scroll-view scroll-y="true"class="Times">
+      <view class="Time" wx:for="{{time}}" style="background-color:{{item.color}}" disabled="{{Days[chosenDay].room[chosenRoom].disabled[index]}}" data-id="{{index}}" bindtap = "chooseTime">{{item.timestr}}</view>
     </scroll-view>
   </view>
-  <view style='display:flex;flex-direction:row'>
-  <switch checked="{{single}}"bindchange="singleChange"/>
-  <text>多人/单人</text>
+  
+  <view class="last">
+  <button class="money">总金额: {{money}}</button>
+  <button class="type" type="primary"bindtap="singleChange"style="opacity:{{singleopacity}}">单</button>
+  <button class="type"type="warn"bindtap="multiChange"style="opacity:{{multiopacity}}">多</button>
+  <button class="makesure"  bindtap="Book">确认</button>
   </view>
-  <text class = "money">总金额: {{money}}</text>
-  <button class = "makesure" type = "primary" bindtap="Book">确认预约</button>
-</view>
+

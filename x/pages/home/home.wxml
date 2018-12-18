@@ -1,12 +1,12 @@
 <!--pages/hometest/home test.wxml-->
-<view class='content'>
+
   <view class="head">
   <image style="height: 50px;" mode="left" src="../../images/logo.png"></image>
   </view>
   <view class="table">
     <view class="tr bg-w">
-      <button class="th" bindtap='change'>公告</button>
-      <button class="th" bindtap='toNotice'>注意事项</button>
+      <view class="th" bindtap='change'>公告</view>
+      <view class="th" bindtap='toNotice'>注意事项</view>
     </view>
   </view>
   <view class = "choose">
@@ -17,5 +17,5 @@
     <button class = "room_type">{{item.room_type}}</button>
     <button class = "room">{{item.room}}</button></button>
   </view>
-</view>
+
 

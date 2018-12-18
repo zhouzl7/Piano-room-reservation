@@ -1,9 +1,8 @@
 /* pages/hometest/home test.wxss */
 .table {
-  border: 0px solid darkgray;
+  border-bottom: 1px solid rgba(169, 169, 169, 0.521);
 }
 .head{
-  margin-top: 10px;
   background-color: white;
   height: 50px;
 }
@@ -16,13 +15,12 @@
   display: flex;
   width: 100%;
   justify-content: center;
-  height: 2rem;
+  height: 3rem;
   align-items: center;
 }
 .td {
     color: #fff;
     margin-left: 5%;
-    margin-top: 10px;
 }
 .bg-w{
   background: white;
@@ -32,10 +30,9 @@
 }
 .th {
   width: 50%;
+  font-size: 18px;
   justify-content: center;
-  color:cornflowerblue;
   display: flex;
-  height: 2rem;
   align-items: center;
   border-radius: 0;
 }
