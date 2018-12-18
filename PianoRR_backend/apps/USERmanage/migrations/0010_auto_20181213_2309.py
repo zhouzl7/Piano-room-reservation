@@ -13,21 +13,21 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='password',
-            field=models.CharField(blank=True, max_length=32, verbose_name='密码'),
+            field=models.CharField(blank=True, max_length=32, verbose_name=u'密码'),
         ),
         migrations.AlterField(
             model_name='arttroupemember',
             name='student_id',
-            field=models.CharField(db_index=True, max_length=32, unique=True, verbose_name='学生证号'),
+            field=models.CharField(db_index=True, max_length=32, unique=True, verbose_name=u'学生证号'),
         ),
         migrations.AlterField(
             model_name='blacklist',
             name='person_id',
-            field=models.CharField(db_index=True, max_length=32, unique=True, verbose_name='学号/教职工号/身份证'),
+            field=models.CharField(db_index=True, max_length=32, unique=True, verbose_name=u'学号/教职工号/身份证'),
         ),
         migrations.AlterField(
             model_name='user',
             name='person_id',
-            field=models.CharField(db_index=True, max_length=32, unique=True, verbose_name='学号/教职工号/手机号'),
+            field=models.CharField(db_index=True, max_length=32, unique=True, verbose_name=u'学号/教职工号/手机号'),
         ),
     ]
