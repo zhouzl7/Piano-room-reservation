@@ -1,21 +1,12 @@
 # _*_ coding: utf-8 _*_
 # Create your views here.
-from django.http import JsonResponse
-from django.db import transaction
-from django.db.models import Q
-from PRmanage.models import Announcement, PianoRoom, TimeTable
-from BOOKmanage.models import BookRecord
-from USERmanage.models import User, UserGroup, BlackList
-from PianoRR_backend.settings import WECHAT_APPID, WECHAT_SECRET
-import json
-import requests
+from PRmanage.models import PianoRoom, TimeTable
 
 import time
 from apscheduler.schedulers.background import BackgroundScheduler
 from django_apscheduler.jobstores import DjangoJobStore, register_events, register_job
 import datetime
 
-print('why you do this?')
 try:
     # 实例化调度器
     scheduler = BackgroundScheduler()

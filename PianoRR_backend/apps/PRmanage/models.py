@@ -2,7 +2,6 @@ from django.db import models
 
 from codex.baseerror import LogicError
 from USERmanage.models import UserGroup
-import datetime
 
 # Create your models here.
 
