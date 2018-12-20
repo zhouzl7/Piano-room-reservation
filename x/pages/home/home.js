@@ -1,15 +1,21 @@
 // pages/hometest/home test.js
-//const crypt = require('../../utils/miniprogram_npm/pbkdf2/index.js')
-
-
 const app = getApp()
 Page({
   data: {
     color: "darkgrey",
-    allroom:[
+    chosenRoom: 0,
+    call: [
       {
-        room_type:"星海琴房",
-        room:"101 202" 
+        notice: "公告"
+      },
+      {
+        notice: "注意事项"
+      }
+    ],
+    allroom: [
+      {
+        room_type: "星海琴房",
+        room: "101 202"
       },
       {
         room_type: "大琴房",
@@ -41,9 +47,17 @@ Page({
   },
 
   change: function (event) {
-    wx.navigateTo({
-      url: '../announceall/announceall',
-    })
+    let chosenRoom = event.currentTarget.dataset.id
+    if (this.data.call[chosenRoom].notice == "公告") {
+      wx.navigateTo({
+        url: '../announceall/announceall',
+      })
+    }
+    if (this.data.call[chosenRoom].notice == "注意事项") {
+      wx.navigateTo({
+        url: '../notice/notice',
+      })
+    }
   },
   toNotice: function (event) {
     this.setData({
@@ -54,7 +68,7 @@ Page({
     })
   },
   changecolor: function (event) {
-    if (this.data.color === "cornflowerblue") {
+    if (this.data.color == "cornflowerblue") {
       this.setData({
         color: "darkgrey"
       })

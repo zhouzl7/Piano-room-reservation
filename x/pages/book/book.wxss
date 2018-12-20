@@ -1,4 +1,6 @@
 /* pages/book/book.wxss */
+/*1.칭화대학 칸 가운대로
+*/
 page{
   background-color: #EDEDED;
 }
@@ -7,8 +9,10 @@ page{
   
 }
 .head{
-  background-color: white;
+  background-color: #57446F;
   height: 50px;
+  display:flex;
+  justify-content: center;
 }
 .last{
   flex-direction: row;
@@ -26,17 +30,18 @@ page{
 }
 .DayBtn{
   border-bottom: 1px solid rgba(169, 169, 169, 0.521);
-  color: cornflowerblue;
   width:100%;
   justify-content: center;
   border-radius: 0;
   border-width: 1rpx;
   background-color: #fff;
-  font-size: 16px;
+  font-size: 20px;
+  font-weight: bold;
 }
 .DayBtn::after{
   border: none;
 }
+
 
 .Day1{
   height: 10rpx;
@@ -59,7 +64,7 @@ page{
 }
 
 .Rooms {
-  width: 30%;
+  width: 33.3%;
   flex-direction: column;
   flex-wrap: wrap;
   display: flex;
@@ -73,7 +78,7 @@ page{
 }
 
 .Times {
-  width: 70%;
+  width: 66.6%;
   flex-direction: row;
   flex-wrap: wrap;
   display: flex;
@@ -81,11 +86,16 @@ page{
 }
 
 .Time{
-
   width: 100%;
   font-size: 30rpx;
   text-align: center;
+  justify-content: center;
+  border-radius: 0;
+  border-width: 1rpx;
   }
+  .Time::after{
+  border: none;
+}
 
 .money{
   font-weight: bold;
@@ -94,16 +104,17 @@ page{
   justify-content: center;
   border-radius: 0;
   border-width: 1rpx;
-  background-color:rgba(0, 0, 0, 0.9);
+  background-color: #131A62;
   font-size: 18px;
 }
 .makesure{
   font-weight: bold;
+  color:#fff;
   width:40%;
   justify-content: center;
   border-radius: 0;
   border-width: 1rpx;
-  background-color: cornflowerblue;
+  background-color: #131A62;
   font-size: 18px;
 }
 .type{
@@ -113,4 +124,9 @@ page{
   border-radius: 0;
   border-width: 1rpx;
   font-size: 16px;
+}
+.nameImage, .keyImage {
+  width: 20px;
+  height: 20px;
+  margin-top: 10px;
 }
