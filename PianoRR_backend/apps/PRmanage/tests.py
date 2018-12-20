@@ -95,9 +95,9 @@ class getReservation(TestCase):
         room = PianoRoom.objects.get(room_id = 101)
         UserGroup.objects.create(group_name = "art", xinghaiPR_price=1,smallPR_price=2,bigPR_price=3)
         usergroup = UserGroup.objects.get(group_name = "art")
-        User.objects.create(open_id = "1",person_id = "123",password = "123",name="user1",group=usergroup)
-        User.objects.create(open_id = "2",person_id = "1234",password = "1234",name="user2",group=usergroup)
-        User.objects.create(open_id = "3",person_id = "12345",password = "12345",name="user3",group=usergroup)
+        User.objects.create(open_id = "1",person_id = "123",pwhash = "123",name="user1",group=usergroup)
+        User.objects.create(open_id = "2",person_id = "1234",pwhash = "1234",name="user2",group=usergroup)
+        User.objects.create(open_id = "3",person_id = "12345",pwhash = "12345",name="user3",group=usergroup)
         BookRecord.objects.create(user = "1234",fee = 1,is_pay = True,user_quantity = True,
                                     BR_date=datetime.date.today(),
                                     use_time = 1,status = BookRecord.STATUS_VALID,piano_room=room)
@@ -152,6 +152,7 @@ class getReservation(TestCase):
         PianoRoom.objects.all().delete()
         BookRecord.objects.all().delete()
 
+#获取可预约时间
 class getTime(TestCase):
 
     def setUp(self):
@@ -167,9 +168,9 @@ class getTime(TestCase):
         art = UserGroup.objects.get(group_name = "art")
 
         #创建用户
-        User.objects.create(open_id = "1", person_id = "123", password="123", name = "user1",group = usualuser)
-        User.objects.create(open_id = "2", person_id = "1234", password = "1234",name = "user2", group = student)
-        User.objects.create(open_id = "3", person_id = "12345",password = "12345",name= "user3", group = art)
+        User.objects.create(open_id = "1", person_id = "123", pwhash="123", name = "user1",group = usualuser)
+        User.objects.create(open_id = "2", person_id = "1234", pwhash = "1234",name = "user2", group = student)
+        User.objects.create(open_id = "3", person_id = "12345",pwhash = "12345",name= "user3", group = art)
 
         #创建三种琴房
         PianoRoom.objects.create(room_id = 101, piano_type = 2,status = True)
@@ -308,7 +309,6 @@ class getTime(TestCase):
         openId = "3"
         get_availableTime = self.client.get("/api/availableTime",{'openId':openId})
         response = json.loads(get_availableTime.content)
-        print(get_availableTime.content)
         disabled1 = []
         disabled2 = []
         for i in range(0,14):
@@ -414,6 +414,145 @@ class getTime(TestCase):
     def clear(self):
         UserGroup.objects.all().delete()
         User.objects.all().delete()
+        PianoRoom.objects.all().delete()
+        TimeTable.objects.all().delete()
+
+#预约
+class book(TestCase):
+    def setUp(self):
+        #创建用户组
+        UserGroup.objects.create(group_name = "student", xinghaiPR_price=1,smallPR_price=2,bigPR_price=3)
+        student = UserGroup.objects.get(group_name = "student")
+        #创建用户
+        User.objects.create(open_id = "1",person_id = "123",pwhash = "123",name="user1",group=student)
+        User.objects.create(open_id = "2",person_id = "1234",pwhash = "1234",name="user2",group=student)
+        User.objects.create(open_id = "3",person_id = "12345",pwhash = "12345",name="black",group=student)
+        #增加黑名单
+        BlackList.objects.create(open_id = "3",person_id = "12345",name = "black",group = student)
+        #创建琴房
+        PianoRoom.objects.create(room_id = 101, piano_type = 2,status = True)
+        room = PianoRoom.objects.get(room_id = 101)
+        room.user_group.add(student)
+        room.save()
+        #创建时间表
+        TimeTable.objects.create(piano_room = room, TT_type=0,date = datetime.date.today(),
+                                    Time1 = 0,Time2 = 0,Time3 = 0,Time4 = 0,Time5 = 0,
+                                    Time6 = 0,Time7 = 0,Time8 = 0,Time9 = 0,Time10 = 0,
+                                    Time11 = 0,Time12 = 0,Time13 = 0,Time14 = 0)
+        TimeTable.objects.create(piano_room = room, TT_type=1,date = datetime.date.today()+datetime.timedelta(1),
+                                    Time1 = 1,Time2 = 1,Time3 = 1,Time4 = 1,Time5 = 1,
+                                    Time6 = 1,Time7 = 1,Time8 = 1,Time9 = 1,Time10 = 1,
+                                    Time11 = 1,Time12 = 1,Time13 = 1,Time14 = 1)
+        TimeTable.objects.create(piano_room = room, TT_type=2,date = datetime.date.today()+datetime.timedelta(2),
+                                    Time1 = 1,Time2 = 1,Time3 = 1,Time4 = 1,Time5 = 1,
+                                    Time6 = 1,Time7 = 1,Time8 = 1,Time9 = 1,Time10 = 1,
+                                    Time11 = 1,Time12 = 1,Time13 = 1,Time14 = 1)
+
+    #用户未绑定
+    def test_noUser(self):
+        openId = "0"
+        single = True 
+        booklist = [
+            {
+                'day': 1,
+                'room': '101',
+                'time':['Time1','Time2']
+            }
+        ]
+        data = {
+            'bookTime':booklist,
+            'single':single,
+            'openId':openId
+        }
+        book = self.client.post("/api/book",data,content_type="application/json")
+        response = json.loads(book.content)
+        self.assertEqual(response['errMsg'],"您尚未绑定!")
+    
+    #用户黑名单
+    def test_black(self):
+        openId = "3"
+        #单人
+        single = True 
+        booklist = [
+            {
+                'day': 1,
+                'room': '101',
+                'time':['Time1','Time2']
+            }
+        ]
+        data = {
+            'bookTime':booklist,
+            'single':single,
+            'openId':openId
+        }
+        book = self.client.post("/api/book",data,content_type="application/json")
+        response = json.loads(book.content)
+        self.assertEqual(response['errMsg'],"您已被加入黑名单,请联系管理员")
+
+    #选择时间已经被使用
+    def test_usedTime(self):
+        openId = "1"
+        single = True 
+        booklist = [
+            {
+                'day': 0,
+                'room': '101',
+                'time':['Time1','Time2']
+            }
+        ]
+        data = {
+            'bookTime':booklist,
+            'single':single,
+            'openId':openId
+        }
+        book = self.client.post("/api/book",data,content_type="application/json")
+        response = json.loads(book.content)
+        self.assertEqual(response['errMsg'],"所选时间已被占用或无法使用!")
+    
+    #成功预订
+    def test_book(self):
+        openId = "1"
+        single = True 
+        booklist = [
+            {
+                'day': 1,
+                'room': '101',
+                'time':['Time1','Time2']
+            }
+        ]
+        data = {
+            'bookTime':booklist,
+            'single':single,
+            'openId':openId
+        }
+        book = self.client.post("/api/book",data,content_type="application/json")
+        response = json.loads(book.content)
+        disabled1 = []
+        disabled2 = []
+        for i in range(0,14):
+            disabled1.append(False)
+            disabled2.append(True)
+        self.assertEqual(response['times'][0]['day'],0)
+        for i in range(0,14):
+            self.assertEqual(response['times'][0]['disabled'][i],disabled2[i])
+        self.assertEqual(response['times'][0]['room'],'101')
+
+        self.assertEqual(response['times'][1]['day'],1)
+        for i in range(0,2):
+            self.assertEqual(response['times'][1]['disabled'][i],True)
+        for i in range(2,14):
+            self.assertEqual(response['times'][1]['disabled'][i],False)
+        self.assertEqual(response['times'][1]['room'],'101')
+
+        self.assertEqual(response['times'][2]['day'],2)
+        for i in range(0,14):
+            self.assertEqual(response['times'][2]['disabled'][i],disabled1[i])
+        self.assertEqual(response['times'][2]['room'],'101')
+
+    def clear(self):
+        UserGroup.objects.all().delete()
+        User.objects.all().delete()
+        BlackList.objects.all().delete()
         PianoRoom.objects.all().delete()
         TimeTable.objects.all().delete()
 

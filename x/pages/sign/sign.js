@@ -118,6 +118,10 @@ Page({
                 wx.showToast({
                   title: '注册成功!',
                 })
+                wx.switchTab({
+                  url: '../home/home',
+                })
+                console.log('1')
               }
             },
             fail: function () {

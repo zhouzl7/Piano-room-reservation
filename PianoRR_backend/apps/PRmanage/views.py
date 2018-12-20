@@ -18,7 +18,7 @@ def announcement(request):
     for announcement in announcements:
         announceall.append({
             'title':announcement.title,
-            'time':announcement.published_time,
+            'time':str(announcement.published_time),
             'author':announcement.published_person,
             'content':announcement.content
         })
@@ -235,6 +235,27 @@ def book(request):
         resData['errMsg'] = '所选时间已被占用或无法使用!'
     #refresh the availableTime
     return JsonResponse(resData)
+
+def isBind(request):
+    openId = request.GET['openId']
+    user = User.objects.filter(open_id = openId).first()
+    if(user):  
+        print(user.open_id)
+        return JsonResponse({'name':user.name,'personId':user.person_id})
+    else:
+        return JsonResponse({'errMsg':'no'})
+
+def notBind(request):
+    openId = request.GET['openId']
+    user = User.objects.filter(open_id = openId)
+    if(not user):
+        return JsonResponse({'errMsg':'no'})
+    else:
+        for i in user:
+            i.open_id = ''
+            i.save()
+        return JsonResponse({'notBind':'ok'})
+
 
 def salt(request):
     result = {}
