@@ -97,6 +97,8 @@ TEMPLATES = [
     },
 ]
 
+NOSE_ARGS = ['--nocapture','--nologcapture']
+
 WSGI_APPLICATION = 'PianoRR_backend.wsgi.application'
 
 
