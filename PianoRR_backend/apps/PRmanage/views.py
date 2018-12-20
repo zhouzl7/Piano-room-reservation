@@ -95,6 +95,8 @@ def onlogin(request):
 def availableTime(request):
     openId = request.GET['openId']
     user = User.objects.filter(open_id = openId).first()
+    if(not user):
+        return JsonResponse({'errMsg':'您尚未绑定!'})
     multiUser = UserGroup.objects.filter(group_name="普通用户").first()
     PianoRoomLists = PianoRoom.objects.all()
     Days = []
@@ -141,22 +143,23 @@ def availableTime(request):
     return JsonResponse(result)
 
 def reservation(request):
+    bookall = []
     openId = request.GET['openId']
     user = User.objects.filter(open_id = openId).first()
-    bookLists = BookRecord.objects.filter(user = user)
-    bookall = []
-    for book in bookLists:
-        if(book.user_quantity):
-            people = '单人'
-        else:
-            people = '多人'
-        bookall.append({
-            'room':book.piano_room.room_id,
-            'useTime':str(book.BR_date) + ' ' + str(book.use_time+7) +':00-' + str(book.use_time+8)+':00',
-            'people':people,
-            'user':user.name
-        })
-    bookall.reverse()
+    if(user):
+        bookLists = BookRecord.objects.filter(user = user.person_id)
+        for book in bookLists:
+            if(book.user_quantity):
+                people = '单人'
+            else:
+                people = '多人'
+            bookall.append({
+                'room':book.piano_room.room_id,
+                'useTime':str(book.BR_date) + ' ' + str(book.use_time+7) +':00-' + str(book.use_time+8)+':00',
+                'people':people,
+                'user':book.user
+            })
+        bookall.reverse()
     result = {
         'reserve': bookall
     }
@@ -230,7 +233,7 @@ def book(request):
             money += len(i['time']) * price
             #createBookRecord:
             for j in i['time']:
-                record = BookRecord.objects.create(user=user,fee=price,
+                record = BookRecord.objects.create(user=user.person_id,fee=price,
                         is_pay=True,user_quantity=body['single'],
                         BR_date=datetime.date.today()+datetime.timedelta(days=i['day']),
                         use_time=int(j[4:]),status=BookRecord.STATUS_VALID,piano_room=room)
