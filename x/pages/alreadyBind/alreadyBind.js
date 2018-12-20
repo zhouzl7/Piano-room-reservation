@@ -1,4 +1,4 @@
-+// pages/alreadyBind/alreadyBind.js
+// pages/alreadyBind/alreadyBind.js
 const app = getApp()
 
 Page({

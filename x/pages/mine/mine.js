@@ -81,5 +81,6 @@ Page({
           url: '../chooseLog/chooseLog',
         })
       }
+    })
   }
 })
