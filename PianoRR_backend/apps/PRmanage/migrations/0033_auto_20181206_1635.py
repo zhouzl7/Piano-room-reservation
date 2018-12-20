@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='timetable',
             name='piano_room',
-            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='PRmanage.PianoRoom', verbose_name='琴房'),
+            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='PRmanage.PianoRoom', to_field='room_id', verbose_name=u'琴房'),
         ),
     ]

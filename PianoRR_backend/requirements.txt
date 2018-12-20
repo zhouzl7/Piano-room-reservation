@@ -7,3 +7,4 @@ django-formtools
 django-crispy-forms
 future
 requests
+bcrypt

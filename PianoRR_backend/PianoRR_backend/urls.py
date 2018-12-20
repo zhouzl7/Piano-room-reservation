@@ -24,5 +24,3 @@ urlpatterns = [
     path('admin/', xadmin.site.urls),
     path('api/', include('PRmanage.urls')),
 ]
-#username:admin
-#pwd:admin123

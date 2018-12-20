@@ -1,17 +1,15 @@
 # _*_ coding: utf-8 _*_
-from django.shortcuts import render
-
 # Create your views here.
-from django.http import HttpResponse,JsonResponse
+from django.http import JsonResponse
 from django.db import transaction
 from django.db.models import Q
-from PRmanage.models import Announcement,PianoRoom,TimeTable
+from PRmanage.models import Announcement, PianoRoom, TimeTable
 from BOOKmanage.models import BookRecord
-from USERmanage.models import User,UserGroup,BlackList
-from django.core import serializers
+from USERmanage.models import User, UserGroup, BlackList
 from PianoRR_backend.settings import WECHAT_APPID, WECHAT_SECRET
 import json
 import requests
+import bcrypt
 import datetime
 
 def announcement(request):
@@ -68,6 +66,7 @@ def room(request):
     return JsonResponse(result)
 
 def onlogin(request):
+    print(request.GET)
     data = {
         'appid': WECHAT_APPID,
         'secret': WECHAT_SECRET,
@@ -75,17 +74,11 @@ def onlogin(request):
     }
     data['js_code'] = request.GET['code']
     r = requests.get('https://api.weixin.qq.com/sns/jscode2session', params=data)
+    print(r.json())
     if r.json()['openid']:
         result = {
-            'openId' : r.json()['openid'] 
+            'openId' : r.json()['openid']
         }
-        try:
-            user = User.objects.get(open_id=result['openId'])
-        except:
-            #create New User by default:
-            user = User.objects.create(open_id=result['openId'])
-            user.group = UserGroup.objects.get(group_name='普通用户')
-            user.save()
     else:
         result = {
             'errMsg' : '登录失败口..口|||'
@@ -168,7 +161,6 @@ def reservation(request):
 def book(request):
     #check if the times are available
     body = json.loads(request.body)
-    print(body['openId'])
     try:
         user = User.objects.get(open_id=body['openId'])
     except:
@@ -243,3 +235,50 @@ def book(request):
         resData['errMsg'] = '所选时间已被占用或无法使用!'
     #refresh the availableTime
     return JsonResponse(resData)
+
+def salt(request):
+    result = {}
+    if('cellPhone' in request.GET):
+        try:
+            user = User.objects.get(person_id=request.GET['cellPhone'])
+        except:
+            result['errMsg'] = '用户不存在!'
+            return JsonResponse(result)
+        result['salt'] = user.pwhash[0:30]
+    else:
+        result['salt'] = bcrypt.gensalt(10).decode('utf-8')
+    return JsonResponse(result)
+
+def register(request):
+    data = json.loads(request.body)
+    if(User.objects.filter(person_id=data['cellPhone']).exists()):
+        return JsonResponse({
+            'errMsg': '手机号已被注册!'
+        })
+    else:
+        group = UserGroup.objects.filter(group_name='普通用户').first()
+        print(group)
+        user = User.objects.create(open_id=data['openId'],person_id=data['cellPhone'],
+                            pwhash=data['hash'],name=data['name'],group=group)
+        user.save()
+        return JsonResponse({})
+
+def pwLogin(request):
+    data = json.loads(request.body)
+    try:
+        user = User.objects.get(person_id=data['cellPhone'])
+    except:
+        return JsonResponse({
+            'errMsg': '用户名或密码错误!'
+        })
+    if(user.pwhash != data['hash']):
+        return JsonResponse({
+            'errMsg': '用户名或密码错误!'
+        })
+    oldUsers = User.objects.filter(open_id=data['openId'])
+    for i in oldUsers:
+        i.open_id = ''
+        i.save()
+    user.open_id = data['openId']
+    user.save()
+    return JsonResponse({})
