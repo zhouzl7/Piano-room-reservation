@@ -25,8 +25,7 @@ try:
 
         if int(hour_now) >= 7 and int(hour_now) <= 20:
             for all_time_table in all_time_tables:
-                if all_time_table.TT_type == 0:
-                    print('2-01')
+                if all_time_table.TT_type == TimeTable.TODAY:
                     if int(hour_now) == 7:
                         if all_time_table.Time1 == 1:
                             all_time_table.Time1 = -1
@@ -72,32 +71,32 @@ try:
                 all_time_table.save()
 
         if int(hour_now) == 23:
-            time_tables = TimeTable.objects.filter(TT_type='0')
+            time_tables = TimeTable.objects.filter(TT_type=TimeTable.TODAY)
 
             for time_table in time_tables:
                 time_table.delete()
 
-            time_tables = TimeTable.objects.filter(TT_type='1')
+            time_tables = TimeTable.objects.filter(TT_type=TimeTable.TOMORROW)
 
             for time_table in time_tables:
-                time_table.TT_type = '0'
+                time_table.TT_type=TimeTable.TODAY
                 time_table.date = datetime.date.today() + datetime.timedelta(days=1)
                 time_table.save()
 
-            time_tables = TimeTable.objects.filter(TT_type='2')
+            time_tables = TimeTable.objects.filter(TT_type=TimeTable.AFTER_TOMORROW)
 
             for time_table in time_tables:
-                time_table.TT_type = '1'
+                time_table.TT_type=TimeTable.TOMORROW
                 time_table.date = datetime.date.today() + datetime.timedelta(days=2)
                 time_table.save()
 
-            time_tables = TimeTable.objects.filter(TT_type='0')
+            time_tables = TimeTable.objects.filter(TT_type=TimeTable.TODAY)
 
             for time_table in time_tables:
                 today = datetime.date.today()
                 date_old = today + datetime.timedelta(days=3)
                 piano_room_old = time_table.piano_room
-                time_table_new = TimeTable(piano_room=piano_room_old, TT_type='2', date=date_old, Time1=1,
+                time_table_new = TimeTable(piano_room=piano_room_old, TT_type=TimeTable.AFTER_TOMORROW, date=date_old, Time1=1,
                                            Time2=1, Time3=1, Time4=1, Time5=1, Time6=1,
                                            Time7=1, Time8=1, Time9=1,
                                            Time10=1, Time11=1, Time12=1,
@@ -112,19 +111,19 @@ try:
                     today_new = today + datetime.timedelta(days=1)
                     tomorrow_new = today + datetime.timedelta(days=2)
                     after_tomorrow_new = today + datetime.timedelta(days=3)
-                    time_table_new = TimeTable(piano_room=pianoroom, TT_type='0', date=today_new, Time1=1,
+                    time_table_new = TimeTable(piano_room=pianoroom, TT_type=TimeTable.TODAY, date=today_new, Time1=1,
                                                Time2=1, Time3=1, Time4=1, Time5=1, Time6=1,
                                                Time7=1, Time8=1, Time9=1,
                                                Time10=1, Time11=1, Time12=1,
                                                Time13=1, Time14=1)
                     time_table_new.save()
-                    time_table_new = TimeTable(piano_room=pianoroom, TT_type='1', date=tomorrow_new, Time1=1,
+                    time_table_new = TimeTable(piano_room=pianoroom, TT_type=TimeTable.TOMORROW, date=tomorrow_new, Time1=1,
                                                Time2=1, Time3=1, Time4=1, Time5=1, Time6=1,
                                                Time7=1, Time8=1, Time9=1,
                                                Time10=1, Time11=1, Time12=1,
                                                Time13=1, Time14=1)
                     time_table_new.save()
-                    time_table_new = TimeTable(piano_room=pianoroom, TT_type='2', date=after_tomorrow_new, Time1=1,
+                    time_table_new = TimeTable(piano_room=pianoroom, TT_type=TimeTable.AFTER_TOMORROW, date=after_tomorrow_new, Time1=1,
                                                Time2=1, Time3=1, Time4=1, Time5=1, Time6=1,
                                                Time7=1, Time8=1, Time9=1,
                                                Time10=1, Time11=1, Time12=1,
