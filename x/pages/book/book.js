@@ -57,18 +57,11 @@ Page({
       },
       method: "GET",
       success: res => {
-        if(res.data.errMsg){
-          wx.showToast({
-            title: '您尚未绑定!'
-          })
-        }
-        else{
-          console.log(res)
-          load(self, res.data.Days)
-          wx.showToast({
-            title: 'BookLoaded!'
-          })
-        }
+        console.log(res)
+        load(self, res.data.Days)
+        wx.showToast({
+          title: 'BookLoaded!'
+        })
       },
       fail: function () {
         setTimeout(function () {

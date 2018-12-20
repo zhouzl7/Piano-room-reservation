@@ -13,8 +13,7 @@
         "pages/login/login",
         "pages/inlogin/inlogin",
         "pages/announceall/announceall",
-        "pages/detail_announce/detail_announce",
-        "pages/alreadyBind/alreadyBind"
+        "pages/detail_announce/detail_announce"
     ],
     "tabBar": {
         "list": [{

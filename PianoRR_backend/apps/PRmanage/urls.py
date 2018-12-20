@@ -10,7 +10,5 @@ urlpatterns = [
     url(r'^room', views.room),
     url(r'^salt', views.salt),
     url(r'^pwlogin', views.pwLogin),
-    url(r'^register', views.register),
-    url(r'^isBind', views.isBind),
-    url(r'^notBind', views.notBind),
+    url(r'^register', views.register)
 ]
