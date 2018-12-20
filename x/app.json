@@ -1,48 +1,48 @@
 {
-  "pages": [
-    "pages/home/home",
-    "pages/book/book",
-    "pages/mine/mine",
-    "pages/myReservation/myReservation",
-    "pages/notice/notice",
-    "pages/index/index",
-    "pages/logs/logs",
-    "pages/chooseLog/chooseLog",
-    "pages/admin/admin",
-    "pages/sign/sign",
-    "pages/login/login",
-    "pages/inlogin/inlogin",
-    "pages/announceall/announceall",
-    "pages/detail_announce/detail_announce"
-  ],
-  "tabBar": {
-    "list": [
-      {
-        "text": "首页",
-        "pagePath": "pages/home/home",
-        "iconPath": "images/icon/home.png",
-        "selectedIconPath": "images/icon/home-selected.png"
-      },
-      {
-        "text": "预约",
-        "pagePath": "pages/book/book",
-        "iconPath": "images/icon/book.png",
-        "selectedIconPath": "images/icon/book-selected.png"
-      },
-      {
-        "text": "我的",
-        "pagePath": "pages/mine/mine",
-        "iconPath": "images/icon/mine.png",
-        "selectedIconPath": "images/icon/mine-selected.png"
-      }
+    "pages": [
+        "pages/home/home",
+        "pages/book/book",
+        "pages/mine/mine",
+        "pages/myReservation/myReservation",
+        "pages/notice/notice",
+        "pages/index/index",
+        "pages/logs/logs",
+        "pages/chooseLog/chooseLog",
+        "pages/admin/admin",
+        "pages/sign/sign",
+        "pages/login/login",
+        "pages/inlogin/inlogin",
+        "pages/announceall/announceall",
+        "pages/detail_announce/detail_announce",
+        "pages/alreadyBind/alreadyBind"
     ],
-    "color": "black",
-    "selectedColor": "#00f"
-  },
-  "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#131A62",
-    "navigationBarTitleText": "伯牙有约",
-    "navigationBarTextStyle": "#fff"
-  }
+    "tabBar": {
+        "list": [{
+                "text": "首页",
+                "pagePath": "pages/home/home",
+                "iconPath": "images/icon/home.png",
+                "selectedIconPath": "images/icon/home-selected.png"
+            },
+            {
+                "text": "预约",
+                "pagePath": "pages/book/book",
+                "iconPath": "images/icon/book.png",
+                "selectedIconPath": "images/icon/book-selected.png"
+            },
+            {
+                "text": "我的",
+                "pagePath": "pages/mine/mine",
+                "iconPath": "images/icon/mine.png",
+                "selectedIconPath": "images/icon/mine-selected.png"
+            }
+        ],
+        "color": "black",
+        "selectedColor": "#00f"
+    },
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#131A62",
+        "navigationBarTitleText": "伯牙有约",
+        "navigationBarTextStyle": "#fff"
+    }
 }

@@ -131,41 +131,49 @@ Page({
       method: "GET",
       success: res => {
         console.log(res)
-        load(self, res.data.Days)
-        setTimeout(function () {
-          let Days = self.data.Days
-          Days.forEach(function (item, index) {
-            item.color = "#7D5E80"
-            item.fontcolor = "white"
-            item.room.forEach(function (item, index) {
-              item.chosen = item.disabled.slice()
-              item.chosen.fill(false)
-              item.color = "#EDEDED"
+        if (res.data.errMsg) {
+          wx.showToast({
+            title: '您尚未绑定!'
+          })
+        }
+        else{
+          load(self, res.data.Days)
+          setTimeout(function () {
+            let Days = self.data.Days
+            Days.forEach(function (item, index) {
+              item.color = "#7D5E80"
+              item.fontcolor = "white"
+              item.room.forEach(function (item, index) {
+                item.chosen = item.disabled.slice()
+                item.chosen.fill(false)
+                item.color = "#EDEDED"
+
+              })
+            })
+            Days[0].color = "#fff"
+            Days[0].fontcolor = "black"
+            Days[0].weight = "bold"
+            Days[0].room[0].color = "#fff"
+            self.data.time.forEach(function (item) {
+              item.color = "#fff"
+            })
+            self.setData({
+              Days: Days,
+              money: 0,
+              multiMoney: 0,
+              single: true,
+              singleopacity: 1,
+              chosenDay: 0,
+              chosenRoom: 0,
+              time: self.data.time
 
             })
+          }, 0)
+          wx.showToast({
+            title: 'BookLoaded!'
           })
-          Days[0].color = "#fff"
-          Days[0].fontcolor = "black"
-          Days[0].weight = "bold"
-          Days[0].room[0].color = "#fff"
-          self.data.time.forEach(function (item) {
-            item.color = "#fff"
-          })
-          self.setData({
-            Days: Days,
-            money: 0,
-            multiMoney: 0,
-            single: true,
-            singleopacity: 1,
-            chosenDay: 0,
-            chosenRoom: 0,
-            time: self.data.time
-
-          })
-        }, 0)
-        wx.showToast({
-          title: 'BookLoaded!'
-        })
+        }
+        
       },
       fail: function () {
         setTimeout(function () {
