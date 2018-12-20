@@ -556,3 +556,79 @@ class book(TestCase):
         PianoRoom.objects.all().delete()
         TimeTable.objects.all().delete()
 
+#是否绑定
+class isBind(TestCase):
+    def setUp(self):
+        UserGroup.objects.create(group_name = "student", xinghaiPR_price=1,smallPR_price=2,bigPR_price=3)
+        student = UserGroup.objects.get(group_name = "student")
+        User.objects.create(open_id = "1",person_id = "123",pwhash = "123",name="user1",group=student)
+    #未绑定
+    def test_noUser(self):
+        openId = "0"
+        response = self.client.get("/api/isBind",{'openId':openId})
+        response = json.loads(response.content)
+        self.assertEqual(response['errMsg'],"no")
+    #已经绑定
+    def test_isUser(self):
+        openId = "1"
+        response = self.client.get("/api/isBind",{'openId':openId})
+        response = json.loads(response.content)
+        self.assertEqual(response['name'],"user1")
+        self.assertEqual(response['personId'],"123")
+
+    def clear(self):
+        User.objects.all().delete()
+        UserGroup.objects.all().delete()
+
+    #取消绑定
+    class cancelBind(TestCase):
+        def setUp(self):
+            UserGroup.objects.create(group_name = "student", xinghaiPR_price=1,smallPR_price=2,bigPR_price=3)
+            student = UserGroup.objects.get(group_name = "student")
+            User.objects.create(open_id = "1",person_id = "123",pwhash = "123",name="user1",group=student)
+
+        def test_noUser(self):
+            openId = "0"
+            response = self.client.get("/api/notBind",{'openId':openId})
+            response = json.loads(response.content)
+            self.assertEqual(response['errMsg'],"no") 
+
+        def test_isUser(self):
+            openId = "1"
+            response = self.client.get("/api/notBind",{'openId':openId})
+            response = json.loads(response.content)
+            self.assertEqual(response['notBind'],"ok")
+        
+        def clear(self):
+            UserGroup.objects.all().delete()
+            User.objects.all().delete()
+    
+    class Login(TestCase):
+        def setUp(self):
+            UserGroup.objects.create(group_name = "student", xinghaiPR_price=1,smallPR_price=2,bigPR_price=3)
+            student = UserGroup.objects.get(group_name = "student")
+            User.objects.create(open_id = "1",person_id = "123",pwhash = "123",name="user1",group=student)
+
+        def test_wrongcellphone(self):
+            data = {
+              'openId': "1",
+              'cellPhone': '1234',
+              'hash': '123'
+            }
+            response = self.client.post("/api/pwLogin",data, content_type = "application/json")
+            response = json.loads(response.content)
+            self.assertEqual(response['errMsg'],"用户名或密码错误!")
+
+        def test_wronghash(self):
+            data = {
+              'openId': "1",
+              'cellPhone': '123',
+              'hash': '1234'
+            }
+            response = self.client.post("/api/pwLogin",data,content_type="application/json")
+            response = json.loads(response.content)
+            self.assertEqual(response['errMsg'],"用户名或密码错误!")
+
+        def clear(self):
+            UserGroup.objects.all().delete()
+            User.objects.all().delete()

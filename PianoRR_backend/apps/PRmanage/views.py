@@ -239,8 +239,7 @@ def book(request):
 def isBind(request):
     openId = request.GET['openId']
     user = User.objects.filter(open_id = openId).first()
-    if(user):  
-        print(user.open_id)
+    if(user):
         return JsonResponse({'name':user.name,'personId':user.person_id})
     else:
         return JsonResponse({'errMsg':'no'})
