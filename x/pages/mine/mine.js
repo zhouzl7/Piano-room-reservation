@@ -56,31 +56,8 @@ Page({
     })
   },
   toBind:function(event){
-    wx.request({
-      url: app.globalData.url + '/api/isBind',
-      data: {
-        openId: app.globalData.openId
-      },
-      method: "GET",
-      success: res => {
-        console.log(res)
-        if (res.data.errMsg) {
-          wx.navigateTo({
-            url: '../chooseLog/chooseLog',
-          })
-        }
-        else {
-          console.log(1)
-          wx.navigateTo({
-            url: '../alreadyBind/alreadyBind',
-          })
-        }
-      },
-      fail: res => {
-        wx.navigateTo({
-          url: '../chooseLog/chooseLog',
-        })
-      }
+    wx.navigateTo({
+      url:'../chooseLog/chooseLog',
     })
   }
 })
