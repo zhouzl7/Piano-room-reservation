@@ -7,7 +7,7 @@
     <scroll-view scroll-y="true" class="Rooms">
       <view class="RoomBtn" wx:for="{{Days[chosenDay].room}}" bindtap="chooseRoom" style="background-color:{{item.color}}" data-id="{{index}}">{{item.name}}</view>
     </scroll-view>
-    <scroll-view scroll-y="true" class="Times">
+    <scroll-view scroll-y="true" wx:if="{{bind}}" class="Times">
       <view class="Time" wx:for="{{time}}" style="background-color:{{item.color}};color:{{Days[chosenDay].room[chosenRoom].disabled[index]?'gray':'black'}}" bindtap="{{Days[chosenDay].room[chosenRoom].disabled[index]?'':'chooseTime'}}" data-id="{{index}}">{{item.timestr}}</view>
     </scroll-view>
   </view>

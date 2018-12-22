@@ -17,7 +17,8 @@ Page({
         multiMoney: 0,
         fontcolor: "darkgrey",
         singleopacity: 0.5,
-        multiopacity: 0.5
+        multiopacity: 0.5,
+        bind: false
     },
 
     /**
@@ -50,6 +51,9 @@ Page({
             wx.showToast({
               title: res.data.errMsg,
               icon: 'none'
+            })
+            self.setData({
+              bind: false
             })
           }else{
             load(self, res.data.Days)
@@ -347,6 +351,7 @@ function load(self,data){
     multiopacity: 0.5,
     chosenDay: 0,
     chosenRoom: 0,
+    bind: true,
     time: self.data.time
   })
 }
@@ -356,17 +361,21 @@ function bookChange(self,data){
   console.log(data)
   data.forEach(item => {
     let roomName = item.room
-    let roomIndex = 0
+    let roomIndex = -1
     self.data.Days[item.day].room.forEach((item,index)=>{
       if(item.name === roomName){
         roomIndex = index
         return
       }
     })
+    if(roomIndex === -1){
+      return
+    }
     let param = {}
     param['Days[' + item.day + '].room[' + roomIndex + '].disabled'] = item.disabled
     param['Days[' + item.day + '].room[' + roomIndex +'].chosen'] = item.disabled.slice()
     param['Days[' + item.day + '].room[' + roomIndex + '].chosen'].fill(false)
+    console.log(param)
     self.setData(param)
   })
 }
