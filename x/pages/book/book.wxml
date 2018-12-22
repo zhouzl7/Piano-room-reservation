@@ -1,26 +1,20 @@
 <!--pages/book/book.wxml-->
-<view class="head">
-  <image style="height: 50px; background-color: #57446F;" mode="aspectFit" src="../../images/logo.png"></image>
-  </view>
-
-     <view class="Days">
-    <button class="DayBtn" wx:for="{{Days}}" wx:key="name" data-id="{{index}}" bindtap = "chooseDay"style="background-color:{{item.color}}; color:{{item.fontcolor}};">{{item.name}}</button>
+<view class='container'>
+  <view class="Days">
+    <button class="DayBtn" wx:for="{{Days}}" wx:key="name" data-id="{{index}}" bindtap = "chooseDay">{{item.name}}<button class="Day1"style="background-color:{{item.color}};  border-radius:0"></button> </button>
   </view>
   <view class = "roomAndTime">
     <scroll-view scroll-y="true" class="Rooms">
       <view class="RoomBtn" wx:for="{{Days[chosenDay].room}}" bindtap="chooseRoom" style="background-color:{{item.color}}" data-id="{{index}}">{{item.name}}</view>
-      
     </scroll-view>
-    <scroll-view scroll-y="true"class="Times">
-    <button class="Time" wx:for="{{time}}" style="background-color:{{item.color}}" disabled="{{Days[chosenDay].room[chosenRoom].disabled[index]}}" data-id="{{index}}" bindtap = "chooseTime">{{item.timestr}}</button>
-      <!--<view class="Time" wx:for="{{time}}" style="background-color:{{item.color}}"  data-id="{{index}}" bindtap = "{{Days[chosenDay].room[chosenRoom].disabled[index]?'':'chooseTime'}}">{{item.timestr}}</view>-->
+    <scroll-view scroll-y="true" class="Times">
+      <view class="Time" wx:for="{{time}}" style="background-color:{{item.color}};color:{{Days[chosenDay].room[chosenRoom].disabled[index]?'gray':'black'}}" bindtap="{{Days[chosenDay].room[chosenRoom].disabled[index]?'':'chooseTime'}}" data-id="{{index}}">{{item.timestr}}</view>
     </scroll-view>
   </view>
-  
   <view class="last">
-  <button class="money">总金额: {{money}}</button>
-  <button class="type" type="primary" bindtap="singleChange"style="opacity:{{singleopacity}}"><image class="nameImage"  src="../../images/single.png"></image></button>
-  <button class="type" type="primary" bindtap="multiChange"style="opacity:{{multiopacity}}"><image class="nameImage"  src="../../images/multi.png"></image></button>
+    <button class="money">¥ {{money}}</button>
+    <button class="type" type="primary" bindtap="chooseSingle"style="opacity:{{singleopacity}}"><image class="nameImage"  src="../../images/single.png"></image></button>
+    <button class="type" type="primary" bindtap="chooseMulti"style="opacity:{{multiopacity}}"><image class="nameImage"  src="../../images/multi.png"></image></button>
   <button class="makesure"  bindtap="Book">确认</button>
   </view>
-
+</view>
