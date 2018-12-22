@@ -84,6 +84,9 @@ Page({
                 wx.showToast({
                   title: '登录成功!',
                 })
+                wx.switchTab({
+                  url: '../home/home',
+                })
               }
             },
             fail: function () {

@@ -13,7 +13,8 @@
         "pages/login/login",
         "pages/inlogin/inlogin",
         "pages/announceall/announceall",
-        "pages/detail_announce/detail_announce"
+        "pages/detail_announce/detail_announce",
+        "pages/alreadyBind/alreadyBind"
     ],
     "tabBar": {
         "list": [{
@@ -40,7 +41,7 @@
     },
     "window": {
         "backgroundTextStyle": "light",
-        "navigationBarBackgroundColor": "#000",
+        "navigationBarBackgroundColor": "#131A62",
         "navigationBarTitleText": "伯牙有约",
         "navigationBarTextStyle": "#fff"
     }

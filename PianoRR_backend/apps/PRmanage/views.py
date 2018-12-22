@@ -276,10 +276,6 @@ def register(request):
             'errMsg': '手机号已被注册!'
         })
     else:
-        oldUsers = User.objects.filter(open_id=data['openId'])
-        for i in oldUsers:
-            i.open_id = ''
-            i.save()
         group = UserGroup.objects.filter(group_name='普通用户').first()
         print(group)
         user = User.objects.create(open_id=data['openId'],person_id=data['cellPhone'],

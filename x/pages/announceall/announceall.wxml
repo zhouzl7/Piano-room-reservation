@@ -1,6 +1,9 @@
-<view class = "announceall">
-  <button class = "head">公告</button>
-  <view class = "detail_announce">
+
+  <view class = "res">
+    <button class = "myres">公告</button>
+  </view>
+
+
     <button class = "announce" wx:for="{{announce}}" bindtap='more_detail' data-index="{{index}}">
       <view class = "word">
         <button class = "title">{{item.title}}</button>
@@ -10,5 +13,3 @@
         <icon class="iconfont icon-youjiantou"></icon>
       </view>
     </button>
-  </view>
-</view>

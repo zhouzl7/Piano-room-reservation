@@ -1,43 +1,66 @@
 /* pages/hometest/home test.wxss */
 .table {
-  border: 0px solid darkgray;
+  border-bottom: 1px solid rgba(169, 169, 169, 0.521);
 }
 .head{
-  margin-top: 10px;
-  background-color: white;
+  background-color: #57446F;
+  display: flex;
   height: 50px;
+  justify-content: center;
 }
 .choose{
+  margin-top:5%;
   margin-bottom: 5%;
-  background-color: cornflowerblue;
+  border-bottom: 1px solid rgba(169, 169, 169, 0.521);
   height: 10%;
 }
+.Days {
+  width: 100%;
+  flex-direction: row;
+  display: flex;
+}
+.DayBtn{
+  border-bottom: 1px solid rgba(169, 169, 169, 0.521);
+  width:100%;
+  justify-content: center;
+  border-radius: 0;
+  border-width: 1rpx;
+  background-color: #7D5E80;
+  font-size: 20px;
+  color: white;
+  font-weight: bold;
+}
+.DayBtn::after{
+  border: none;
+}
+
 .tr {
   display: flex;
   width: 100%;
   justify-content: center;
-  height: 2rem;
+  height: 3rem;
   align-items: center;
 }
 .td {
-    color: #fff;
+    color: black;
     margin-left: 5%;
-    margin-top: 10px;
+    font-size: 20px;
+    font-weight: bold;
 }
 .bg-w{
-  background: white;
+  background: #7D5E80;
 }
 .bg-g{
   background: #E6F3F9;
 }
 .th {
-  width: 50%;
+  border-bottom: 1px solid rgba(169, 169, 169, 0.521);
+  width:100%;
   justify-content: center;
-  color:cornflowerblue;
-  display: flex;
-  height: 2rem;
-  align-items: center;
   border-radius: 0;
+  border-width: 1rpx;
+  background-color: #fff;
+  font-size: 16px;
 }
 .room{
   background-color: white;
@@ -68,4 +91,9 @@
 }
 .room::after{
   border: none;
+}
+.nameImage, .keyImage {
+  width: 20px;
+  height: 20px;
+  margin-right:5px;
 }

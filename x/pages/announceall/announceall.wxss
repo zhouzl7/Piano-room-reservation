@@ -1,13 +1,20 @@
-.head{
-  margin-top: 10px;
+
+.myres {
   width:90%;
   height:30px;
-  background-color: #fff;
-  font-size: 15px;
+  background-color: #57446F;
+  font-size: 16px;
   line-height: 30px;
-  text-align: center
+  text-align: center;
+  color:#fff;
 }
 
+.res{
+  flex-direction: row;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
 .announce{
   width:90%;
   background-color: #fff;

@@ -5,7 +5,6 @@ six
 httplib2
 django-formtools
 django-crispy-forms
-django_apscheduler
 future
 requests
 bcrypt
