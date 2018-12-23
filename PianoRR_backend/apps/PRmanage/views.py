@@ -1,16 +1,23 @@
 # _*_ coding: utf-8 _*_
 # Create your views here.
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render
 from django.db import transaction
 from django.db.models import Q
 from PRmanage.models import Announcement, PianoRoom, TimeTable
 from BOOKmanage.models import BookRecord
 from USERmanage.models import User, UserGroup, BlackList
 from PianoRR_backend.settings import WECHAT_APPID, WECHAT_SECRET
+from PianoRR_backend.settings import client_appid,client_secret,Mch_id,Mch_key
+import os
 import json
+import re
 import requests
 import bcrypt
-import datetime
+import datetime, time
+import hashlib
+import xml.etree.ElementTree as ET
+from .countDown import countDown
 
 def announcement(request):
     announceall = []
@@ -68,14 +75,13 @@ def room(request):
 def onlogin(request):
     print(request.GET)
     data = {
-        'appid': WECHAT_APPID,
-        'secret': WECHAT_SECRET,
+        'appid': client_appid,
+        'secret': client_secret,
         'grant_type': 'authorization_code',
     }
     data['js_code'] = request.GET['code']
     r = requests.get('https://api.weixin.qq.com/sns/jscode2session', params=data)
-    print(r.json())
-    if r.json()['openid']:
+    if 'openid' in r.json():
         result = {
             'openId' : r.json()['openid']
         }
@@ -164,7 +170,7 @@ def book(request):
     try:
         user = User.objects.get(open_id=body['openId'])
     except:
-        return JsonResponse({'errMsg':'您尚未绑定!'})
+        return JsonResponse({'errMsg': '您尚未绑定!'})
     if(BlackList.objects.filter(open_id=body['openId']).exists()):
         return JsonResponse({'errMsg': '您已被加入黑名单,请联系管理员'})
     available = False
@@ -173,21 +179,17 @@ def book(request):
     for i in bookTime:
         timeQuery = Q(piano_room=i['room']) & Q(TT_type=i['day'])
         for j in i['time']:
-            timeQuery.children.append((j,TimeTable.TIME_ABLED))
+            timeQuery.children.append((j, TimeTable.TIME_ABLED))
         query = query | timeQuery
-    print(query)
     result = TimeTable.objects.select_for_update().filter(query)
     with transaction.atomic():
-        print(result)
         if len(result) == len(bookTime):
             available = True
             for i in result:
                 for j in bookTime:
-                    print(j)
                     if (j['day'] == i.TT_type) and (j['room'] == i.piano_room.room_id):
-                        for time in j['time']:
-                            print(time)
-                            setattr(i,time,TimeTable.TIME_BOOKED)
+                        for t in j['time']:
+                            setattr(i, t, TimeTable.TIME_BOOKED)
                         break
                 i.save()
         else:
@@ -198,16 +200,16 @@ def book(request):
         'times': []
     }
     for timetable in TimeTable.objects.all():
-        time = []
+        disable = []
         for i in range(1,15):
             if(getattr(timetable,'Time'+str(i)) == TimeTable.TIME_ABLED):
-                time.append(False)
+                disable.append(False)
             else:
-                time.append(True)
+                disable.append(True)
         resData['times'].append({
-            'day' : timetable.TT_type,
-            'room' : timetable.piano_room.room_id,
-            'disabled' : time
+            'day': timetable.TT_type,
+            'room': timetable.piano_room.room_id,
+            'disabled': disable
         })
     if available == True:
         if body['single']:
@@ -224,13 +226,22 @@ def book(request):
                 price = prices.xinghaiPR_price
             money += len(i['time']) * price
             #createBookRecord:
+            recordId_List = []
             for j in i['time']:
-                record = BookRecord.objects.create(user=user.person_id,fee=price,
-                        is_pay=True,user_quantity=body['single'],
-                        BR_date=datetime.date.today()+datetime.timedelta(days=i['day']),
-                        use_time=int(j[4:]),status=BookRecord.STATUS_VALID,piano_room=room)
+                record = BookRecord.objects.create(user=user.person_id, fee=price,
+                                                   is_pay=False, user_quantity=body['single'],
+                                                   BR_date=datetime.date.today()+datetime.timedelta(days=i['day']),
+                                                   use_time=int(j[4:]), status=BookRecord.STATUS_VALID, piano_room=room)
                 #TODO: is_pay should be false by default, but there's no pay model
                 record.save()
+                recordId_List.append(record.id)
+            countDown(recordId_List)
+            param = {
+                'price': money,
+                'openId': body['openId']
+            }
+            payParam = payOrder(param)
+            resData['payParam'] = payParam
     else:
         resData['errMsg'] = '所选时间已被占用或无法使用!'
     #refresh the availableTime
@@ -239,8 +250,10 @@ def book(request):
 def isBind(request):
     openId = request.GET['openId']
     user = User.objects.filter(open_id = openId).first()
-    if(user):
-        return JsonResponse({'name':user.name,'personId':user.person_id})
+    if (user):
+        return JsonResponse({'name': user.name, 'personId': user.person_id, 'userGroup': user.group.group_name,
+                             'bigPrice': user.group.bigPR_price, 'smallPrice': user.group.smallPR_price,
+                             'xinghaiPrice': user.group.xinghaiPR_price})
     else:
         return JsonResponse({'errMsg':'no'})
 
@@ -254,7 +267,6 @@ def notBind(request):
             i.open_id = ''
             i.save()
         return JsonResponse({'notBind':'ok'})
-
 
 def salt(request):
     result = {}
@@ -302,3 +314,199 @@ def pwLogin(request):
     user.open_id = data['openId']
     user.save()
     return JsonResponse({})
+
+def bindRedirect(request):
+    if 'ticket' not in request.GET:
+        return HttpResponse(status=404)
+    context = {
+        'ticket': request.GET['ticket']
+    }
+    return render(request, 'bindRedirect.html', context)
+
+def bindCampus(request):
+    if 'openId' not in request.GET:
+        return HttpResponse(status=404)
+    if 'ticket' in request.GET:
+        print(request.GET)
+        url = 'https://id-tsinghua-test.iterator-traits.com/thuser/authapi/checkticket/PIANO/'
+        url += request.GET['ticket']
+        url += '/'+'140_143_57_245'
+        res = requests.get(url).text
+        print(res)
+        regExp = re.findall('([^:=]*)=([^:=]*)',res)
+        data = {}
+        for i in regExp:
+            data[i[0]] = i[1]
+        if('yhm' not in data):
+            return JsonResponse({'errMsg' : '登录超时,请稍后重试'})
+        oldUsers = User.objects.filter(open_id=request.GET['openId'])
+        for i in oldUsers:
+            i.open_id = ''
+            i.save()
+        user = User.objects.filter(person_id=data['zjh']).first()
+        if(user):
+            user.open_id = request.GET['openId']
+            user.save()
+            return JsonResponse({
+                'name': data['xm'],
+                'personId': data['zjh']
+            })
+        else:
+            teacherCode = ['J0000','H0000','J0054']
+            studentCode = ['X0011','X0021','X0031']
+            if data['yhlb'] in teacherCode:
+                group = UserGroup.objects.filter(group_name='教职工').first()
+            elif data['yhlb'] in studentCode:
+                group = UserGroup.objects.filter(group_name='校内学生').first()
+            user = User.objects.create(open_id=request.GET['openId'], person_id=data['zjh'], name=data['xm'], group=group)
+            user.save()
+            return JsonResponse({
+                'name': data['xm'],
+                'personId': data['zjh']
+            })
+    else:
+        return HttpResponse(status=404)
+
+def getNonceStr():
+    import random
+    data="123456789zxcvbnmasdfghjklqwertyuiopZXCVBNMASDFGHJKLQWERTYUIOP"
+    nonce_str  = ''.join(random.sample(data , 30))
+    return nonce_str
+#生成签名的函数
+def paysign(appid,body,mch_id,nonce_str,notify_url,openid,out_trade_no,spbill_create_ip,total_fee):
+    ret= {
+        "appid": appid,
+        "body": body,
+        "mch_id": mch_id,
+        "nonce_str": nonce_str,
+        "notify_url":notify_url,
+        "openid":openid,
+        "out_trade_no":out_trade_no,
+        "spbill_create_ip":spbill_create_ip,
+        "total_fee":total_fee,
+        "trade_type": 'JSAPI'
+    }
+ 
+    #处理函数，对参数按照key=value的格式，并按照参数名ASCII字典序排序
+    stringA = '&'.join(["{0}={1}".format(k, ret.get(k))for k in sorted(ret)])
+    stringSignTemp = '{0}&key={1}'.format(stringA,Mch_key)
+    sign = hashlib.md5(stringSignTemp.encode("utf-8")).hexdigest()
+    return sign.upper()
+#生成商品订单号，方式一：
+def getWxPayOrderID(): 
+    date=datetime.datetime.now()
+    #根据当前系统时间来生成商品订单号。时间精确到微秒
+    payOrdrID=date.strftime("%Y%m%d%H%M%S%f") + os.urandom(5).hex()
+    return payOrdrID
+#获取返回给小程序的paySign
+def get_paysign(prepay_id,timeStamp,nonceStr):
+    pay_data={
+                'appId': client_appid,
+                'nonceStr': nonceStr,
+                'package': "prepay_id="+prepay_id,
+                'signType': 'MD5',
+                'timeStamp':timeStamp
+    }
+    stringA = '&'.join(["{0}={1}".format(k, pay_data.get(k))for k in sorted(pay_data)])
+    stringSignTemp = '{0}&key={1}'.format(stringA,Mch_key)
+    sign = hashlib.md5(stringSignTemp.encode('utf-8')).hexdigest()
+    return sign.upper()
+
+#获取全部参数信息，封装成xml,传递过来的openid和客户端ip，和价格需要我们自己获取传递进来
+def getBodyData(openid,clientIp,price):
+    body = 'Mytest'                    #商品描述
+    notify_url = "https://166628.iterator-traits.com/api/book"      #填写支付成功的回调地址，微信确认支付成功会访问这个接口
+    nonce_str =getNonceStr()           #随机字符串
+    out_trade_no =getWxPayOrderID()     #商户订单号
+    total_fee = str(price)              #订单价格，单位是 分
+    #获取签名                                        
+    sign=paysign(client_appid,body,Mch_id,nonce_str,notify_url,openid,out_trade_no,clientIp,total_fee) 
+ 
+    bodyData = '<xml>'
+    bodyData += '<appid>' + client_appid + '</appid>' 
+    print(client_appid)            # 小程序ID
+    bodyData += '<body>' + body + '</body>'                         #商品描述
+    bodyData += '<mch_id>' + Mch_id + '</mch_id>'   
+    print(Mch_id)       #商户号
+    bodyData += '<nonce_str>' + nonce_str + '</nonce_str>' 
+    print(nonce_str)        #随机字符串
+    bodyData += '<notify_url>' + notify_url + '</notify_url>'      
+    print(notify_url)#支付成功的回调地址
+    bodyData += '<openid>' + str(openid) + '</openid>'  
+    print(openid)                 #用户标识
+    bodyData += '<out_trade_no>' + out_trade_no + '</out_trade_no>'
+    print(out_trade_no)#商户订单号
+    bodyData += '<spbill_create_ip>' + clientIp + '</spbill_create_ip>'
+    print(clientIp)#客户端终端IP
+    bodyData += '<total_fee>' + total_fee + '</total_fee>' 
+    print(total_fee)        #总金额 单位为分
+    bodyData += '<trade_type>JSAPI</trade_type>'                   #交易类型 小程序取值如下：JSAPI
+ 
+    bodyData += '<sign>' + sign + '</sign>'
+    print(sign)
+    bodyData += '</xml>'
+    print(bodyData)
+ 
+    return bodyData
+def xml2Dict(xml_data):
+    '''
+    xml to dict
+    :param xml_data:
+    :return:
+    '''
+    xml_dict = {}
+    root = ET.fromstring(xml_data)
+    for child in root:
+        xml_dict[child.tag] = child.text
+    return xml_dict
+def dict2Xml(dict_data):
+    '''
+    dict to xml
+    :param dict_data:
+    :return:
+    '''
+    xml = ["<xml>"]
+    for k, v in dict_data.iteritems():
+        xml.append("<{0}>{1}</{0}>".format(k, v))
+    xml.append("</xml>")
+    return "".join(xml)
+
+#统一下单支付接口
+def payOrder(param):
+        #获取价格
+    price=param["price"]*100
+        #获取客户端ip
+    clientIp='140.143.57.245'
+        #获取小程序openid
+    openid= param["openId"]
+    print(openid)
+        #请求微信的url
+    url= 'https://api.mch.weixin.qq.com/pay/unifiedorder'
+ 
+        #拿到封装好的xml数据
+    bodyData = getBodyData(openid,clientIp,price)
+ 
+        #获取时间戳
+    timeStamp=str(int(time.time()))
+ 
+    #请求微信接口下单
+    response=requests.post(url,bodyData,headers={'Content-Type': 'application/xml'})
+    #回复数据为xml,将其转为字典
+    content= xml2Dict(response.content)
+    print(content["return_code"])
+    if content["return_code"]=='SUCCESS':
+        #获取预支付交易会话标识
+        prepay_id =content.get("prepay_id")
+        #获取随机字符串
+        nonceStr =content.get("nonce_str")
+ 
+        #获取paySign签名，这个需要我们根据拿到的prepay_id和nonceStr进行计算签名
+        paySign=get_paysign(prepay_id,timeStamp,nonceStr)
+
+        #封装返回给前端的数据
+        data={"package":"prepay_id="+str(prepay_id),"nonceStr":nonceStr,"paySign":paySign,"timeStamp":timeStamp,'status':100}
+        print(data)
+        return data 
+    else:
+        return {"errMsg":"请求支付失败"}
+
