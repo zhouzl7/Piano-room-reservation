@@ -163,11 +163,14 @@ def reservation(request):
 def book(request):
     #check if the times are available
     body = json.loads(request.body)
+    print(body)
     try:
         user = User.objects.get(open_id=body['openId'])
     except:
         return JsonResponse({'errMsg': '您尚未绑定!'})
-    if(BlackList.objects.filter(open_id=body['openId']).exists()):
+    person_id = User.objects.get(open_id=body['openId']).person_id
+    print(person_id)
+    if BlackList.objects.filter(person_id=person_id).exists():
         return JsonResponse({'errMsg': '您已被加入黑名单,请联系管理员'})
     available = False
     query = Q()
