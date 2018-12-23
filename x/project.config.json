@@ -1,5 +1,5 @@
 {
-	"description": "项目配置文件。",
+	"description": "项目配置文件",
 	"packOptions": {
 		"ignore": []
 	},
@@ -8,12 +8,16 @@
 		"es6": true,
 		"postcss": true,
 		"minified": true,
-		"newFeature": true
+		"newFeature": true,
+		"nodeModules": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.0.4",
+	"libVersion": "2.4.2",
 	"appid": "wx77fa9e3e4014ff7a",
-	"projectname": "%E4%BC%AF%E7%89%99%E6%9C%89%E7%BA%A65",
+	"projectname": "%E4%BC%AF%E7%89%99%E6%9C%89%E7%BA%A6",
+	"debugOptions": {
+		"hidedInDevtools": []
+	},
 	"isGameTourist": false,
 	"condition": {
 		"search": {

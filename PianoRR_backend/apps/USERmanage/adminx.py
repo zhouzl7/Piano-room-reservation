@@ -63,7 +63,7 @@ class UserAdmin(object):
     def get_readonly_fields(self):
         path = self.request.get_full_path()
         if "update" in path:
-            return ['name', 'person_id', 'password', 'open_id', 'group']  # Return a list or tuple of readonly fields' names
+            return ['name', 'person_id', 'pwhash', 'open_id']  # Return a list or tuple of readonly fields' names
         else:  # This is an addition
             return []
 

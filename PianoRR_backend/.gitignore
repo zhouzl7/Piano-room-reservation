@@ -65,5 +65,8 @@ target/
 .idea
 .tx
 
+# Vs Code
+.vscode
+
 # Custom files
 /configs.json
