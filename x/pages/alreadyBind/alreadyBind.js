@@ -19,7 +19,40 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    console.log(options)
+    if (options.ticket) {
+      wx.request({
+        url: app.globalData.url + '/api/bindCampus',
+        method: "GET",
+        data: {
+          openId: app.globalData.openId,
+          ticket: options.ticket
+        },
+        success: res => {
+          console.log(res)
+          if (res.data.errMsg) {
+            wx.showToast({
+              title: res.data.errMsg,
+              icon: 'none'
+            })
+          } else if (res.data.name) {
+            wx.showToast({
+              title: '登录成功!'
+            })
+            self.setData({
+              name: res.data.name,
+              personId: res.data.personId
+            })
+          }
+        },
+        fail: function () {
+          wx.showToast({
+            title: '连接失败,请稍后重试',
+            icon: 'none'
+          })
+        }
+      })
+    }
   },
 
   /**
