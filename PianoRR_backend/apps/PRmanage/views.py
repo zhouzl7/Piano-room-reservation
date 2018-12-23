@@ -140,19 +140,19 @@ def availableTime(request):
 def reservation(request):
     bookall = []
     openId = request.GET['openId']
-    user = User.objects.filter(open_id = openId).first()
+    user = User.objects.filter(open_id=openId).first()
     if(user):
-        bookLists = BookRecord.objects.filter(user = user.person_id)
+        bookLists = BookRecord.objects.filter(person_id=user.person_id)
         for book in bookLists:
-            if(book.user_quantity):
+            if book.user_quantity:
                 people = '单人'
             else:
                 people = '多人'
             bookall.append({
-                'room':book.piano_room.room_id,
-                'useTime':str(book.BR_date) + ' ' + str(book.use_time+7) +':00-' + str(book.use_time+8)+':00',
-                'people':people,
-                'user':book.user
+                'room': book.piano_room.room_id,
+                'useTime': str(book.BR_date) + ' ' + str(book.use_time+7) +':00-' + str(book.use_time+8)+':00',
+                'people': people,
+                'user': book.person_id
             })
         bookall.reverse()
     result = {
@@ -227,11 +227,10 @@ def book(request):
             #createBookRecord:
             recordId_List = []
             for j in i['time']:
-                record = BookRecord.objects.create(user=user.person_id, fee=price,
+                record = BookRecord.objects.create(name=user.name, person_id=user.person_id, fee=price,
                                                    is_pay=False, user_quantity=body['single'],
                                                    BR_date=datetime.date.today()+datetime.timedelta(days=i['day']),
                                                    use_time=int(j[4:]), status=BookRecord.STATUS_VALID, piano_room=room)
-                #TODO: is_pay should be false by default, but there's no pay model
                 record.save()
                 recordId_List.append(record.id)
             countDown(recordId_List)
