@@ -337,8 +337,8 @@ def bindCampus(request):
             user.open_id = request.GET['openId']
             user.save()
             return JsonResponse({
-                name: data['xm'],
-                personId: data['zjh']
+                'name': data['xm'],
+                'personId': data['zjh']
             })
         else:
             teacherCode = ['J0000','H0000','J0054']
@@ -350,8 +350,8 @@ def bindCampus(request):
             user = User.objects.create(open_id=request.GET['openId'], person_id=data['zjh'], name=data['xm'], group=group)
             user.save()
             return JsonResponse({
-                name: data['xm'],
-                personId: data['zjh']
+                'name': data['xm'],
+                'personId': data['zjh']
             })
     else:
         return HttpResponse(status=404)
