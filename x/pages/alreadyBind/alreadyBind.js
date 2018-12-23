@@ -8,7 +8,11 @@ Page({
    */
   data: {
     name: null,
-    personId: null
+    personId: null,
+    userGroup: null,
+    xinghaiPrice: null,
+    smallPrice: null,
+    bigPrice: null,
   },
 
   /**
@@ -74,7 +78,11 @@ Page({
         else {
           this.setData({
             name: res.data.name,
-            personId: res.data.personId
+            personId: res.data.personId,
+            userGroup: res.data.userGroup,
+            xinghaiPrice: res.data.xinghaiPrice,
+            smallPrice: res.data.smallPrice,
+            bigPrice: res.data.bigPrice,
           })
         }
       },

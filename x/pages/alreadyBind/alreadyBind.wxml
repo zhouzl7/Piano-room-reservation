@@ -1,7 +1,11 @@
 <view>
   <button class = "bingMsg">
-    <button class = "name">name:{{name}}</button>
-    <button class = "personId">绑定号：{{personId}}</button>
+    <button class = "name">用户名：{{name}}</button>
+    <button class = "name">绑定号：{{personId}}</button>
+    <button class = "price">星海琴房：{{xinghaiPrice}} 元/小时</button>
+    <button class = "price">小琴房：{{smallPrice}} 元/小时</button>
+    <button class = "price">大琴房：{{bigPrice}} 元/小时</button>
+    <button class = "userGroup">用户组：{{userGroup}}</button>
   </button>
   <button bindtap = 'notBind' type = 'primary' class="OK">解绑</button>
 </view>

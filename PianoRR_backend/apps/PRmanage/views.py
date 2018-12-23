@@ -12,7 +12,8 @@ import json
 import re
 import requests
 import bcrypt
-import datetime
+import datetime, time
+from .countDown import countDown
 
 def announcement(request):
     announceall = []
@@ -165,7 +166,7 @@ def book(request):
     try:
         user = User.objects.get(open_id=body['openId'])
     except:
-        return JsonResponse({'errMsg':'您尚未绑定!'})
+        return JsonResponse({'errMsg': '您尚未绑定!'})
     if(BlackList.objects.filter(open_id=body['openId']).exists()):
         return JsonResponse({'errMsg': '您已被加入黑名单,请联系管理员'})
     available = False
@@ -174,21 +175,17 @@ def book(request):
     for i in bookTime:
         timeQuery = Q(piano_room=i['room']) & Q(TT_type=i['day'])
         for j in i['time']:
-            timeQuery.children.append((j,TimeTable.TIME_ABLED))
+            timeQuery.children.append((j, TimeTable.TIME_ABLED))
         query = query | timeQuery
-    print(query)
     result = TimeTable.objects.select_for_update().filter(query)
     with transaction.atomic():
-        print(result)
         if len(result) == len(bookTime):
             available = True
             for i in result:
                 for j in bookTime:
-                    print(j)
                     if (j['day'] == i.TT_type) and (j['room'] == i.piano_room.room_id):
-                        for time in j['time']:
-                            print(time)
-                            setattr(i,time,TimeTable.TIME_BOOKED)
+                        for t in j['time']:
+                            setattr(i, t, TimeTable.TIME_BOOKED)
                         break
                 i.save()
         else:
@@ -199,16 +196,16 @@ def book(request):
         'times': []
     }
     for timetable in TimeTable.objects.all():
-        time = []
+        disable = []
         for i in range(1,15):
             if(getattr(timetable,'Time'+str(i)) == TimeTable.TIME_ABLED):
-                time.append(False)
+                disable.append(False)
             else:
-                time.append(True)
+                disable.append(True)
         resData['times'].append({
-            'day' : timetable.TT_type,
-            'room' : timetable.piano_room.room_id,
-            'disabled' : time
+            'day': timetable.TT_type,
+            'room': timetable.piano_room.room_id,
+            'disabled': disable
         })
     if available == True:
         if body['single']:
@@ -225,13 +222,16 @@ def book(request):
                 price = prices.xinghaiPR_price
             money += len(i['time']) * price
             #createBookRecord:
+            recordId_List = []
             for j in i['time']:
-                record = BookRecord.objects.create(user=user.person_id,fee=price,
-                        is_pay=True,user_quantity=body['single'],
-                        BR_date=datetime.date.today()+datetime.timedelta(days=i['day']),
-                        use_time=int(j[4:]),status=BookRecord.STATUS_VALID,piano_room=room)
+                record = BookRecord.objects.create(user=user.person_id, fee=price,
+                                                   is_pay=False, user_quantity=body['single'],
+                                                   BR_date=datetime.date.today()+datetime.timedelta(days=i['day']),
+                                                   use_time=int(j[4:]), status=BookRecord.STATUS_VALID, piano_room=room)
                 #TODO: is_pay should be false by default, but there's no pay model
                 record.save()
+                recordId_List.append(record.id)
+            countDown(recordId_List)
     else:
         resData['errMsg'] = '所选时间已被占用或无法使用!'
     #refresh the availableTime
@@ -240,8 +240,10 @@ def book(request):
 def isBind(request):
     openId = request.GET['openId']
     user = User.objects.filter(open_id = openId).first()
-    if(user):
-        return JsonResponse({'name':user.name,'personId':user.person_id})
+    if (user):
+        return JsonResponse({'name': user.name, 'personId': user.person_id, 'userGroup': user.group.group_name,
+                             'bigPrice': user.group.bigPR_price, 'smallPrice': user.group.smallPR_price,
+                             'xinghaiPrice': user.group.xinghaiPR_price})
     else:
         return JsonResponse({'errMsg':'no'})
 
