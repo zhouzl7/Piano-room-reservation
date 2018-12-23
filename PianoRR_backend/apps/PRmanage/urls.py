@@ -13,4 +13,6 @@ urlpatterns = [
     url(r'^register', views.register),
     url(r'^isBind', views.isBind),
     url(r'^notBind', views.notBind),
+    url(r'^bind?$', views.bindRedirect),
+    url(r'^bindCampus?$', views.bindCampus),
 ]

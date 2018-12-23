@@ -9,7 +9,39 @@ Page({
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
-  onLoad: function () {
+  onLoad: function (options) {
+    if(options.ticket){
+      wx.request({
+        url: app.globalData.url + '/api/bindCampus',
+        method: "GET",
+        data: {
+          openId: app.globalData.openId,
+          ticket: options.ticket
+        },
+        success: res => {
+          console.log(res)
+          if (res.data.errMsg) {
+            wx.showToast({
+              title: res.data.errMsg,
+              icon: 'none'
+            })
+          } else if (res.data.name) {
+            wx.showToast({
+              title: '登录成功!'
+            })
+            wx.redirectTo({
+              url: '../alreadyBind/alreadyBind',
+            })
+          }
+        },
+        fail: function () {
+          wx.showToast({
+            title: '连接失败,请稍后重试',
+            icon: 'none'
+          })
+        }
+      })
+    }
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,

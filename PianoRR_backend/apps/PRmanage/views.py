@@ -1,6 +1,7 @@
 # _*_ coding: utf-8 _*_
 # Create your views here.
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render
 from django.db import transaction
 from django.db.models import Q
 from PRmanage.models import Announcement, PianoRoom, TimeTable
@@ -8,6 +9,7 @@ from BOOKmanage.models import BookRecord
 from USERmanage.models import User, UserGroup, BlackList
 from PianoRR_backend.settings import WECHAT_APPID, WECHAT_SECRET
 import json
+import re
 import requests
 import bcrypt
 import datetime, time
@@ -75,8 +77,7 @@ def onlogin(request):
     }
     data['js_code'] = request.GET['code']
     r = requests.get('https://api.weixin.qq.com/sns/jscode2session', params=data)
-    print(r.json())
-    if r.json()['openid']:
+    if 'openid' in r.json():
         result = {
             'openId' : r.json()['openid']
         }
@@ -304,3 +305,55 @@ def pwLogin(request):
     user.open_id = data['openId']
     user.save()
     return JsonResponse({})
+
+def bindRedirect(request):
+    if 'ticket' not in request.GET:
+        return HttpResponse(status=404)
+    context = {
+        'ticket': request.GET['ticket']
+    }
+    return render(request, 'bindRedirect.html', context)
+
+def bindCampus(request):
+    if 'openId' not in request.GET:
+        return HttpResponse(status=404)
+    if 'ticket' in request.GET:
+        print(request.GET)
+        url = 'https://id-tsinghua-test.iterator-traits.com/thuser/authapi/checkticket/PIANO/'
+        url += request.GET['ticket']
+        url += '/'+'140_143_57_245'
+        res = requests.get(url).text
+        print(res)
+        regExp = re.findall('([^:=]*)=([^:=]*)',res)
+        data = {}
+        for i in regExp:
+            data[i[0]] = i[1]
+        if('yhm' not in data):
+            return JsonResponse({'errMsg' : '登录超时,请稍后重试'})
+        oldUsers = User.objects.filter(open_id=request.GET['openId'])
+        for i in oldUsers:
+            i.open_id = ''
+            i.save()
+        user = User.objects.filter(person_id=data['zjh']).first()
+        if(user):
+            user.open_id = request.GET['openId']
+            user.save()
+            return JsonResponse({
+                name: data['xm'],
+                personId: data['zjh']
+            })
+        else:
+            teacherCode = ['J0000','H0000','J0054']
+            studentCode = ['X0011','X0021','X0031']
+            if data['yhlb'] in teacherCode:
+                group = UserGroup.objects.filter(group_name='教职工').first()
+            elif data['yhlb'] in studentCode:
+                group = UserGroup.objects.filter(group_name='校内学生').first()
+            user = User.objects.create(open_id=request.GET['openId'], person_id=data['zjh'], name=data['xm'], group=group)
+            user.save()
+            return JsonResponse({
+                name: data['xm'],
+                personId: data['zjh']
+            })
+    else:
+        return HttpResponse(status=404)
