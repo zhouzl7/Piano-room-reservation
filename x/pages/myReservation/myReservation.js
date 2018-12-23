@@ -10,17 +10,19 @@ Page({
         colorHistory: "#fff",
       reserve: [{
         room: "琴房1",
-
+        status: "已赴约",
+        people: "测试员1号",
         useTime: "2018-11-17 13:00-14:00",
-
+        is_pay: "已付款",
         user: "single",
         resTime: "xxxx-xx-xx xx:xx-xx:xx"
       },
       {
         room: "琴房2",
-
+        status: "已赴约",
+        people: "测试员1号",
         useTime: "2018-11-18 13:00-14:00",
-
+        is_pay: "已付款",
         user: "multy",
         resTime: "xxxx-xx-xx xx:xx-xx:xx"
       }

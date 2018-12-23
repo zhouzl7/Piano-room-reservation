@@ -6,7 +6,9 @@
     <button class = "reservation" wx:for="{{reserve}}"><view class="head">{{item.room}}</view>
    <view class="content">
    <view class="circle"></view>{{item.useTime}}</view>
-   <view class="content"><view class="circle"></view>{{item.people}}</view>
-   <view class="content"style="margin-bottom:60rpx"><view class="circle"></view>{{item.user}}</view></button>
+   <view class="content"><view class="circle"></view>人数：{{item.people}}</view>
+   <view class="content"><view class="circle"></view>支付：{{item.is_pay}}</view>
+   <view class="content"><view class="circle"></view>状态：{{item.status}}</view>
+   <view class="content"style="margin-bottom:60rpx"><view class="circle"></view>用户：{{item.user}}</view></button>
     </view>
 </view>

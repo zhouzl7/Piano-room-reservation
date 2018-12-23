@@ -13,7 +13,6 @@ def is_pay(id_List):
             date = record.BR_date
             use_time = record.use_time
             time_table = TimeTable.objects.get(piano_room=piano_room, date=date)
-            print(time_table.piano_room.room_id)
             time1 = datetime.datetime.now()
             time_delta = datetime.timedelta(seconds=300)
             time1 = time1 - time_delta
@@ -29,7 +28,6 @@ def is_pay(id_List):
 # 倒计时5分钟，未支付则取消预约订单
 def countDown(id_List):
     scheduler = BackgroundScheduler()
-    print(datetime.datetime.now())
     run_date = datetime.datetime.now() + datetime.timedelta(minutes=5)
     scheduler.add_job(is_pay, 'date', run_date=run_date, args=[id_List])
     scheduler.start()
