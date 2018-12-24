@@ -4,3 +4,4 @@
 venv_piano/
 migrations/
 .DS_Store
+*.pyc
