@@ -15,4 +15,5 @@ urlpatterns = [
     url(r'^notBind', views.notBind),
     url(r'^bind?$', views.bindRedirect),
     url(r'^bindCampus?$', views.bindCampus),
+    url(r'^wxPayConfirm$', views.wxPayConfirm)
 ]

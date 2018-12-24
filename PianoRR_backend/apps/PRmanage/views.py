@@ -6,7 +6,7 @@ from django.db import transaction
 from django.db.models import Q
 from PRmanage.models import Announcement, PianoRoom, TimeTable
 from BOOKmanage.models import BookRecord
-from USERmanage.models import User, UserGroup, BlackList
+from USERmanage.models import User, UserGroup, BlackList, ArtTroupeMember
 from PianoRR_backend.settings import WECHAT_APPID, WECHAT_SECRET
 from PianoRR_backend.settings import client_appid,client_secret,Mch_id,Mch_key
 import os
@@ -195,7 +195,6 @@ def book(request):
         else:
             available = False
     
-    money = 0
     resData = {
         'times': []
     }
@@ -212,6 +211,8 @@ def book(request):
             'disabled': disable
         })
     if available == True:
+        money = 0
+        payOrderId = getWxPayOrderID()
         if body['single']:
             prices = user.group
         else:
@@ -229,19 +230,20 @@ def book(request):
             recordId_List = []
             for j in i['time']:
                 record = BookRecord.objects.create(user=user.person_id, fee=price,
-                                                   is_pay=False, user_quantity=body['single'],
+                                                   is_pay=False, user_quantity=body['single'],pay_id=payOrderId,
                                                    BR_date=datetime.date.today()+datetime.timedelta(days=i['day']),
                                                    use_time=int(j[4:]), status=BookRecord.STATUS_VALID, piano_room=room)
                 #TODO: is_pay should be false by default, but there's no pay model
                 record.save()
                 recordId_List.append(record.id)
-            countDown(recordId_List)
-            param = {
-                'price': money,
-                'openId': body['openId']
-            }
-            payParam = payOrder(param)
-            resData['payParam'] = payParam
+            countDown(recordId_List)        
+        param = {
+            'price': money,
+            'openId': body['openId'],
+            'payOrderId':  payOrderId
+        }
+        payParam = payOrder(param)
+        resData['payParam'] = payParam
     else:
         resData['errMsg'] = '所选时间已被占用或无法使用!'
     #refresh the availableTime
@@ -358,6 +360,8 @@ def bindCampus(request):
                 group = UserGroup.objects.filter(group_name='教职工').first()
             elif data['yhlb'] in studentCode:
                 group = UserGroup.objects.filter(group_name='校内学生').first()
+                if ArtTroupeMember.objects.filter(student_id=data['zjh']).exists():
+                    group = UserGroup.objects.filter(group_name='艺术团').first()
             user = User.objects.create(open_id=request.GET['openId'], person_id=data['zjh'], name=data['xm'], group=group)
             user.save()
             return JsonResponse({
@@ -396,8 +400,8 @@ def paysign(appid,body,mch_id,nonce_str,notify_url,openid,out_trade_no,spbill_cr
 def getWxPayOrderID(): 
     date=datetime.datetime.now()
     #根据当前系统时间来生成商品订单号。时间精确到微秒
-    payOrdrID=date.strftime("%Y%m%d%H%M%S%f") + os.urandom(5).hex()
-    return payOrdrID
+    payOrderId=date.strftime("%Y%m%d%H%M%S%f") + os.urandom(5).hex()
+    return payOrderId
 #获取返回给小程序的paySign
 def get_paysign(prepay_id,timeStamp,nonceStr):
     pay_data={
@@ -413,11 +417,11 @@ def get_paysign(prepay_id,timeStamp,nonceStr):
     return sign.upper()
 
 #获取全部参数信息，封装成xml,传递过来的openid和客户端ip，和价格需要我们自己获取传递进来
-def getBodyData(openid,clientIp,price):
+def getBodyData(openid,clientIp,price,payOrderId):
     body = 'Mytest'                    #商品描述
-    notify_url = "https://166628.iterator-traits.com/api/book"      #填写支付成功的回调地址，微信确认支付成功会访问这个接口
+    notify_url = "https://166628.iterator-traits.com/api/wxPayConfirm"      #填写支付成功的回调地址，微信确认支付成功会访问这个接口
     nonce_str =getNonceStr()           #随机字符串
-    out_trade_no =getWxPayOrderID()     #商户订单号
+    out_trade_no = payOrderId    #商户订单号
     total_fee = str(price)              #订单价格，单位是 分
     #获取签名                                        
     sign=paysign(client_appid,body,Mch_id,nonce_str,notify_url,openid,out_trade_no,clientIp,total_fee) 
@@ -479,13 +483,12 @@ def payOrder(param):
     clientIp='140.143.57.245'
         #获取小程序openid
     openid= param["openId"]
+    payOrderId = param["parOrderId"]
     print(openid)
         #请求微信的url
     url= 'https://api.mch.weixin.qq.com/pay/unifiedorder'
- 
         #拿到封装好的xml数据
-    bodyData = getBodyData(openid,clientIp,price)
- 
+    bodyData = getBodyData(openid,clientIp,price,payOrderId)
         #获取时间戳
     timeStamp=str(int(time.time()))
  
@@ -510,3 +513,52 @@ def payOrder(param):
     else:
         return {"errMsg":"请求支付失败"}
 
+def wxPayConfirm(request):
+    content = xml2Dict(request.content)
+    if content['return_code'] == 'SUCCESS':
+        #签名验证
+        keys = list(content.keys())
+        #清理空参数
+        for k in keys:
+            if not content[k]:
+                content.pop(k)
+        recvSign = content.pop('sign')
+        stringA = '&'.join('='.join(i) for i in sorted(content.items()))
+        stringSign = stringA + '&key=' + Mch_key
+        sign = hashlib.md5(stringSignTemp.encode("utf-8")).hexdigest().upper()
+        if recvSign == sign :
+            #金钱验证:
+            record = BookRecord.objects.select_for_update().filter(pay_id=content['out_trade_no'])
+            with transaction.atomic():
+                money = 0
+                for r in record:
+                    money += r.fee
+                    if r.is_pay == True:
+                        reply = {
+                            'return_code': 'SUCCESS',
+                            'return_msg': 'OK'
+                        }
+                        xml = dict2Xml(reply)
+                        return xml
+                if money == content['total_fee']:
+                    for r in record:
+                        r.is_pay = True
+                        r.save()
+                else:
+                    reply = {
+                        'return_code': 'FAIL',
+                        'return_msg': 'FEEERROR'
+                    }
+                    return dict2Xml(reply)
+        else:
+            reply = {
+                'return_code': 'FAIL',
+                'return_msg': 'SIGNERROR'
+            }
+            return dict2Xml(reply)
+    reply = {
+        'return_code': 'SUCCESS',
+        'return_msg': 'OK'
+    }
+    xml = dict2Xml(reply)
+    return xml
