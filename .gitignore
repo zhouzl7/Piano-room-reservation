@@ -5,3 +5,4 @@ venv_piano/
 migrations/
 .DS_Store
 *.pyc
+PianoRR_backend/PianoRR_backend/__pycache__/settings.cpython-36.pyc
