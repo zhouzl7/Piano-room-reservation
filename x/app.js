@@ -58,7 +58,7 @@ App({
   },
   globalData: {
     userInfo: null,
-    url: "http://localhost:8000",
+    url: "https://166628.iterator-traits.com",
     openId: null
   }
 })

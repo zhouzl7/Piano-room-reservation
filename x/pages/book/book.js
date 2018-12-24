@@ -292,9 +292,32 @@ Page({
               icon: 'none'
             })
           }else{
-            wx.showToast({
-              title:'预约成功!'
-            })
+            if (res.data.payParam.errMsg){
+              wx.showToast({
+                title: res.data.payParam.errMsg,
+                icon: 'none'
+              })
+            }
+            else if (res.data.payParam.status == 100) {
+              let payModel = res.data.payParam;
+              console.log(payModel)
+              wx.requestPayment({
+                'timeStamp': payModel.timeStamp,
+                'nonceStr': payModel.nonceStr,
+                'package': payModel.package,
+                'signType': 'MD5',
+                'paySign': payModel.paySign,
+                'success': function (res) {
+                  wx.showToast({
+                    title: '支付成功',
+                    icon: 'success',
+                    duration: 2000
+                  })
+                },
+                'fail': function (res) {
+                }
+              })
+            }
           }
         },
         fail: function(){
