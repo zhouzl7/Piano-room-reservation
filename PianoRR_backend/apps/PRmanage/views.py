@@ -82,6 +82,7 @@ def onlogin(request):
     data['js_code'] = request.GET['code']
     r = requests.get('https://api.weixin.qq.com/sns/jscode2session', params=data)
     if 'openid' in r.json():
+        print(r.json())
         result = {
             'openId' : r.json()['openid']
         }
@@ -470,7 +471,7 @@ def dict2Xml(dict_data):
     :return:
     '''
     xml = ["<xml>"]
-    for k, v in dict_data.iteritems():
+    for k, v in dict_data.items():
         xml.append("<{0}>{1}</{0}>".format(k, v))
     xml.append("</xml>")
     return "".join(xml)
@@ -483,10 +484,10 @@ def payOrder(param):
     clientIp='140.143.57.245'
         #获取小程序openid
     openid= param["openId"]
-    payOrderId = param["parOrderId"]
+    payOrderId = param["payOrderId"]
     print(openid)
         #请求微信的url
-    url= 'https://api.mch.weixin.qq.com/pay/unifiedorder'
+    url= 'https://api.mch.weixin.qq.com/sandbox/pay/unifiedorder'
         #拿到封装好的xml数据
     bodyData = getBodyData(openid,clientIp,price,payOrderId)
         #获取时间戳
@@ -514,7 +515,8 @@ def payOrder(param):
         return {"errMsg":"请求支付失败"}
 
 def wxPayConfirm(request):
-    content = xml2Dict(request.content)
+    content = xml2Dict(request.body)
+    print(content)
     if content['return_code'] == 'SUCCESS':
         #签名验证
         keys = list(content.keys())
@@ -525,11 +527,15 @@ def wxPayConfirm(request):
         recvSign = content.pop('sign')
         stringA = '&'.join('='.join(i) for i in sorted(content.items()))
         stringSign = stringA + '&key=' + Mch_key
-        sign = hashlib.md5(stringSignTemp.encode("utf-8")).hexdigest().upper()
+        sign = hashlib.md5(stringSign.encode("utf-8")).hexdigest().upper()
+        print(sign)
         if recvSign == sign :
+            print('签名验证通过')
             #金钱验证:
             record = BookRecord.objects.select_for_update().filter(pay_id=content['out_trade_no'])
             with transaction.atomic():
+                for i in record:
+                    print(i)
                 money = 0
                 for r in record:
                     money += r.fee
@@ -539,9 +545,12 @@ def wxPayConfirm(request):
                             'return_msg': 'OK'
                         }
                         xml = dict2Xml(reply)
-                        return xml
-                if money == content['total_fee']:
+                        return HttpResponse(xml, content_type='application/xml')
+                money *= 100
+                print(money)
+                if str(money) == content['total_fee']:
                     for r in record:
+                        print(r.is_pay)
                         r.is_pay = True
                         r.save()
                 else:
@@ -549,16 +558,17 @@ def wxPayConfirm(request):
                         'return_code': 'FAIL',
                         'return_msg': 'FEEERROR'
                     }
-                    return dict2Xml(reply)
+                    xml = dict2Xml(reply)
+                    return HttpResponse(xml, content_type='application/xml')
         else:
             reply = {
                 'return_code': 'FAIL',
                 'return_msg': 'SIGNERROR'
             }
-            return dict2Xml(reply)
+            return HttpResponse(dict2Xml(reply), content_type='application/xml')
     reply = {
         'return_code': 'SUCCESS',
         'return_msg': 'OK'
     }
     xml = dict2Xml(reply)
-    return xml
+    return HttpResponse(xml, content_type='application/xml')

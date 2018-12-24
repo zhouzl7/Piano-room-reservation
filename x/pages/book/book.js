@@ -315,6 +315,7 @@ Page({
                   })
                 },
                 'fail': function (res) {
+                  wx.hideLoading()
                 }
               })
             }
