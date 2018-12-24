@@ -10,5 +10,9 @@
   "DB_PASS": "123456",
   "DB_HOST": "127.0.0.1",
   "DB_PORT": "3306",
-  "SITE_DOMAIN": "http://6cd1ce12.ngrok.io"
+  "SITE_DOMAIN": "http://6cd1ce12.ngrok.io",
+  "CLIENT_APPID": "actuallyitshouldbewechatappid",
+  "CLIENT_SECRET": "similarasclientid",
+  "MCH_ID": "whatever",
+  "MCH_KEY": "yourmchkeysetinwechat"
 }
