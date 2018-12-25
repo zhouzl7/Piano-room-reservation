@@ -426,9 +426,9 @@ class book(TestCase):
         #创建用户
         User.objects.create(open_id = "1",person_id = "123",pwhash = "123",name="user1",group=student)
         User.objects.create(open_id = "2",person_id = "1234",pwhash = "1234",name="user2",group=student)
-        User.objects.create(open_id = "3",person_id = "12345",pwhash = "12345",name="black",group=student)
+        badguy = User.objects.create(open_id = "3",person_id = "12345",pwhash = "12345",name="black",group=student)
         #增加黑名单
-        BlackList.objects.create(person_id = "12345",name = "black",group = student)
+        BlackList.objects.create(person_id = badguy,name = "black",group = student, reason='whatever')
         #创建琴房
         PianoRoom.objects.create(room_id = 101, piano_type = 2,status = True)
         room = PianoRoom.objects.get(room_id = 101)
@@ -615,7 +615,7 @@ class Login(TestCase):
             'cellPhone': '1234',
             'hash': '123'
         }
-        response = self.client.post("/api/pwLogin",data, content_type = "application/json")
+        response = self.client.post("/api/pwlogin",data, content_type = "application/json")
         response = json.loads(response.content)
         self.assertEqual(response['errMsg'],"用户名或密码错误!")
 
@@ -625,7 +625,7 @@ class Login(TestCase):
             'cellPhone': '123',
             'hash': '1234'
         }
-        response = self.client.post("/api/pwLogin",data,content_type="application/json")
+        response = self.client.post("/api/pwlogin",data,content_type="application/json")
         response = json.loads(response.content)
         self.assertEqual(response['errMsg'],"用户名或密码错误!")
 
