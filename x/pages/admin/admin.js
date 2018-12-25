@@ -5,7 +5,15 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    admin:[{
+      name: "管理员1",
+      phone:"1xx xxxx xxxx"
+      },
+      {
+        name: "管理员2",
+        phone: "132 xxxx xxxx"
+      },
+    ]
   },
 
   /**
