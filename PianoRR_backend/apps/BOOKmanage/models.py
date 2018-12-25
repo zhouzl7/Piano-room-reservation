@@ -13,8 +13,9 @@ class BookRecord(models.Model):
     STATUS_VALID = 1
     # 已赴约
     STATUS_USED = 2
- 
-    user = models.CharField(u'学号/教职工号/手机号', max_length=32)
+
+    name = models.CharField(u'姓名', max_length=12)
+    person_id = models.CharField(u'学号/教职工号/手机号', max_length=32)
     fee = models.IntegerField(u'费用 /元')
     is_pay = models.BooleanField(u'缴费情况', choices=((
                                             True, '已缴费'), (False, '待缴费')))

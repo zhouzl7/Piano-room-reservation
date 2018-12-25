@@ -24,10 +24,10 @@ def announcement(request):
     announcements = Announcement.objects.all()
     for announcement in announcements:
         announceall.append({
-            'title':announcement.title,
-            'time':str(announcement.published_time),
-            'author':announcement.published_person,
-            'content':announcement.content
+            'title': announcement.title,
+            'time': str(announcement.published_time),
+            'author': announcement.published_person,
+            'content': announcement.content
         })
     announceall.reverse()
     result = {
@@ -145,19 +145,27 @@ def availableTime(request):
 def reservation(request):
     bookall = []
     openId = request.GET['openId']
-    user = User.objects.filter(open_id = openId).first()
+    user = User.objects.filter(open_id=openId).first()
     if(user):
-        bookLists = BookRecord.objects.filter(user = user.person_id)
+        bookLists = BookRecord.objects.filter(person_id=user.person_id)
         for book in bookLists:
-            if(book.user_quantity):
+            if book.user_quantity:
                 people = '单人'
             else:
                 people = '多人'
+            if book.status == BookRecord.STATUS_CANCELLED:
+                record_status = u'已取消'
+            elif book.status == BookRecord.STATUS_USED:
+                record_status = u'已赴约'
+            elif book.status == BookRecord.STATUS_VALID:
+                record_status = u'未赴约'
             bookall.append({
-                'room':book.piano_room.room_id,
-                'useTime':str(book.BR_date) + ' ' + str(book.use_time+7) +':00-' + str(book.use_time+8)+':00',
-                'people':people,
-                'user':book.user
+                'room': book.piano_room.room_id,
+                'useTime': str(book.BR_date) + ' ' + str(book.use_time+7) +':00-' + str(book.use_time+8)+':00',
+                'people': people,
+                'user': book.person_id,
+                'is_pay': u'已付款' if book.is_pay else u'待付款',
+                'status': record_status
             })
         bookall.reverse()
     result = {
@@ -172,7 +180,8 @@ def book(request):
         user = User.objects.get(open_id=body['openId'])
     except:
         return JsonResponse({'errMsg': '您尚未绑定!'})
-    if(BlackList.objects.filter(open_id=body['openId']).exists()):
+    person_id = User.objects.get(open_id=body['openId']).person_id
+    if BlackList.objects.filter(person_id=person_id).exists():
         return JsonResponse({'errMsg': '您已被加入黑名单,请联系管理员'})
     available = False
     query = Q()
@@ -234,7 +243,6 @@ def book(request):
                                                    is_pay=False, user_quantity=body['single'],pay_id=payOrderId,
                                                    BR_date=datetime.date.today()+datetime.timedelta(days=i['day']),
                                                    use_time=int(j[4:]), status=BookRecord.STATUS_VALID, piano_room=room)
-                #TODO: is_pay should be false by default, but there's no pay model
                 record.save()
                 recordId_List.append(record.id)
             countDown(recordId_List)        

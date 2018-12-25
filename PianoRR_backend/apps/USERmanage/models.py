@@ -69,10 +69,10 @@ class ArtTroupeMember(models.Model):
         return self.name
 
 class BlackList(models.Model):
-    open_id = models.CharField(u'open_id', max_length=64, unique=True, db_index=True)
-    person_id = models.CharField(u'学号/教职工号/身份证', max_length=32, unique=True, db_index=True)
+    person_id = models.CharField(u'学号/教职工号/手机号', max_length=32, unique=True, db_index=True)
     name = models.CharField(u'姓名', max_length=12)
     group = models.ForeignKey(UserGroup, on_delete=models.CASCADE, verbose_name='用户组')
+    reason = models.TextField(u'拉黑理由', blank=True)
 
     @classmethod
     def get_by_personid(cls, personid):
