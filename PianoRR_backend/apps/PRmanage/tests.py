@@ -93,19 +93,19 @@ class getReservation(TestCase):
     def setUp(self):
         PianoRoom.objects.create(room_id = 101, piano_type = 2,status = True)
         room = PianoRoom.objects.get(room_id = 101)
-        UserGroup.objects.create(group_name = "art", xinghaiPR_price=1,smallPR_price=2,bigPR_price=3)
-        usergroup = UserGroup.objects.get(group_name = "art")
+        UserGroup.objects.create(group_name = "艺术团", xinghaiPR_price=1,smallPR_price=2,bigPR_price=3)
+        usergroup = UserGroup.objects.get(group_name = "艺术团")
         User.objects.create(open_id = "1",person_id = "123",pwhash = "123",name="user1",group=usergroup)
         User.objects.create(open_id = "2",person_id = "1234",pwhash = "1234",name="user2",group=usergroup)
         User.objects.create(open_id = "3",person_id = "12345",pwhash = "12345",name="user3",group=usergroup)
-        BookRecord.objects.create(user = "1234",fee = 1,is_pay = True,user_quantity = True,
-                                    BR_date=datetime.date.today(),
+        BookRecord.objects.create(person_id = "1234",fee = 1,is_pay = True,user_quantity = True,
+                                    BR_date=datetime.date.today(), name = 'wtf', pay_id = '',
                                     use_time = 1,status = BookRecord.STATUS_VALID,piano_room=room)
-        BookRecord.objects.create(user = "12345",fee = 1,is_pay = True,user_quantity = True,
-                                    BR_date=datetime.date.today(),
+        BookRecord.objects.create(person_id = "12345",fee = 1,is_pay = True,user_quantity = True,
+                                    BR_date=datetime.date.today(), name = 'wtf', pay_id = '',
                                     use_time = 1,status = BookRecord.STATUS_VALID,piano_room=room)
-        BookRecord.objects.create(user = "12345",fee = 1,is_pay = True,user_quantity = False,
-                                    BR_date=datetime.date.today(),
+        BookRecord.objects.create(person_id = "12345",fee = 1,is_pay = True,user_quantity = False,
+                                    BR_date=datetime.date.today(), name = 'wtf', pay_id = '',
                                     use_time = 1,status = BookRecord.STATUS_VALID,piano_room=room)
 
     #用户不存在
@@ -159,13 +159,13 @@ class getTime(TestCase):
         #创建用户组
         UserGroup.objects.create(group_name = "普通用户", xinghaiPR_price = 10, 
                                     smallPR_price=20, bigPR_price = 30)
-        UserGroup.objects.create(group_name = "student", xinghaiPR_price = 5,
+        UserGroup.objects.create(group_name = "校内学生", xinghaiPR_price = 5,
                                     smallPR_price = 15, bigPR_price = 25)
-        UserGroup.objects.create(group_name = "art", xinghaiPR_price = 1,
+        UserGroup.objects.create(group_name = "艺术团", xinghaiPR_price = 1,
                                     smallPR_price = 2, bigPR_price = 3)
         usualuser = UserGroup.objects.get(group_name = "普通用户")
-        student = UserGroup.objects.get(group_name = "student")
-        art = UserGroup.objects.get(group_name = "art")
+        student = UserGroup.objects.get(group_name = "校内学生")
+        art = UserGroup.objects.get(group_name = "艺术团")
 
         #创建用户
         User.objects.create(open_id = "1", person_id = "123", pwhash="123", name = "user1",group = usualuser)
@@ -421,14 +421,14 @@ class getTime(TestCase):
 class book(TestCase):
     def setUp(self):
         #创建用户组
-        UserGroup.objects.create(group_name = "student", xinghaiPR_price=1,smallPR_price=2,bigPR_price=3)
-        student = UserGroup.objects.get(group_name = "student")
+        UserGroup.objects.create(group_name = "校内学生", xinghaiPR_price=1,smallPR_price=2,bigPR_price=3)
+        student = UserGroup.objects.get(group_name = "校内学生")
         #创建用户
         User.objects.create(open_id = "1",person_id = "123",pwhash = "123",name="user1",group=student)
         User.objects.create(open_id = "2",person_id = "1234",pwhash = "1234",name="user2",group=student)
         User.objects.create(open_id = "3",person_id = "12345",pwhash = "12345",name="black",group=student)
         #增加黑名单
-        BlackList.objects.create(open_id = "3",person_id = "12345",name = "black",group = student)
+        BlackList.objects.create(person_id = "12345",name = "black",group = student)
         #创建琴房
         PianoRoom.objects.create(room_id = 101, piano_type = 2,status = True)
         room = PianoRoom.objects.get(room_id = 101)
@@ -559,8 +559,8 @@ class book(TestCase):
 #是否绑定
 class isBind(TestCase):
     def setUp(self):
-        UserGroup.objects.create(group_name = "student", xinghaiPR_price=1,smallPR_price=2,bigPR_price=3)
-        student = UserGroup.objects.get(group_name = "student")
+        UserGroup.objects.create(group_name = "校内学生", xinghaiPR_price=1,smallPR_price=2,bigPR_price=3)
+        student = UserGroup.objects.get(group_name = "校内学生")
         User.objects.create(open_id = "1",person_id = "123",pwhash = "123",name="user1",group=student)
     #未绑定
     def test_noUser(self):
@@ -580,55 +580,55 @@ class isBind(TestCase):
         User.objects.all().delete()
         UserGroup.objects.all().delete()
 
-    #取消绑定
-    class cancelBind(TestCase):
-        def setUp(self):
-            UserGroup.objects.create(group_name = "student", xinghaiPR_price=1,smallPR_price=2,bigPR_price=3)
-            student = UserGroup.objects.get(group_name = "student")
-            User.objects.create(open_id = "1",person_id = "123",pwhash = "123",name="user1",group=student)
+#取消绑定
+class cancelBind(TestCase):
+    def setUp(self):
+        UserGroup.objects.create(group_name = "校内学生", xinghaiPR_price=1,smallPR_price=2,bigPR_price=3)
+        student = UserGroup.objects.get(group_name = "校内学生")
+        User.objects.create(open_id = "1",person_id = "123",pwhash = "123",name="user1",group=student)
 
-        def test_noUser(self):
-            openId = "0"
-            response = self.client.get("/api/notBind",{'openId':openId})
-            response = json.loads(response.content)
-            self.assertEqual(response['errMsg'],"no") 
+    def test_noUser(self):
+        openId = "0"
+        response = self.client.get("/api/notBind",{'openId':openId})
+        response = json.loads(response.content)
+        self.assertEqual(response['errMsg'],"no") 
 
-        def test_isUser(self):
-            openId = "1"
-            response = self.client.get("/api/notBind",{'openId':openId})
-            response = json.loads(response.content)
-            self.assertEqual(response['notBind'],"ok")
-        
-        def clear(self):
-            UserGroup.objects.all().delete()
-            User.objects.all().delete()
+    def test_isUser(self):
+        openId = "1"
+        response = self.client.get("/api/notBind",{'openId':openId})
+        response = json.loads(response.content)
+        self.assertEqual(response['notBind'],"ok")
     
-    class Login(TestCase):
-        def setUp(self):
-            UserGroup.objects.create(group_name = "student", xinghaiPR_price=1,smallPR_price=2,bigPR_price=3)
-            student = UserGroup.objects.get(group_name = "student")
-            User.objects.create(open_id = "1",person_id = "123",pwhash = "123",name="user1",group=student)
+    def clear(self):
+        UserGroup.objects.all().delete()
+        User.objects.all().delete()
 
-        def test_wrongcellphone(self):
-            data = {
-              'openId': "1",
-              'cellPhone': '1234',
-              'hash': '123'
-            }
-            response = self.client.post("/api/pwLogin",data, content_type = "application/json")
-            response = json.loads(response.content)
-            self.assertEqual(response['errMsg'],"用户名或密码错误!")
+class Login(TestCase):
+    def setUp(self):
+        UserGroup.objects.create(group_name = "校内学生", xinghaiPR_price=1,smallPR_price=2,bigPR_price=3)
+        student = UserGroup.objects.get(group_name = "校内学生")
+        User.objects.create(open_id = "1",person_id = "123",pwhash = "123",name="user1",group=student)
 
-        def test_wronghash(self):
-            data = {
-              'openId': "1",
-              'cellPhone': '123',
-              'hash': '1234'
-            }
-            response = self.client.post("/api/pwLogin",data,content_type="application/json")
-            response = json.loads(response.content)
-            self.assertEqual(response['errMsg'],"用户名或密码错误!")
+    def test_wrongcellphone(self):
+        data = {
+            'openId': "1",
+            'cellPhone': '1234',
+            'hash': '123'
+        }
+        response = self.client.post("/api/pwLogin",data, content_type = "application/json")
+        response = json.loads(response.content)
+        self.assertEqual(response['errMsg'],"用户名或密码错误!")
 
-        def clear(self):
-            UserGroup.objects.all().delete()
-            User.objects.all().delete()
+    def test_wronghash(self):
+        data = {
+            'openId': "1",
+            'cellPhone': '123',
+            'hash': '1234'
+        }
+        response = self.client.post("/api/pwLogin",data,content_type="application/json")
+        response = json.loads(response.content)
+        self.assertEqual(response['errMsg'],"用户名或密码错误!")
+
+    def clear(self):
+        UserGroup.objects.all().delete()
+        User.objects.all().delete()

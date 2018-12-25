@@ -239,7 +239,7 @@ def book(request):
             #createBookRecord:
             recordId_List = []
             for j in i['time']:
-                record = BookRecord.objects.create(user=user.person_id, fee=price,
+                record = BookRecord.objects.create(person_id=user.person_id, fee=price, name = user.name,
                                                    is_pay=False, user_quantity=body['single'],pay_id=payOrderId,
                                                    BR_date=datetime.date.today()+datetime.timedelta(days=i['day']),
                                                    use_time=int(j[4:]), status=BookRecord.STATUS_VALID, piano_room=room)
