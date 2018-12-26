@@ -70,6 +70,8 @@ Page({
               item.room.forEach(function (item, index) {
                 item.chosen = item.disabled.slice()
                 item.chosen.fill(false)
+                item.formId = item.disabled.slice()
+                item.formId.fill('')
                 item.color = "#fff"
               })
             })
@@ -203,9 +205,12 @@ Page({
     },
 
     chooseTime: function(event) {
+        console.log(event.detail.formId)
         let index = event.currentTarget.dataset.id
+        console.log(index)
         let chosenDay = this.data.chosenDay
         let chosenRoom = this.data.chosenRoom
+        this.data.Days[chosenDay].room[chosenRoom].formId[index] = event.detail.formId
         if (this.data.Days[chosenDay].room[chosenRoom].chosen[index] === false) {
             //改变chosen, 增加money, 变色
             this.data.time[index].color = "yellow"
@@ -259,20 +264,24 @@ Page({
         item.room.forEach(function(item,index){
           bookTime.room = item.name
           bookTime.time = []
-          item.chosen.forEach(function(item,index){
-            if(item){
+          bookTime.formId = []
+          item.chosen.forEach(function(it,index){
+            if(it){
               bookTime.time.push('Time'+(index+1))
+              bookTime.formId.push(item.formId[index])
             }
           })
           if(bookTime.time.length > 0){
             booklist.push({
               day: bookTime.day,
               room: bookTime.room,
-              time: bookTime.time
+              time: bookTime.time,
+              formId: bookTime.formId
             })
           }
         })
       })
+      console.log(booklist)
       wx.request({
         url: app.globalData.url+'/api/book',
         method: 'POST',
@@ -357,6 +366,8 @@ function load(self,data){
     item.room.forEach(function (item, index) {
       item.chosen = item.disabled.slice()
       item.chosen.fill(false)
+      item.formId = item.disabled.slice()
+      item.formId.fill('')
       item.color = "#fff"
     })
   })

@@ -1,8 +1,14 @@
 # _*_ coding: utf-8 _*_
 # Create your views here.
 from PRmanage.models import PianoRoom, TimeTable
+from BOOKmanage.models import BookRecord
+from USERmanage.models import User
+from PianoRR_backend.settings import WECHAT_APPID, WECHAT_SECRET, TEMPLATE_ID
 
 import time
+import json
+import requests
+from django.db.models import Q
 from apscheduler.schedulers.background import BackgroundScheduler
 from django_apscheduler.jobstores import DjangoJobStore, register_events, register_job
 import datetime
@@ -129,6 +135,54 @@ try:
                                                Time10=1, Time11=1, Time12=1,
                                                Time13=1, Time14=1)
                     time_table_new.save()
+        
+        #预约提醒
+        if int(hour_now) >= 7 and int(hour_now) <= 20:
+            urlToken = 'https://api.weixin.qq.com/cgi-bin/token'
+            data = {
+                'grant_type': 'client_credential',
+                'appid': WECHAT_APPID,
+                'secret': WECHAT_SECRET
+            }
+            r = requests.get(urlToken, params=data)
+            if 'access_token' in r.json():
+                accessToken = r.json()['access_token']
+            useTimeIndex = int(hour_now) - 6
+            query = Q(is_pay=True) & Q(use_time=useTimeIndex) & Q(BR_date=datetime.date.today())
+            records = BookRecord.objects.filter(query)
+            for i in records:
+                user = User.objects.filter(person_id=i.person_id)
+                openId = ''
+                for j in user:
+                    if j.open_id:
+                        openId = j.open_id
+                        break
+                if openId:
+                    urlMsg = 'https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=' + accessToken
+                    templateData = {
+                        'keyword1': {
+                            'value': str(i.use_time+7) + ':00'
+                        },
+                        'keyword2': {
+                            'value': str(i.use_time+8) + ':00'
+                        },
+                        'keyword3': {
+                            'value': i.piano_room.room_id
+                        },
+                        'keyword4': {
+                            'value': '您预约的琴房即将开放, 请及时赴约'
+                        },
+                    }
+                    data = {
+                        'access_token': accessToken,
+                        'touser': openId,
+                        'template_id': TEMPLATE_ID,
+                        'form_id': i.form_id,
+                        'data': templateData,
+                        'page': '/pages/mine/mine'
+                    }
+                    r = requests.post(urlMsg, json.dumps(data), headers={'Content-Type': 'application/json'})
+                    print(r.json())
         print("已刷新")
     # 监控任务
     register_events(scheduler)

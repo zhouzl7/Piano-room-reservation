@@ -44,6 +44,7 @@ client_appid = CONFIGS["CLIENT_APPID"]
 client_secret = CONFIGS["CLIENT_SECRET"]
 Mch_id = CONFIGS["MCH_ID"]
 Mch_key = CONFIGS["MCH_KEY"]
+TEMPLATE_ID = CONFIGS["TEMPLATE_ID"]
 # # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = '2^h^#^$8@3#-ckoh05t-*1)k%p%51$k^(42by&4wf8z9j0eddj'
 #
