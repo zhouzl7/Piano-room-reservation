@@ -1,7 +1,7 @@
 <!--pages/hometest/home test.wxml-->
 
   <view class="head">
-  <image style="height: 50px;"  mode="aspectFit" src="../../images/th.png"></image>
+  <image style="height: 50px;"  mode="left" src="../../images/logo.png"></image>
   </view>
   
 
