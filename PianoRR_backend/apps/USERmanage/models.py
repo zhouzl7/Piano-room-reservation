@@ -69,7 +69,7 @@ class ArtTroupeMember(models.Model):
         return self.name
 
 class BlackList(models.Model):
-    person_id = models.CharField(u'学号/教职工号/手机号', max_length=32, unique=True, db_index=True)
+    person_id = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='学号/工作证号/手机号', to_field='person_id')
     name = models.CharField(u'姓名', max_length=12)
     group = models.ForeignKey(UserGroup, on_delete=models.CASCADE, verbose_name='用户组')
     reason = models.TextField(u'拉黑理由', blank=True)
