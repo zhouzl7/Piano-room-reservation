@@ -1,8 +1,9 @@
 <!--pages/hometest/home test.wxml-->
 
   <view class="head">
-  <image style="height: 50px;  background-color: #57446F;" mode="aspectFit" src="../../images/logo.png"></image>
+  <image style="height: 50px;"  mode="aspectFit" src="../../images/th.png"></image>
   </view>
+  
 
   <view class="Days">
     <button class="DayBtn"wx:for="{{call}}" data-id="{{index}}" bindtap = "change">{{item.notice}}</button>
