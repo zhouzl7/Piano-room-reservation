@@ -2,11 +2,9 @@
 .myres {
   width:90%;
   height:30px;
-  background-color: #57446F;
   font-size: 16px;
   line-height: 30px;
   text-align: center;
-  color:#fff;
 }
 
 .res{
