@@ -73,7 +73,8 @@
   background-color: #fff;
   font-size: 15px;
   line-height: 30px;
-  text-align: center
+  text-align: center;
+  box-shadow: 1px 1px 1px;
 }
 
 .res{
