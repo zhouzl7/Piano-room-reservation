@@ -20,6 +20,7 @@ Page({
    */
   onLoad: function (options) {
     console.log(options)
+    let self = this
     if (options.ticket) {
       wx.request({
         url: app.globalData.url + '/api/bindCampus',
@@ -39,9 +40,26 @@ Page({
             wx.showToast({
               title: '登录成功!'
             })
-            self.setData({
-              name: res.data.name,
-              personId: res.data.personId
+            wx.request({
+              url: app.globalData.url + '/api/isBind',
+              data: {
+                openId: app.globalData.openId
+              },
+              method: "GET",
+              success: res => {
+                console.log(res)
+                if (res.data.errMsg) { }
+                else {
+                  this.setData({
+                    name: res.data.name,
+                    personId: res.data.personId,
+                    userGroup: res.data.userGroup,
+                    xinghaiPrice: res.data.xinghaiPrice,
+                    smallPrice: res.data.smallPrice,
+                    bigPrice: res.data.bigPrice,
+                  })
+                }
+              },
             })
           }
         },
