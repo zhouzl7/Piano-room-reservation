@@ -45,11 +45,11 @@ xadmin.site.register(ArtTroupeMember, ArtTroupeMemberAdmin)
 
 class UserAdmin(object):
     # 显示的列
-    list_display = ['name', 'person_id', 'open_id', 'group']
+    list_display = ['name', 'person_id', 'group']
     # 搜索的字段，不要添加时间搜索
-    search_fields = ['name', 'person_id', 'open_id', 'group__group_name']
+    search_fields = ['name', 'person_id', 'group__group_name']
     # 过滤
-    list_filter = ['name', 'person_id', 'open_id', 'group']
+    list_filter = ['name', 'person_id', 'group']
 
     # 是否显示书签
     show_bookmarks = False
@@ -57,8 +57,8 @@ class UserAdmin(object):
     # 不可进入更新界面
    # list_display_links = ['id']
 
-    # def has_add_permission(self):
-    #     return False
+    def has_add_permission(self):
+         return False
 
     def get_readonly_fields(self):
         path = self.request.get_full_path()

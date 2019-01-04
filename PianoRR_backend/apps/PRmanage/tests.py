@@ -615,8 +615,8 @@ class Login(TestCase):
             'cellPhone': '1234',
             'hash': '123'
         }
-        response = self.client.post("/api/pwlogin",data, content_type = "application/json")
-        response = json.loads(response.content)
+        res = self.client.post("/api/pwlogin",data, content_type = "application/json")
+        response = json.loads(res.content)
         self.assertEqual(response['errMsg'],"用户名或密码错误!")
 
     def test_wronghash(self):
@@ -625,8 +625,8 @@ class Login(TestCase):
             'cellPhone': '123',
             'hash': '1234'
         }
-        response = self.client.post("/api/pwlogin",data,content_type="application/json")
-        response = json.loads(response.content)
+        res = self.client.post("/api/pwlogin",data,content_type="application/json")
+        response = json.loads(res.content)
         self.assertEqual(response['errMsg'],"用户名或密码错误!")
 
     def clear(self):

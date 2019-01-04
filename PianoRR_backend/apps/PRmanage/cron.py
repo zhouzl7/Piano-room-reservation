@@ -137,7 +137,7 @@ try:
                     time_table_new.save()
         
         #预约提醒
-        if int(hour_now) >= 7 and int(hour_now) <= 20:
+        if int(hour_now) >= 6 and int(hour_now) <= 19:
             urlToken = 'https://api.weixin.qq.com/cgi-bin/token'
             data = {
                 'grant_type': 'client_credential',
@@ -147,7 +147,7 @@ try:
             r = requests.get(urlToken, params=data)
             if 'access_token' in r.json():
                 accessToken = r.json()['access_token']
-            useTimeIndex = int(hour_now) - 6
+            useTimeIndex = int(hour_now) - 5
             query = Q(is_pay=True) & Q(use_time=useTimeIndex) & Q(BR_date=datetime.date.today())
             records = BookRecord.objects.filter(query)
             for i in records:

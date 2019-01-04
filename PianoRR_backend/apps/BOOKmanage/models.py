@@ -29,7 +29,8 @@ class BookRecord(models.Model):
     status = models.IntegerField(u'状态', choices=((
                                     STATUS_CANCELLED, '已取消'), (STATUS_VALID, '未赴约'), (STATUS_USED, '已赴约')))
     piano_room = models.ForeignKey(PianoRoom, on_delete=models.CASCADE, verbose_name='琴房')
-    pay_id = models.CharField(max_length=32)
+    pay_id = models.CharField(max_length=32, blank=True)
+    form_id = models.CharField(max_length=32, blank=True)
     class Meta:
         verbose_name = '预约记录'
         verbose_name_plural = verbose_name

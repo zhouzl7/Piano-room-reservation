@@ -1,14 +1,13 @@
 # _*_ coding: utf-8 _*_
 # Create your views here.
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 from django.db import transaction
 from django.db.models import Q
 from PRmanage.models import Announcement, PianoRoom, TimeTable
 from BOOKmanage.models import BookRecord
 from USERmanage.models import User, UserGroup, BlackList, ArtTroupeMember
-from PianoRR_backend.settings import WECHAT_APPID, WECHAT_SECRET
-from PianoRR_backend.settings import client_appid,client_secret,Mch_id,Mch_key
+from PianoRR_backend.settings import WECHAT_APPID, WECHAT_SECRET, Mch_id, Mch_key
 import os
 import json
 import re
@@ -73,10 +72,14 @@ def room(request):
     return JsonResponse(result)
 
 def onlogin(request):
+    needParam = ['code']
+    for param in needParam:
+        if param not in request.GET:
+            return HttpResponseNotFound()
     print(request.GET)
     data = {
-        'appid': client_appid,
-        'secret': client_secret,
+        'appid': WECHAT_APPID,
+        'secret': WECHAT_SECRET,
         'grant_type': 'authorization_code',
     }
     data['js_code'] = request.GET['code']
@@ -239,13 +242,14 @@ def book(request):
             #createBookRecord:
             recordId_List = []
             for j in i['time']:
-                record = BookRecord.objects.create(person_id=user.person_id, fee=price, name = user.name,
+                formId = i['formId'][i['time'].index(j)]
+                record = BookRecord.objects.create(person_id=user.person_id, fee=price, name = user.name, form_id = formId,
                                                    is_pay=False, user_quantity=body['single'],pay_id=payOrderId,
                                                    BR_date=datetime.date.today()+datetime.timedelta(days=i['day']),
                                                    use_time=int(j[4:]), status=BookRecord.STATUS_VALID, piano_room=room)
                 record.save()
                 recordId_List.append(record.id)
-            countDown(recordId_List)        
+            countDown(recordId_List)
         param = {
             'price': money,
             'openId': body['openId'],
@@ -308,16 +312,13 @@ def register(request):
 
 def pwLogin(request):
     data = json.loads(request.body)
+    print(data)
     try:
         user = User.objects.get(person_id=data['cellPhone'])
     except:
-        return JsonResponse({
-            'errMsg': '用户名或密码错误!'
-        })
+        return JsonResponse({'errMsg': '用户名或密码错误!'})
     if(user.pwhash != data['hash']):
-        return JsonResponse({
-            'errMsg': '用户名或密码错误!'
-        })
+        return JsonResponse({'errMsg': '用户名或密码错误!'})
     oldUsers = User.objects.filter(open_id=data['openId'])
     for i in oldUsers:
         i.open_id = ''
@@ -414,7 +415,7 @@ def getWxPayOrderID():
 #获取返回给小程序的paySign
 def get_paysign(prepay_id,timeStamp,nonceStr):
     pay_data={
-                'appId': client_appid,
+                'appId': WECHAT_APPID,
                 'nonceStr': nonceStr,
                 'package': "prepay_id="+prepay_id,
                 'signType': 'MD5',
@@ -433,11 +434,11 @@ def getBodyData(openid,clientIp,price,payOrderId):
     out_trade_no = payOrderId    #商户订单号
     total_fee = str(price)              #订单价格，单位是 分
     #获取签名                                        
-    sign=paysign(client_appid,body,Mch_id,nonce_str,notify_url,openid,out_trade_no,clientIp,total_fee) 
+    sign=paysign(WECHAT_APPID,body,Mch_id,nonce_str,notify_url,openid,out_trade_no,clientIp,total_fee) 
  
     bodyData = '<xml>'
-    bodyData += '<appid>' + client_appid + '</appid>' 
-    print(client_appid)            # 小程序ID
+    bodyData += '<appid>' + WECHAT_APPID + '</appid>' 
+    print(WECHAT_APPID)            # 小程序ID
     bodyData += '<body>' + body + '</body>'                         #商品描述
     bodyData += '<mch_id>' + Mch_id + '</mch_id>'   
     print(Mch_id)       #商户号
