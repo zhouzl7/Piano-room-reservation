@@ -1,0 +1,66 @@
+
+.myres {
+  width:90%;
+  height:30px;
+  font-size: 16px;
+  line-height: 30px;
+  text-align: center;
+  background-color: white;
+  box-shadow: 1px 1px 1px;
+}
+
+.res{
+  flex-direction: row;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.announce{
+  width:90%;
+  background-color: #fff;
+  margin-top: 10px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  display: flex;
+  height:200rpx;
+  box-shadow: 1px 1px 1px;
+}
+
+.word{
+  width:90%;
+}
+.title{
+  width:100%;
+  background-color: #fff;
+  text-align: left;
+  font-size: 40rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.title::after{
+  border: none;
+}
+
+.time{
+  background-color: #fff;
+  text-align: left;
+  font-size: 30rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: none;
+}
+
+.time::after{
+  border: none;
+}
+
+.icon{
+  width:10%;
+  text-align: center;
+  display:flex; 
+  justify-content:center;
+  align-items:center;
+}

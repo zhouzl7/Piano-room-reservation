@@ -1,0 +1,99 @@
+/* pages/hometest/home test.wxss */
+.table {
+  border-bottom: 1px solid rgba(169, 169, 169, 0.521);
+}
+.head{
+  
+  background-color: #fff;
+  height: 60px;
+ 
+}
+.choose{
+  margin-top:5%;
+  margin-bottom: 5%;
+  border-bottom: 1px solid rgba(169, 169, 169, 0.521);
+  height: 10%;
+}
+.Days {
+  width: 100%;
+  flex-direction: row;
+  display: flex;
+}
+.DayBtn{
+  border-bottom: 1px solid rgba(169, 169, 169, 0.521);
+  width:100%;
+  justify-content: center;
+  border-radius: 0;
+  border-width: 1rpx;
+  background-color: #fff;
+  font-size: 20px;
+  color: cornflowerblue;
+}
+.DayBtn::after{
+  border: none;
+}
+
+.tr {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 3rem;
+  align-items: center;
+}
+.td {
+    color: black;
+    margin-left: 5%;
+    font-size: 24px;
+    font-weight: bold;
+    
+}
+.bg-w{
+  background: #7D5E80;
+}
+.bg-g{
+  background: #E6F3F9;
+}
+.th {
+  border-bottom: 1px solid rgba(169, 169, 169, 0.521);
+  width:100%;
+  justify-content: center;
+  border-radius: 0;
+  border-width: 1rpx;
+  background-color: #fff;
+  font-size: 16px;
+}
+.room{
+  background-color: white;
+  text-align: left;
+}
+
+.allroom{
+  width:90%;
+  background-color: #fff;
+  margin-top: 10px;
+}
+
+.room_type{
+  width:100%;
+  background-color: #fff;
+  text-align: center;
+  font-size: 40rpx;
+}
+.room_type::after{
+  border: none;
+}
+
+.room{
+  width:100%;
+  background-color: #fff;
+  text-align: center;
+  font-size: 40rpx;
+}
+.room::after{
+  border: none;
+}
+.nameImage, .keyImage {
+  width: 20px;
+  height: 20px;
+  margin-right:5px;
+}

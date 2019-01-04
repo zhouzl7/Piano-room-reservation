@@ -1,0 +1,21 @@
+<!--pages/hometest/home test.wxml-->
+
+  <view class="head">
+  <image style="height: 50px;"  mode="left" src="../../images/logo.png"></image>
+  </view>
+  
+
+  <view class="Days">
+    <button class="DayBtn"wx:for="{{call}}" data-id="{{index}}" bindtap = "change">{{item.notice}}</button>
+  </view>
+  <view class = "choose">
+  
+  <view class="td"><image class="nameImage" src="../../images/piano.png"></image>琴房介绍</view>
+  </view>
+
+  <view><button class = "allroom" wx:for="{{allroom}}">
+    <button class = "room_type">{{item.room_type}}</button>
+    <button class = "room">{{item.room}}</button></button>
+  </view>
+
+

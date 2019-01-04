@@ -1,0 +1,85 @@
+.icon{
+  width: 20%;
+  margin-top:30px;
+  display:flex; 
+  justify-content:center;
+  align-items:center;
+  background-color: #EDEDED;
+}
+.icon::after{
+  border: none;
+}
+.object{
+  color: darkgray;
+  margin-right: 10px;
+  font-size: 40rpx;
+}
+.name{
+  width:90%;
+  text-align: left;
+  background-color: #fff;
+  font-size: 40rpx;
+  
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.firstname{
+  margin-top:10px;
+  text-align: left;
+  width:90%;
+  background-color: #fff;
+  font-size: 40rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  
+}
+
+
+.price{
+  color: black;
+  width:90%;
+  background-color: #fff;
+  text-align: left;
+  font-size: 40rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cancel{
+  margin-top: 10px;
+  text-align:center;
+  
+}
+
+.userGroup{
+  width:90%;
+  text-align: left;
+  background-color: #fff;
+  font-size: 40rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.OK{
+  margin-top: 20rpx;
+  width: 90%;
+}
+.myres {
+  width:90%;
+  height:30px;
+  background-color: #fff;
+  font-size: 15px;
+  line-height: 30px;
+  text-align: center;
+  box-shadow: 1px 1px 1px;
+}
+
+.res{
+  flex-direction: row;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}

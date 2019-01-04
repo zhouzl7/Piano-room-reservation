@@ -1,0 +1,24 @@
+.pic {
+  display: flex;
+  justify-content: center;
+}
+
+.pic image{
+  height: 100px;
+  width: 90%;
+}
+
+.word{
+  justify-content: center;
+  width: 90%;
+  background-color: #fff;
+  border: 1px solid #CC3333;
+  border-radius: 15rpx;
+  text-align: left;
+  line-height: 60rpx;
+}
+.title{
+  text-align: center;
+  width:80%;
+  font-weight: bold;
+}

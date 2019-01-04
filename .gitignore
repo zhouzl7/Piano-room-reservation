@@ -1,0 +1,6 @@
+
+*.pyc
+*.json
+venv_piano/
+migrations/
+.DS_Store

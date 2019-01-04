@@ -1,0 +1,50 @@
+
+.userinfo {
+  margin-top: -50px;
+  display: flex;
+  flex-direction: column;
+}
+
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+}
+
+.userinfo-nickname {
+  color: #000;
+}
+
+.myReservation {
+  margin-top: 20px;
+  height: 80px;
+  width: 80%;
+  color: #000;
+  text-align: center;
+  line-height: 80px;
+  background-color: #fff;
+  justify-content: center;
+}
+
+.bind {
+  margin-top: 10px;
+  height: 80px;
+  width: 80%;
+  color: #000;
+  text-align: center;
+  line-height: 80px;
+  background-color: #fff;
+  justify-content: center;
+}
+
+.admin {
+  margin-top: 10px;
+  height: 80px;
+  width: 80%;
+  color: #000;
+  text-align: center;
+  line-height: 80px;
+  background-color: #fff;
+  justify-content: center;
+}

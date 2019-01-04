@@ -1,0 +1,5 @@
+<view class = "choose">
+  <button bindtap='inlog'>校内登录</button>
+  <button bindtap='outsign'>校外注册</button>
+  <button bindtap='outlog'>校外登录</button>
+</view>

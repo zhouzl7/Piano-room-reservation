@@ -1,0 +1,7 @@
+.choose button{
+  margin-top: 20px;
+  width:90%;
+  height: 100px;
+  line-height: 100px;
+  background-color: #fff;
+}

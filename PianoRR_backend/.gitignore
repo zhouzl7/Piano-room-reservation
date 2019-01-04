@@ -63,6 +63,10 @@ target/
 
 # JetBrains
 .idea
+.tx
+
+# Vs Code
+.vscode
 
 # Custom files
 /configs.json

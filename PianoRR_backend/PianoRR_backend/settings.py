@@ -40,6 +40,11 @@ IGNORE_WECHAT_SIGNATURE = CONFIGS['IGNORE_WECHAT_SIGNATURE']
 WECHAT_TOKEN = CONFIGS['WECHAT_TOKEN']
 WECHAT_APPID = CONFIGS['WECHAT_APPID']
 WECHAT_SECRET = CONFIGS['WECHAT_SECRET']
+client_appid = CONFIGS["CLIENT_APPID"]
+client_secret = CONFIGS["CLIENT_SECRET"]
+Mch_id = CONFIGS["MCH_ID"]
+Mch_key = CONFIGS["MCH_KEY"]
+TEMPLATE_ID = CONFIGS["TEMPLATE_ID"]
 # # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = '2^h^#^$8@3#-ckoh05t-*1)k%p%51$k^(42by&4wf8z9j0eddj'
 #
@@ -65,13 +70,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'xadmin',
     'crispy_forms',
+    'django_apscheduler',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -96,6 +102,8 @@ TEMPLATES = [
     },
 ]
 
+NOSE_ARGS = ['--nocapture','--nologcapture']
+
 WSGI_APPLICATION = 'PianoRR_backend.wsgi.application'
 
 
@@ -117,6 +125,9 @@ DATABASES = {
         'PASSWORD': CONFIGS['DB_PASS'],
         'HOST': CONFIGS['DB_HOST'],
         'PORT': CONFIGS['DB_PORT'],
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        }
     }
 }
 

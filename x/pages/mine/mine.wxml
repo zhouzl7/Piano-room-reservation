@@ -1,0 +1,12 @@
+<view class="container">
+  <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <block wx:else>
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+  <button class = "myReservation" bindtap='checkmyReservation'><text>我的预约</text></button>
+  <button class = "bind" bindtap='toBind'>个人信息绑定</button>
+  <button class = "admin" bindtap='connectAdmin'>联系管理员</button>
+</view>

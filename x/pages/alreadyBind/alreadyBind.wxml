@@ -1,0 +1,15 @@
+<view>
+  <view class = "res">
+    <button class = "myres">个人信息</button>
+  </view>
+    <button class = "firstname"><text class="object">用户名</text>{{name}}</button>
+    <button class = "name"><text class="object">绑定号</text>{{personId}}</button>
+    <button class = "price"><text class="object">星海琴房</text>{{xinghaiPrice}} 元/小时</button>
+    <button class = "price"><text class="object">小琴房</text>{{smallPrice}} 元/小时</button>
+    <button class = "price"><text class="object">大琴房</text>{{bigPrice}} 元/小时</button>
+    <button class = "userGroup"><text class="object">用户组</text>{{userGroup}}</button>
+  <button class="icon" bindtap = 'notBind'>
+  <icon bindtap = 'notBind' color="red" type="clear" size="50"></icon>
+</button>
+<view class="cancel">解绑</view>
+</view>

@@ -1,0 +1,33 @@
+.admin {
+  width:90%;
+  height:30px;
+  background-color: #fff;
+  font-size: 15px;
+  line-height: 30px;
+  text-align: center
+}
+
+.adminmessage{
+  width:90%;
+  background-color: #fff;
+  margin-top: 10px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  display: flex;
+  height:200rpx;
+}
+
+.name{
+  width:100%;
+  background-color: #fff;
+  text-align: center;
+  font-size: 40rpx;
+}
+
+.phone{
+  width:100%;
+  background-color: #fff;
+  text-align: center;
+  font-size: 40rpx;
+  background: none;
+}

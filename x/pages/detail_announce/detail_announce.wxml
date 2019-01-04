@@ -1,0 +1,9 @@
+<view>
+  <view class = "all">
+      <button class = "title">{{title}}</button>
+      <button class = "time">{{time}}</button>
+      <button class = "author">{{author}}</button>
+      <view><button class = "main">{{content}}</button></view>
+      <button bindtap = 'Iknow' type = 'primary' class="OK">我知道了</button>
+  </view>
+</view>

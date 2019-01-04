@@ -14,11 +14,12 @@ class BookRecord(models.Model):
     # 已赴约
     STATUS_USED = 2
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='用户')
+    name = models.CharField(u'姓名', max_length=12)
+    person_id = models.CharField(u'学号/教职工号/手机号', max_length=32)
     fee = models.IntegerField(u'费用 /元')
     is_pay = models.BooleanField(u'缴费情况', choices=((
                                             True, '已缴费'), (False, '待缴费')))
-    user_quantity = models.IntegerField(u'人数')
+    user_quantity = models.BooleanField(u'单人/多人', choices=((True, '单人'), (False, '多人')))
     BR_date = models.DateField(u'日期')
     use_time = models.IntegerField(u'时间段', choices=((1, u'8-9'), (2, u'9-10'), (3, u'10-11'), (4, u'11-12'),
                                                     (5, u'12-13'), (6, u'13-14'), (7, u'14-15'), (8, u'15-16'),
@@ -28,7 +29,8 @@ class BookRecord(models.Model):
     status = models.IntegerField(u'状态', choices=((
                                     STATUS_CANCELLED, '已取消'), (STATUS_VALID, '未赴约'), (STATUS_USED, '已赴约')))
     piano_room = models.ForeignKey(PianoRoom, on_delete=models.CASCADE, verbose_name='琴房')
-
+    pay_id = models.CharField(max_length=32, blank=True)
+    form_id = models.CharField(max_length=32, blank=True)
     class Meta:
         verbose_name = '预约记录'
         verbose_name_plural = verbose_name

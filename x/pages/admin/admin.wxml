@@ -1,0 +1,7 @@
+<view class = "adminMessage">
+  <button class = "admin">管理员信息</button>
+  <button class = "adminmessage" wx:for="{{admin}}">
+      <view class = "name">姓名：{{item.name}}</view>
+      <view class = "phone">电话号码：{{item.phone}}</view>
+  </button>
+</view>
