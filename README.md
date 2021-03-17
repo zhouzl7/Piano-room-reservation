@@ -1,2 +1,2 @@
 ﻿# Piano-room-reservation
-清华大学琴房预约系统
+课程大作业：琴房预约系统
